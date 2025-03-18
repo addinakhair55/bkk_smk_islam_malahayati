@@ -1,0 +1,45 @@
+.job-judul, .job-perusahaan{
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.job-detail {
+    transition: all 0.3s ease-in-out;
+    border-radius: 10px;
+    width: 100%;
+    max-width: 100%;
+    min-height: 220px;
+  }
+  .text-primary-color {
+    color: #4065B6; /* Primary biru */
+  }
+  
+  .bg-primary-color {
+    background-color: #D6E0F5; /* Warna soft yang tetap nyambung */
+  }
+  .job-detail:hover {
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+    transform: scale(1.02);
+  }
+  .badge-view {
+    font-size: 12px;
+    padding: 2px 6px;
+    white-space: nowrap;
+  }
+
+  @media (min-width: 768px) {
+    .job-detail {
+      max-width: auto;
+      min-height: 200px;
+    }
+    .job-judul, .job-perusahaan {
+      max-width: 82%; 
+    }
+    .badge-view {
+      font-size: 14px;
+      padding: 3px 6px;
+    }
+  
+  }

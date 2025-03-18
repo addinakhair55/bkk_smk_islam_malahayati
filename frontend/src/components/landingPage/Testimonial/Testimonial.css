@@ -1,0 +1,24 @@
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    background-color: transparent;
+    border: solid 3px transparent;  /* Hapus border default */
+}
+
+.carousel-control-prev-icon::before,
+.carousel-control-next-icon::before {
+    content: '';
+    border-top: solid 3px #007bff;  /* Warna panah (ganti sesuai kebutuhan) */
+    border-left: solid 3px #007bff;
+    display: block;
+    width: 20px;
+    height: 20px;
+    transform: rotate(45deg);
+}
+
+.carousel-control-prev-icon::before {
+    transform: rotate(-45deg);  /* Putar panah kiri */
+}
+
+.carousel-control-next-icon::before {
+    transform: rotate(135deg);  /* Putar panah kanan */
+}

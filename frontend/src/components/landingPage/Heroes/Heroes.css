@@ -1,0 +1,87 @@
+/* Mengatur Gaya Teks */
+.font-des {
+    font-size: 1rem;
+    text-align: justify;
+}
+  
+.font-title {
+    font-size: 1.9rem;
+}
+
+.button-hero{
+    background-color:  #4065B6;
+    height: 3rem;
+    padding: 0.6rem;
+    justify-content: center;
+    align-items: center;
+    color: #ffffff;
+    font-size: 1rem;
+}
+
+.text-justify {
+    text-align: justify;
+  }
+
+  .text-spacing {
+    line-height: 1.5; /* Line spacing (jarak antar baris) */
+    letter-spacing: 0.5px; /* Letter spacing (jarak antar huruf) */
+    word-spacing: 1px; /* Word spacing (jarak antar kata) */
+  }
+
+.font-title2{
+    font-size: 2.20rem;
+}
+.font-title3{
+    font-size: 1.3rem;
+}
+.font-des1{
+    font-size: 1.14rem;
+}
+  
+/* Media Query untuk Tampilan Lebih Besar */
+@media (min-width: 768px) {
+    .font-des {
+        font-size: 0.8rem;
+    }
+  
+    .font-title {
+        font-size: 1.5rem;
+    }
+    .img-hero {
+        width: 17rem;
+    }
+    .button-hero{
+        width: 12rem;
+    }
+    
+}
+
+@media (min-width: 992px) {
+    .font-des {
+        font-size: 1.25rem;
+    }
+  
+    .font-title {
+        font-size: 2.5rem;
+    }
+    .img-hero {
+        width: 23rem;
+        min-width:100%;
+    }
+   
+}
+
+@media (min-width: 1200px) {
+    .font-des {
+        font-size: 1.25rem;
+    }
+  
+    .font-title {
+        font-size: 3rem;
+    }
+    .img-hero {
+        width: 30rem;
+        min-width:100%;
+    }
+    
+}

@@ -1,0 +1,77 @@
+.text-title-job, .text-title-company {
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.job-card {
+  transition: all 0.3s ease-in-out;
+  border-radius: 10px;
+  width: 100%;
+  max-width: 100%;
+  min-height: 220px;
+  background-color: #f8f9fa;
+}
+
+
+.text-primary-color {
+  color: #4065B6; /* Primary biru */
+}
+
+.bg-primary-color {
+  background-color: #D6E0F5; /* Warna soft yang tetap nyambung */
+}
+
+.gaji{
+  font-size: 14px;
+}
+
+.job-card:hover {
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+  transform: scale(1.02);
+}
+
+.job-logo {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+  transition: all 0.3s ease-in-out;
+}
+
+.job-logo:hover {
+  transform: scale(1.1);
+}
+
+.custom-badge {
+  font-size: 11px;
+  padding: 2px 4px;
+  white-space: nowrap;
+}
+
+@media (min-width: 768px) {
+  .job-card {
+    max-width: 350px;
+    min-height: 200px;
+  }
+  .job-judul, .job-perusahaan {
+    width: 260px;
+  }
+  .custom-badge {
+    font-size: 12px;
+    padding: 3px 10px;
+  }
+
+
+
+}
+
+@media (min-width: 992px) {
+  .job-judul, .job-perusahaan {
+    width: 210px;
+  }
+  .gaji{
+    font-size: 12px;
+  }
+
+}

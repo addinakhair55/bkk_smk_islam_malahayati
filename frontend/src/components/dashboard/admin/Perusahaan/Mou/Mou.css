@@ -1,0 +1,159 @@
+  .table-responsive {
+    max-height: 265px;
+    overflow-y: auto;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    position: relative;
+  }
+    
+  .table {
+    min-width: 105%;
+    border-collapse: collapse;
+    background: #fff;
+  }
+
+  .table thead {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  .table th,
+  .table td {
+    vertical-align: middle;
+    padding: 10px;
+  }
+    
+  .text-truncate {
+    max-width: 100px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+    
+  .table .d-flex {
+    gap: 10px;
+    justify-content: center;
+  }
+    
+  .table button {
+    padding: 5px 10px;
+    font-size: 14px;
+  }
+    
+  .modal-header {
+    background-color: #f8f9fa;
+    border: 0;
+  }
+
+  .modal-body {
+    padding: 1.5rem;
+  }
+
+  .modal-footer {
+    padding: 1rem;
+  }
+    
+  .status-button {
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease-in-out;
+    border: none;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    background-color: transparent;
+    color: #fff;
+  }
+
+  .status-button.active {
+    background: linear-gradient(45deg, #28a745, #218838);
+  }
+
+  .status-button.inactive {
+    background: linear-gradient(45deg, #dc3545, #c82333);
+  }
+
+  .status-button:hover {
+    transform: scale(1.05);
+  }
+
+  .status-button i {
+    margin-right: 5px;
+    font-size: 14px;
+  }
+
+  .modal-footer .btn {
+    width: 100%;
+    font-size: 14px;
+    padding: 10px 0;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  .table button {
+    font-size: 15px;
+    padding: 5px 10px;
+  }
+
+  .icon-color{
+    background-color: #198754;
+    border:0;
+  }
+
+  .icon-color:hover{
+      background-color: #57b187;
+  }
+
+  .action-warning{
+      background-color: #ffc107;
+      border:0;
+  }
+
+  .action-warning:hover{
+      background-color: #fed557;
+  }
+  
+  .dropdown-menu-filter {
+    position: absolute !important;
+    z-index: 1050 !important;
+    max-height: 400px;
+    overflow-y: auto; 
+  }
+  
+
+  @media (max-width: 768px) {
+    .table {
+      min-width: 100%;
+      font-size: 12px;
+    }
+
+    .text-truncate {
+      max-width: 100px;
+    }
+
+    .table button {
+      font-size: 12px;
+      padding: 4px 8px;
+    }
+
+    .modal-body {
+      padding: 1rem;
+    }
+
+    .table-responsive {
+        max-height: 200px;
+    }
+  }
+
+  @media (min-width: 992px) {
+      
+    .table-responsive {
+        max-height: 400px;
+    }
+  }
+    

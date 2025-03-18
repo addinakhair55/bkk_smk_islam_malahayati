@@ -1,0 +1,87 @@
+    @font-face {
+        font-family: 'Poppins';
+        src: url('../../../components/Font/Poppins-Regular.ttf') format('truetype');
+        font-weight: normal;
+        font-style: normal;
+    }
+    
+    .style-font {
+        font-family: 'Poppins', sans-serif;
+    }
+
+    .font-title{
+        color: #4065B6;
+    }
+
+    .font-title2{
+        color: #4065B6;
+        font-size: 2.25rem
+    }
+
+    .font-title3{
+        color: #F21707;
+        font-size: 1.5rem
+    }
+
+    .font-des {
+        font-size: 1rem;
+        text-align: justify;
+    }
+
+    .text-justify {
+        text-align: justify;
+    }
+
+    .text-spacing {
+        line-height: 1.5;
+        letter-spacing: 0.5px;
+        word-spacing: 1px;
+    }
+
+
+    @media (min-width: 768px) {
+        .font-des {
+            font-size: 0.8rem;
+        }
+    
+        .font-title {
+            font-size: 1.5rem;
+        }
+        .img-hero {
+            width: 17rem;
+        }
+        .button-hero{
+            width: 12rem;
+        }
+        
+    }
+
+    @media (min-width: 992px) {
+        .font-des {
+            font-size: 1.25rem;
+        }
+    
+        .font-title {
+            font-size: 2.5rem;
+        }
+        .img-hero {
+            width: 23rem;
+            min-width:100%;
+        }
+    
+    }
+
+    @media (min-width: 1200px) {
+        .font-des {
+            font-size: 1.25rem;
+        }
+    
+        .font-title {
+            font-size: 3rem;
+        }
+        .img-hero {
+            width: 30rem;
+            min-width:100%;
+        }
+        
+    }

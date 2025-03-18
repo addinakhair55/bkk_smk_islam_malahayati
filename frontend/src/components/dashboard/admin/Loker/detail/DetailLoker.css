@@ -1,0 +1,14 @@
+.text-tag-detail{
+    max-width: 185px;
+}
+
+@media (min-width: 768px) {
+    .text-tag-detail{
+        min-width: 95%;
+    }
+}
+@media (min-width: 992px) {
+    .text-tag-detail{
+        min-width: 120%;
+    }
+}

@@ -1,0 +1,80 @@
+.carousel-overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 1;
+}
+
+.carousel-caption {
+    position: absolute;
+    color: #fff;
+    z-index: 2;
+    max-width: 100%;
+    bottom: 2rem;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+.position-1{
+    width: 84%;
+    padding-right: 3rem;
+}
+
+.carousel-caption h1 {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.carousel-caption p {
+    font-size: 0.5rem;
+}
+
+@font-face {
+    font-family: 'Nunito Sans';
+    src: url('../../../components/Font/NunitoSans_7pt-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.style-font {
+    font-family: 'Nunito Sans', sans-serif;
+}
+
+@media (min-width: 768px) {
+    .carousel-caption {
+        max-width: 100%;
+        bottom: 4rem;
+    }
+
+    .position-1{
+        padding-right: 7rem;
+    }
+
+    .carousel-caption h1 {
+        font-size: 2rem;
+    }
+
+    .carousel-caption p {
+        font-size: 1.2rem;
+    }
+}
+
+@media (min-width: 992px) {
+    .carousel-caption {
+        max-width: 100%;
+        bottom: 6rem;
+    }
+
+    .carousel-caption h1 {
+        font-size: 3rem;
+    }
+
+    .position-1{
+        padding-right: 10rem;
+    }
+
+    .carousel-caption p {
+        font-size: 1.5rem;
+    }
+}

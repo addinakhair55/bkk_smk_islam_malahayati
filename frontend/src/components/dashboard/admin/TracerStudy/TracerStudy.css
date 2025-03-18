@@ -1,0 +1,130 @@
+    .table-responsive {
+        max-height: 265px;
+        overflow-y: auto;
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        position: relative;
+    }
+
+    .table {
+        width: 100%;
+        min-width: 120%;
+        max-width: unset;
+        border-collapse: collapse;
+        background: #fff;
+    }
+
+    .table thead {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+    }
+
+    .table th,
+    .table td {
+        vertical-align: middle;
+        padding: 10px;
+    }
+
+    .text-truncate {
+        max-width: 150px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .table .d-flex {
+        gap: 10px;
+        justify-content: center;
+    }
+
+    .table button {
+        padding: 5px 10px;
+        font-size: 14px;
+    }
+
+    .status-button {
+        padding: 10px 20px;
+        font-size: 14px;
+        font-weight: 600;
+        border-radius: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease-in-out;
+        border: none;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        background-color: transparent;
+        color: #fff;
+    }
+
+    .status-button.pending {
+        background-color: #ffc107;
+    }
+
+    .status-button.approved {
+        background-color: #28a745;
+    }
+
+    .status-button.rejected {
+        background-color: #dc3545;
+    }
+
+    .status-button:hover {
+        transform: scale(1.05);
+    }
+
+    .status-button i {
+        margin-right: 5px;
+        font-size: 14px;
+    }
+
+    .table button {
+        font-size: 15px;
+        padding: 5px 10px;
+    }
+
+    .icon-color{
+        background-color: #198754;
+        border:0;
+    }
+    
+    .icon-color:hover{
+        background-color: #57b187;
+    }
+    
+    .action-warning{
+        background-color: #ffc107;
+        border:0;
+    }
+    
+    .action-warning:hover{
+        background-color: #fed557;
+    }
+
+    @media (min-width: 768px) {
+        .table-responsive {
+            max-height: 200px;
+          }
+        .table {
+            min-width: 140%;
+        }
+    }
+
+    @media (min-width: 992px) {
+        .table {
+            min-width: 120%;
+          }
+        .table-responsive {
+            max-height: 400px;
+        }
+    }
+
+    @media (min-width: 1200px) {
+        .table {
+          min-width: 100%;
+          width: auto;
+        }
+    }
