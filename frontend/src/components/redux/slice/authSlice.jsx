@@ -29,10 +29,30 @@ export const loginUser = createAsyncThunk("auth/loginUser", async (data, { dispa
     }
 });
 
+export const updateUserProfile = createAsyncThunk(
+    "auth/updateUserProfile",
+    async ({ formData, token }, { rejectWithValue }) => {
+      try {
+        if (!token) {
+          throw new Error("Token tidak tersedia.");
+        }
+        const response = await axios.put("http://localhost:5000/auth/profile", formData, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        });
+  
+        return response.data;
+      } catch (error) {
+        return rejectWithValue(error.response?.data || "Terjadi kesalahan.");
+      }
+    }
+  );
 
 const authSlice = createSlice({
     name: "auth",
-    initialState: { user: null, role: null, loading: false, error: null },
+    initialState: { user: null, role: null, loading: false, error: null, token: localStorage.getItem("token") || null, },
     reducers: {
         logout: (state) => {
             state.user = null;
@@ -53,7 +73,19 @@ const authSlice = createSlice({
             .addCase(getUser.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload;
-            });
+            })
+            .addCase(updateUserProfile.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+              })
+              .addCase(updateUserProfile.fulfilled, (state, action) => {
+                state.loading = false;
+                state.user = action.payload;
+              })
+              .addCase(updateUserProfile.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload || "Terjadi kesalahan.";
+              });
     },
 });
 

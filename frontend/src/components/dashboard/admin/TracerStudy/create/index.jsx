@@ -304,50 +304,58 @@ export default function CreateTracerStudy() {
                                                         Pas Foto Formal
                                                     </Form.Label>
                                                     <div
+                                                        className="position-relative d-flex align-items-center justify-content-center"
                                                         style={{
                                                             border: `2px dashed ${borderColor}`,
                                                             borderRadius: "10px",
-                                                            padding: "10px",
                                                             width: "130px",
                                                             height: "180px",
-                                                            display: "flex",
-                                                            alignItems: "center",
-                                                            justifyContent: "center",
-                                                            flexDirection: "column",
-                                                            textAlign: "center",
                                                             cursor: "pointer",
-                                                            position: "relative",
+                                                            overflow: "hidden",
                                                             backgroundColor: "#f8f9fa",
+                                                            position: "relative",
                                                         }}
                                                     >
+                                                        
+                                                        {formData.foto_alumni ? (
+                                                            <>
+                                                            <img
+                                                                src={URL.createObjectURL(formData.foto_alumni)}
+                                                                alt="Preview"
+                                                                className="w-100 h-100 object-fit-cover"
+                                                            />
+                                                            <div
+                                                                className="position-absolute top-50 start-50 translate-middle text-white fw-bold bg-dark bg-opacity-50 w-100 h-100 d-flex flex-column align-items-center justify-content-center"
+                                                                style={{ fontSize: "12px", zIndex: 2 }}
+                                                            >
+                                                                <FaPlus size={20} />
+                                                                <small>Ubah Foto</small>
+                                                            </div>
+                                                            </>
+                                                        ) : (
+                                                            <div
+                                                                className="position-absolute top-50 start-50 translate-middle text-secondary fw-bold bg-dark bg-opacity-10 w-100 h-100 d-flex flex-column align-items-center justify-content-center"
+                                                                style={{ fontSize: "12px" }}
+                                                            >
+                                                                <FaPlus size={20} />
+                                                                <small>Upload Foto</small>
+                                                            </div>
+                                                        )}
                                                         <input
                                                             type="file"
                                                             name="foto_alumni"
                                                             onChange={handleChange}
-                                                            accept=".png, .jpg, .jpeg" // Hanya izinkan format ini
+                                                            accept=".png, .jpg, .jpeg"
                                                             style={{
                                                                 position: "absolute",
                                                                 width: "100%",
                                                                 height: "100%",
                                                                 opacity: 0,
                                                                 cursor: "pointer",
+                                                                zIndex: 3,
                                                             }}
                                                             required
                                                         />
-                                                        {formData.foto_alumni ? (
-                                                            <img
-                                                                src={URL.createObjectURL(formData.foto_alumni)}
-                                                                alt="Preview"
-                                                                style={{ maxWidth: "100%", maxHeight: "100%" }}
-                                                            />
-                                                        ) : (
-                                                            <>
-                                                                <FaPlus size={30} color={borderColor} />
-                                                                <small style={{ color: borderColor, marginTop: "5px" }}>
-                                                                    Upload Foto
-                                                                </small>
-                                                            </>
-                                                        )}
                                                     </div>
                                                     {errorMessage && <small className="text-danger">{errorMessage}</small>}
                                                 </>

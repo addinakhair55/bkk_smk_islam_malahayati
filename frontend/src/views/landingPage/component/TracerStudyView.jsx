@@ -4,6 +4,7 @@ import axios from 'axios';
 import Navbar from '../../../components/LandingPage/Navbar';
 import Footer from '../../../components/landingPage/Footer';
 import HeroTitle from '../../../components/landingPage/HeroTitle';
+import PageContainer from 'src/components/container/PageContainer';
 
 export default function TracerStudyView() {
     const [tracerStudy, setTracerStudy] = useState([]);
@@ -43,12 +44,11 @@ export default function TracerStudyView() {
     if (error) return <p className='text-center text-danger mt-5'>{error}</p>;
 
     return (
-        <>
+        <PageContainer title="Tracer Study">
             <Navbar />
             <HeroTitle 
                 title='Tracer Study' 
                 subtitle='SMK ISLAM MALAHAYATI' 
-                description='Data Tracer Study Alumni Kelulusan SMK Islam Malahayati' 
             />
             <div
                 className="align-items-center align-content-center"
@@ -68,7 +68,7 @@ export default function TracerStudyView() {
                     />
                     <div className="row">
                         {[{label: 'Jenis Kelamin', value: filterGender, setter: setFilterGender, options: ['', 'Laki-Laki', 'Perempuan']},
-                          {label: 'Jurusan', value: filterJurusan, setter: setFilterJurusan, options: ['', 'AKL', 'TKJ', 'ADM']},
+                          {label: 'Jurusan', value: filterJurusan, setter: setFilterJurusan, options: ['', 'Akuntasi', 'Teknik Komputer Jaringan', 'Administrasi']},
                           {label: 'Tahun Lulus', value: filterTahun, setter: setFilterTahun, options: ['', '2024', '2023', '2022']}
                         ].map((filter, idx) => (
                             <div className="col-md-4 p-2" key={idx}>
@@ -121,6 +121,6 @@ export default function TracerStudyView() {
             </div>
             </div>
             <Footer />
-        </>
+        </PageContainer>
     );
 }

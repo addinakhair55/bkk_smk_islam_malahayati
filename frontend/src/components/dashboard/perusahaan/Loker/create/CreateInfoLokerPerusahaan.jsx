@@ -37,7 +37,6 @@ export default function CreateInfoLokerPerusahaan() {
     const imageRef = useRef(null);
     const [showConfirmModal, setShowConfirmModal] = useState(false);
 
-    // Handle changes in the salary secrecy checkbox
     const handleGajiSecretChange = (e) => {
         const isChecked = e.target.checked;
         setIsGajiSecret(isChecked);
@@ -48,12 +47,10 @@ export default function CreateInfoLokerPerusahaan() {
         }));
     };
 
-    // Handle input changes
     const handleChange = (e) => {
         const { name, files, value } = e.target;
         let newValue = value;
 
-        // Validate salary fields
         if (name === "gaji_min" || name === "gaji_max") {
             if (/[.,;/-]/.test(value)) {
                 setErrors(prevErrors => ({
@@ -65,7 +62,6 @@ export default function CreateInfoLokerPerusahaan() {
             newValue = value.replace(/\D/g, "");
         }
 
-        // Handle logo file upload
         if (name === "logo" && files.length > 0) {
             const file = files[0];
             const reader = new FileReader();

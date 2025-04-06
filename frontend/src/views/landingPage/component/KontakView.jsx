@@ -3,6 +3,7 @@ import Footer from "../../../components/landingPage/Footer";
 import HeroTitle from "../../../components/landingPage/HeroTitle";
 import Kontak from "../../../components/landingPage/Kontak";
 import Navbar from "../../../components/landingPage/Navbar";
+import PageContainer from 'src/components/container/PageContainer';
 
 
 export default function KontakView() {
@@ -10,7 +11,7 @@ export default function KontakView() {
             window.scrollTo(0, 0);
           }, []);
  return(
-    <>
+    <PageContainer title="Kontak BKK">
         <Navbar/>
         <HeroTitle
             title="Kontak Kami" 
@@ -18,6 +19,6 @@ export default function KontakView() {
         />
         <Kontak/>
         <Footer/>
-    </>
+    </PageContainer>
  )
 }

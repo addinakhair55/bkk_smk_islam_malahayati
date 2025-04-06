@@ -139,9 +139,7 @@ export default function DetailInfoLokerView() {
                                                     {/* Tombol Lamar */}
                                                     {jobInfo.link && (
                                                         <Button
-                                                            href={jobInfo.link.startsWith("http") ? jobInfo.link : `https://${jobInfo.link}`}
-                                                            target="_blank"
-                                                            rel="noopener noreferrer"
+                                                        onClick={() => window.open(jobInfo.link, "_blank")}
                                                             className="fw-bold d-flex align-items-center justify-content-center flex-grow-1"
                                                             style={{ 
                                                                 backgroundColor: "#4065B6",
@@ -324,9 +322,7 @@ export default function DetailInfoLokerView() {
                                         <Button
                                             size="sm"
                                             className="border-0"
-                                            href={job.link}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
+                                            onClick={() => window.open(job.link, "_blank")}
                                             style={{
                                                 fontSize:"0.8rem",
                                                 color: '#ffffff',

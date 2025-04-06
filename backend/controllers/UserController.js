@@ -3,7 +3,8 @@ import jwt from "jsonwebtoken";
 import crypto from 'crypto';
 import nodemailer from 'nodemailer';
 import bcrypt from "bcryptjs";
-
+import path from "path";
+import fs from "fs";
   export const getUserProfile = async (req, res) => {
     try {
         const user = await UserModel.findById(req.user.id).select("-password");
@@ -150,3 +151,43 @@ export const login = async (req, res) => {
       res.status(500).json({ message: "Kesalahan server", error: error.message });
     }
   };
+
+  // Profile
+  export const updateProfile = async (req, res) => {
+    const { name, email, password, deleteFotoProfile, noTelp } = req.body;
+    const fotoProfile = req.files?.fotoProfile ? req.files.fotoProfile[0].filename : undefined;
+    const cv = req.files?.cv ? req.files.cv[0].filename : undefined;
+
+    try {
+        const user = await UserModel.findById(req.user.id);
+        if (!user) {
+            return res.status(404).json({ message: "Pengguna tidak ditemukan" });
+        }
+
+        user.name = name || user.name;
+        user.email = email || user.email;
+
+        if (password) {
+            const salt = await bcrypt.genSalt(10);
+            user.password = await bcrypt.hash(password, salt);
+        }
+
+        if (fotoProfile) {
+            user.fotoProfile = fotoProfile;
+        }
+
+        if (noTelp) {
+            user.noTelp = noTelp;
+        }
+
+        if (user.role === "alumni" && cv) {
+            user.cv = cv;
+        }
+
+        await user.save();
+        res.status(200).json({ message: "Profil berhasil diperbarui", user });
+
+    } catch (error) {
+        res.status(500).json({ message: "Kesalahan server", error: error.message });
+    }
+};

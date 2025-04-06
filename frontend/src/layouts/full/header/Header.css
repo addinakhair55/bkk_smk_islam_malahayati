@@ -19,7 +19,6 @@
   border-color: rgba(0, 123, 255, 0.6);
 }
 
-/* Dropdown styling */
 .custom-dropdown {
   border-radius: 10px;
   min-width: 160px;
@@ -28,22 +27,17 @@
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-/* Item di dalam dropdown */
 .custom-dropdown-item {
-  font-size: 1rem;
-  font-weight: 500;
-  color: #333;
-  padding: 10px 15px;
-  transition: all 0.3s ease;
-  border-radius: 5px;
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
 }
 
-.custom-dropdown-item:hover {
-  background-color: #f8d7da; /* Warna merah muda lembut */
-  color: #dc3545; /* Warna merah untuk logout */
+.custom-dropdown-item:hover:not(.logout-item) {
+  color: #4065B6;
 }
 
-
+.custom-dropdown-item.logout-item:hover {
+  color: #dc3545 !important;
+}
 
 @media (max-width: 576px) {
   .avatar img {

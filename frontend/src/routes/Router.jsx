@@ -50,6 +50,8 @@ import FaqView from "../views/landingPage/component/FaqView";
 import DashboardLayout from "../layouts/full/DashboardLayout";
 import DashboardAlumni from "../views/dashboard/DashboardAlumni";
 import DashboardPerusahaan from "../views/dashboard/DashboardPerusahaan";
+import Profile from "../views/authentication/page/Profile";
+import KonfirmasiGabung from "../views/authentication/page/KonfirmasiGabung";
 
 
 /* ***Layouts**** */
@@ -61,9 +63,6 @@ const Dashboard = Loadable(lazy(() => import("../views/dashboard/Dashboard")));
 const TracerStudy = Loadable(lazy(() => import("../views/dashboard/components/TracerStudy")));
 const MouPerusahaan = Loadable(lazy(() => import("../views/dashboard/components/MouPerusahaan")));
 const InfoLoker = Loadable(lazy(() => import("../views/dashboard/components/InfoLoker")));
-const Icons = Loadable(lazy(() => import("../views/icons/Icons")));
-const TypographyPage = Loadable(lazy(() => import("../views/utilities/TypographyPage")));
-const Shadow = Loadable(lazy(() => import("../views/utilities/Shadow")));
 const Error = Loadable(lazy(() => import("../views/authentication/Error")));
 const RegisterAdmin = Loadable(lazy(() => import("../views/authentication/page/Register")));
 const LoginAdmin = Loadable(lazy(() => import("../views/authentication/page/Login")));
@@ -230,6 +229,7 @@ const Router = [
           </PrivateRoute>
         ),
       },
+      { path: "/auth/profile", element: <Profile /> },
     ],
   },
 
@@ -278,6 +278,7 @@ const Router = [
               </PrivateRoute>
           ),
       },
+      { path: "/auth/profile", element: <Profile /> },
   ],
 },
 
@@ -296,6 +297,7 @@ const Router = [
       { path: "/auth/reset-password/:token", element: <ResetPasswordAdmin /> },
       { path: "/auth/forgot-password/perusahaan", element: <ForgotPasswordPerusahaan /> },
       { path: "/auth/reset-password/perusahaan/:token", element: <ResetPasswordPerusahaan /> },
+      { path: "/auth/konfirmasi", element: <KonfirmasiGabung/> },
 
       { path: "*", element: <Navigate to="/auth/404" /> },
     ],

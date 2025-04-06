@@ -7,6 +7,7 @@ import Navbar from "../../../components/landingPage/Navbar";
 import imgHero from "../../../assets/images/backgrounds/4.png";
 import imgHero2 from "../../../components/Image/img-heroes2.png";
 import imgHero3 from "../../../assets/images/backgrounds/5.png";
+import PageContainer from 'src/components/container/PageContainer';
 import "./Home.css"
 
 const sections = [
@@ -65,13 +66,13 @@ const sections = [
 
 export default function Home() {
   return (
-    <div className="m-auto style-font">
+    <PageContainer title="BKK SMK Islam Malahayati" className="m-auto style-font">
       <Navbar/>
       <Heroes sections={sections}/>
       <Manfaat/>
       <InfoLoker/>
       <Testimonial/>
       <Footer/>
-    </div>
+    </PageContainer>
   );
 }

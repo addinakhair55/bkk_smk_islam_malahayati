@@ -1,8 +1,9 @@
 import "./Heroes.css";
 import { useState, useEffect } from "react";
-import PropTypes from "prop-types"; // Tambahkan import ini
+import PropTypes from "prop-types";
 import { Button } from "react-bootstrap";
 import { FaBuilding, FaGraduationCap } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 const bgColors = ["#FFFFFF", "#ECF0F8", "#FFFFFF"];
 
@@ -84,9 +85,18 @@ export default function Heroes({ sections }) {
                         <span style={{ display: 'none' }}>&#9660;</span>
                       </Button>
                       {openDropdown === "alumni" && (
-                        <div className="dropdown-menu show position-absolute mt-2 w-auto" style={{ zIndex: 10 }}>
-                          {section.buttonText?.alumniLogin && <button className="dropdown-item">{section.buttonText?.alumniLogin}</button>}
-                          {section.buttonText?.alumniRegister && <button className="dropdown-item">{section.buttonText?.alumniRegister}</button>}
+                        <div className="dropdown-menu show position-absolute mt-2 w-100 p-1" style={{ zIndex: 10, fontSize:"14px" }}>
+                          {section.buttonText?.alumniLogin && (
+                            <Link to="/auth/login" className="dropdown-item">
+                              {section.buttonText.alumniLogin}
+                            </Link>
+                          )}
+
+                          {section.buttonText?.alumniRegister && (
+                            <Link to="/auth/register" className="dropdown-item">
+                              {section.buttonText.alumniRegister}
+                            </Link>
+                          )}
                         </div>
                       )}
                     </div>
@@ -123,9 +133,18 @@ export default function Heroes({ sections }) {
                         <span style={{ display: 'none' }}>&#9660;</span>
                       </Button>
                       {openDropdown === "perusahaan" && (
-                        <div className="dropdown-menu show position-absolute mt-2 w-auto" style={{ zIndex: 10 }}>
-                          {section.buttonText?.perusahaanLogin && <button className="dropdown-item">{section.buttonText?.perusahaanLogin}</button>}
-                          {section.buttonText?.perusahaanRegister && <button className="dropdown-item">{section.buttonText?.perusahaanRegister}</button>}
+                        <div className="dropdown-menu show position-absolute mt-2 w-100 p-1" style={{ zIndex: 10, fontSize:"14px" }}>
+                         {section.buttonText?.perusahaanLogin && (
+                            <Link to="/auth/login/perusahaan" className="dropdown-item">
+                              {section.buttonText.perusahaanLogin}
+                            </Link>
+                          )}
+
+                          {section.buttonText?.perusahaanRegister && (
+                            <Link to="/auth/konfirmasi" className="dropdown-item">
+                              {section.buttonText.perusahaanRegister}
+                            </Link>
+                          )}
                         </div>
                       )}
                     </div>

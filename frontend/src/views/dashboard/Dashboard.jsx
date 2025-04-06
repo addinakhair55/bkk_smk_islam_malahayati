@@ -121,40 +121,40 @@ const Dashboard = () => {
 
             <Row className="g-4 mb-4">
                 <Col xl={4} lg={4} md={6} sm={6} xs={12}>
-                    <Card className="shadow p-3 rounded-4 border-0 h-100">
+                    <Card className="shadow p-2 rounded-4 border-0 h-100">
                         <Card.Body className="d-flex align-items-center">
                             <div className="icon-circle me-3 flex-shrink-0" style={{ background: "linear-gradient(135deg, #c7d7f9, #c7d7f9)", width: "70px", height: "70px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center" }}>
                                 <FaUserGraduate size={30} className="text-primary" />
                             </div>
                             <div className="flex-grow-1">
                                 <h3 className="fw-bold fs-2 mb-0">{tracerData.length}</h3>
-                                <p className="fw-bold mb-0 text-muted fs-6">Total Kelulusan</p>
+                                <p className="fw-bold mb-0 text-muted">Total Kelulusan</p>
                             </div>
                         </Card.Body>
                     </Card>
                 </Col>
                 <Col xl={4} lg={4} md={6} sm={6} xs={12}>
-                    <Card className="shadow p-3 rounded-4 border-0 h-100">
+                    <Card className="shadow p-2 rounded-4 border-0 h-100">
                         <Card.Body className="d-flex align-items-center">
                             <div className="icon-circle me-3 flex-shrink-0" style={{ background: "linear-gradient(135deg, #c0fbd4, #c0fbd4)", width: "70px", height: "70px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center" }}>
                                 <FaBriefcase size={30} className="text-success" />
                             </div>
                             <div className="flex-grow-1">
                                 <h3 className="fw-bold fs-2 mb-0">{jobData.length}</h3>
-                                <p className="fw-bold mb-0 text-muted fs-6">Total Lowongan</p>
+                                <p className="fw-bold mb-0 text-muted">Total Lowongan</p>
                             </div>
                         </Card.Body>
                     </Card>
                 </Col>
                 <Col xl={4} lg={4} md={6} sm={6} xs={12}>
-                    <Card className="shadow p-3 rounded-4 border-0 h-100">
+                    <Card className="shadow p-2 rounded-4 border-0 h-100">
                         <Card.Body className="d-flex align-items-center">
                             <div className="icon-circle me-3 flex-shrink-0" style={{ background: "linear-gradient(135deg, #faf8c0, #faf8c0)", width: "70px", height: "70px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center" }}>
                                 <FaBuilding size={30} className="text-warning" />
                             </div>
                             <div className="flex-grow-1">
                                 <h3 className="fw-bold fs-2 mb-0">{companyData.length}</h3>
-                                <p className="fw-bold mb-0 text-muted fs-6">Total MoU/Kerjasama</p>
+                                <p className="fw-bold mb-0 text-muted">Total MoU Perusahaan</p>
                             </div>
                         </Card.Body>
                     </Card>

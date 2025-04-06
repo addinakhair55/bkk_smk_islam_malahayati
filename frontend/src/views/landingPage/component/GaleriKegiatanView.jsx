@@ -26,7 +26,7 @@ export default function GaleriKegiatanView() {
     return (
         <>
             <Navbar />
-            <PageContainer title="Galeri Kegiatan BKK SMK Islam Malahayati">
+            <PageContainer title="Galeri Kegiatan BKK">
                 <HeroTitle title="Galeri Kegiatan" />
                 <div style={{ backgroundColor: "#ECF0F8"}} className="py-5">
                     <div className="container">

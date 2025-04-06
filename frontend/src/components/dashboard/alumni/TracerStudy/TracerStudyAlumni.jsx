@@ -277,8 +277,8 @@ const TracerStudyAlumni = () => {
                   <img
                     src={`http://localhost:5000/uploads/${tracerStudy.foto_alumni}`}
                     alt="Foto Alumni"
-                    className="img-fluid rounded-1"
-                    style={{ width: "130px", height: "190px", }}
+                    className="img-fluid rounded-3"
+                    style={{ width: "130px", height: "180px", }}
                   />
                 </div>
               )}

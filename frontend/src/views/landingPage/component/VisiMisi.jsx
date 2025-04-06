@@ -1,7 +1,8 @@
 import Content from "../../../components/landingPage/Content";
 import HeroTitle from "../../../components/landingPage/HeroTitle";
 import Footer from "../../../components/landingPage/Footer";
-import Navbar from "../../../components/LandingPage/Navbar";
+import Navbar from "../../../components/landingPage/Navbar";
+import PageContainer from 'src/components/container/PageContainer';
 import { useEffect } from "react";
 
 export default function VisiMisi() {
@@ -9,7 +10,7 @@ export default function VisiMisi() {
             window.scrollTo(0, 0);
           }, []);
   return (
-    <>
+    <PageContainer title="Visi Misi BKK">
         <Navbar/>
         <div className="m-auto">
           <HeroTitle 
@@ -26,6 +27,6 @@ export default function VisiMisi() {
           />
         </div>
         <Footer/>
-    </>
+    </PageContainer>
   );
 }

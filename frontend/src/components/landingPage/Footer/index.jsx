@@ -12,7 +12,7 @@ export default function Footer() {
                     {/* SMK ISLAM MALAHAYATI Section */}
                     <div className="col-lg-3 col-md-6 col-12 d-flex flex-column align-items-start">
                         <h5 className="mb-3 text-color fw-bold">SMK ISLAM MALAHAYATI</h5>
-                        <h6 className="text-secondary">BURSA KERJA KHUSUS</h6>
+                        <h6 className="text-secondary fw-bold">BURSA KERJA KHUSUS</h6>
                         <div className="mt-2 text-muted">
                             <div className="d-flex align-items-start mb-2">
                                 <FaMapMarkerAlt className="me-2 text-danger icon-footer1" />
@@ -59,6 +59,11 @@ export default function Footer() {
                                     Visi & Misi
                                 </Link>
                             </li>
+                            <li className="mb-2">
+                                <Link to="/program-kerja" className=" text-decoration-none link-footer" style={{fontSize:"12px"}}>
+                                    Program Kerja BKK
+                                </Link>
+                            </li>
                             <li>
                                 <Link to="/struktur-organisasi" className=" text-decoration-none link-footer" style={{fontSize:"12px"}}>
                                     Struktur Organisasi
@@ -69,7 +74,7 @@ export default function Footer() {
 
                     {/* Kontak Kami Section */}
                     <div className="col-lg-3 col-md-6 col-12 d-flex flex-column align-items-start">
-                        <h5 className="mb-3 text-color fw-bold">Kontak Kami</h5>
+                        <h5 className="mb-3 text-color fw-bold">Media Sosial</h5>
                         <div className="">
                             <div className="d-flex align-items-center mb-3">
                                 <img src={Instagram} alt="Instagram" style={{width:"20px"}} />

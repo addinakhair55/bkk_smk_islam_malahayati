@@ -315,51 +315,54 @@ export default function UpdateTracerStudy() {
                                       <>
                                           <Form.Label className="text-uppercase text-secondary">Pas Foto Formal</Form.Label>
                                           <div
-                                          style={{
-                                              border: `2px dashed ${borderColor}`,
-                                              borderRadius: "10px",
-                                              padding: "10px",
-                                              width: "130px",
-                                              height: "180px",
-                                              display: "flex",
-                                              alignItems: "center",
-                                              justifyContent: "center",
-                                              flexDirection: "column",
-                                              textAlign: "center",
-                                              cursor: "pointer",
-                                              position: "relative",
-                                              backgroundColor: "#f8f9fa",
-                                          }}
-                                          >
-                                          <input
-                                              type="file"
-                                              name="foto_alumni"
-                                              onChange={handleChange}
-                                              accept=".png, .jpg, .jpeg"
-                                              style={{
-                                              position: "absolute",
-                                              width: "100%",
-                                              height: "100%",
-                                              opacity: 0,
-                                              cursor: "pointer",
-                                              }}
-                                              required={!data?.foto_alumni}
-                                          />
-                                          {preview ? (
-                                              <img
-                                              src={preview}
-                                              alt="Preview"
-                                              style={{ maxWidth: "100%", maxHeight: "100%", objectFit: "cover" }}
-                                              />
-                                          ) : (
-                                              <>
-                                              <FaPlus size={30} color={borderColor} />
-                                              <small style={{ color: borderColor, marginTop: "5px" }}>
-                                                  {data?.foto_alumni ? "Ganti Foto" : "Upload Foto"}
-                                              </small>
-                                              </>
-                                          )}
-                                          </div>
+                                            className="position-relative d-flex align-items-center justify-content-center"
+                                            style={{
+                                                border: `2px dashed ${borderColor}`,
+                                                borderRadius: "10px",
+                                                width: "130px",
+                                                height: "180px",
+                                                cursor: "pointer",
+                                                overflow: "hidden",
+                                                backgroundColor: "#f8f9fa",
+                                                position: "relative",
+                                            }}
+                                            onClick={() => document.getElementById("fileInputAlumni").click()}
+                                        >
+                                        {preview || formData?.foto_alumni ? (
+                                            <>
+                                            <img
+                                                src={preview || `http://localhost:5000/uploads/${formData.foto_alumni}`}
+                                                alt="Foto Alumni"
+                                                className="w-100 h-100 object-fit-cover"
+                                            />
+                                            <div
+                                                className="position-absolute top-50 start-50 translate-middle text-white fw-bold bg-dark bg-opacity-50 w-100 h-100 d-flex flex-column align-items-center justify-content-center"
+                                                style={{ fontSize: "12px", zIndex: 2 }}
+                                            >
+                                                <FaPlus size={20} />
+                                                <small>Ubah Foto</small>
+                                            </div>
+                                            </>
+                                        ) : (
+                                            <div
+                                                className="position-absolute top-50 start-50 translate-middle text-white fw-bold bg-dark bg-opacity-50 w-100 h-100 d-flex flex-column align-items-center justify-content-center"
+                                                style={{ fontSize: "12px" }}
+                                            >
+                                                <FaPlus size={20} />
+                                                <small>Upload Foto</small>
+                                            </div>
+                                        )}
+
+                                        <input
+                                            type="file"
+                                            id="fileInputAlumni"
+                                            name="foto_alumni"
+                                            onChange={handleChange}
+                                            accept=".png, .jpg, .jpeg"
+                                            className="d-none"
+                                            required={!formData?.foto_alumni}
+                                        />
+                                        </div>
                                           {errorMessage && <small className="text-danger">{errorMessage}</small>}
                                       </>
                                       );

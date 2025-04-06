@@ -8,6 +8,9 @@ const UserSchema = new mongoose.Schema({
   role: { type: String, enum: ["alumni", "admin", "perusahaan"], default: "alumni" },
   resetToken: { type: String },
   resetExpire: { type: Date },
+  fotoProfile: { type: String, default: "" },
+  noTelp: { type: String },
+  cv: { type: String },
 }, { timestamps: true });
 
 // Hash password sebelum menyimpan User

@@ -1,15 +1,16 @@
 import Content from "../../../components/landingPage/Content";
 import HeroTitle from "../../../components/landingPage/HeroTitle";
 import Footer from "../../../components/landingPage/Footer";
-import Navbar from "../../../components/LandingPage/Navbar";
+import Navbar from "../../../components/landingPage/Navbar";
 import { useEffect } from "react";
+import PageContainer from 'src/components/container/PageContainer';
 
 export default function ProgramKerja() {
   useEffect(() => {
           window.scrollTo(0, 0);
         }, []);
   return (
-    <>
+    <PageContainer title="Program Kerja BKK">
       <Navbar />
         <HeroTitle 
           title="Program Kerja BKK" 
@@ -42,6 +43,6 @@ export default function ProgramKerja() {
               }
             />
       <Footer />
-    </>
+    </PageContainer>
   );
 }

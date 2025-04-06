@@ -11,6 +11,8 @@
 
 .title{
     font-size: 0.9rem;
+    color: #4065B6;
+    font-weight: bold;
 }
 
 .img-title{
@@ -24,7 +26,7 @@
 }
   
 .navbar-nav .nav-link:hover {
-    color: #007bff;
+    color: #4065B6;
 }
 
 .dropdown-menu .dropdown-item {
@@ -32,14 +34,14 @@
 }
 
 .dropdown-menu .dropdown-item:hover {
-    color: #007bff;
+    color: #4065B6;
     background-color:rgb(255, 255, 255);
 }
   
 
 @media (min-width: 992px) {
     .title{
-        font-size: 1.2rem;
+        font-size: 1.1rem;
     }
     
     .img-title{

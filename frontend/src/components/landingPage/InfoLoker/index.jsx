@@ -128,9 +128,7 @@ export default function InfoLoker() {
                   <Button
                     size="sm"
                     className="px-2 py-2 w-auto border-0"
-                    href={job.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                    onClick={() => window.open(job.link, "_blank")}
                     style={{
                       fontSize:"0.8rem",
                       color: '#ffffff',
