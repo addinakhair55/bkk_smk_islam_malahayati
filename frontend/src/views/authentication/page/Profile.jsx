@@ -26,7 +26,6 @@ const Profile = () => {
   });
 
   const [editMode, setEditMode] = useState(false);
-  const [cvFile] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [image, setImage] = useState(null);
@@ -52,7 +51,8 @@ const Profile = () => {
         name: user.name, 
         email: user.email, 
         password: "", 
-        noTelp: user.noTelp 
+        noTelp: user.noTelp,
+        cv: user.cv || null
       });
     }
   }, [user]);
@@ -61,9 +61,19 @@ const Profile = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleFileChange = (e) => {
+  const handleCVChange = (e) => {
     const file = e.target.files[0];
     if (file) {
+      setFormData((prev) => ({
+        ...prev,
+        cv: file,
+      }));
+    }
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file && file.type.startsWith("image/")) {
       const reader = new FileReader();
       reader.onload = () => {
         setImage(reader.result);
@@ -93,7 +103,6 @@ const Profile = () => {
     setFormData(formData);
   };
 
-
   const handleSubmit = (e) => {
     e.preventDefault();
     setShowConfirmModal(true);
@@ -121,8 +130,8 @@ const Profile = () => {
 
     formDataToSend.append("noTelp", formData.noTelp);
 
-    if (cvFile) {
-      formDataToSend.append("cv", cvFile);
+    if (formData.cv) {
+      formDataToSend.append("cv", formData.cv);
     }
 
     if (formData.fotoProfile) {
@@ -138,10 +147,10 @@ const Profile = () => {
     } catch (err) {
       setToastMessage({ type: "danger", message: "Gagal memperbarui akun Anda. Silakan coba lagi." });
       setShowToast(true);
-  } finally {
-      setIsSubmitting(false);
-      setShowConfirmModal(false);
-  }
+    } finally {
+        setIsSubmitting(false);
+        setShowConfirmModal(false);
+    }
   };
 
   if (isLoading) {
@@ -152,7 +161,7 @@ const Profile = () => {
             </Spinner>
         </div>
     );
-}
+  }
 
 if (error) {
     return (
@@ -278,7 +287,7 @@ if (error) {
                     Upload Foto
                   </div>
                 </div>
-                <input type="file" id="fileInput" className="d-none" accept="image/*" onChange={handleFileChange} />
+                <input type="file" id="fileInput" className="d-none" accept="image/*" onChange={handleImageChange} />
               </div>
             </div>
 
@@ -335,23 +344,35 @@ if (error) {
               </div>
             </div>
 
-            <div className="mb-3">
-              <label className="form-label text-uppercase">CV (Opsional)</label>
-              <input type="file" accept=".pdf" className="form-control" onChange={(e) => handleFileChange(e, "cv")} />
-              
-              {user.cv ? (
-                <div className="mt-3">
-                  <iframe 
-                    src={`http://localhost:5000/uploads/${user.cv}`} 
-                    width="100%" 
-                    height="500px"
-                    style={{ border: "1px solid #ddd", borderRadius: "5px" }}
-                  />
-                </div>
-              ) : (
-                <p className="text-muted mt-2">Belum ada CV yang diunggah.</p>
-              )}
-            </div>
+            {user?.role === 'alumni' && (
+              <div className="mb-3">
+                <label className="form-label text-uppercase">Upload CV (Optional)</label>
+                <input 
+                  type="file" 
+                  name="cv" 
+                  accept=".pdf,.doc,.docx" 
+                  className="form-control" 
+                  onChange={handleCVChange} 
+                />
+                {formData.cv && (
+                  <p className="mt-2">
+                    {user.cv ? (
+                      <div className="mt-3">
+                        <iframe 
+                          src={`http://localhost:5000/uploads/${user.cv}`} 
+                          width="100%" 
+                          height="500px"
+                          style={{ border: "1px solid #ddd", borderRadius: "5px" }}
+                        />
+                      </div>
+                    ) : (
+                      <p className="text-muted mt-2">Belum ada CV yang diunggah.</p>
+                    )}
+                  </p>
+                )}
+              </div>
+            )}
+
           </form>
         ) : (
           <div className="text-center">

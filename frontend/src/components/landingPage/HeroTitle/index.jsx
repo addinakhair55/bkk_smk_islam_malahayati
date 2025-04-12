@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
-import { Breadcrumb } from 'react-bootstrap';
 import "./HeroTitle.css"
+import { Link } from 'react-router-dom';
 
 export default function HeroTitle({ title, subtitle}) {
     return (
@@ -10,10 +10,30 @@ export default function HeroTitle({ title, subtitle}) {
                 {subtitle && <h2 className="fw-bold font-subtitle-hero mt-4">{subtitle}</h2>}
             </div>
             <div className="w-100 d-flex justify-content-center mt-3">
-                <Breadcrumb>
-                    <Breadcrumb.Item href="/">Beranda</Breadcrumb.Item>
-                    <Breadcrumb.Item active>{title}</Breadcrumb.Item>
-                </Breadcrumb>
+                <nav aria-label="breadcrumb" className="mb-4">
+                    <ol className="breadcrumb">
+                        <li className="breadcrumb-item">
+                            <Link 
+                                to="/" 
+                                className="d-flex align-items-center text-decoration-none"
+                                style={{ 
+                                    transition: "opacity 0.2s ease",
+                                    color: "#4065B6",
+                                    textDecoration: "none",
+                                  }}
+                                  onMouseEnter={(e) => e.currentTarget.style.opacity = "0.7"}
+                                  onMouseLeave={(e) => e.currentTarget.style.opacity = "1"}
+                                  onMouseDown={(e) => e.currentTarget.style.opacity = "0.5"}
+                                  onMouseUp={(e) => e.currentTarget.style.opacity = "0.7"}
+                            >
+                                <span className="fw-medium">Beranda</span>
+                            </Link>
+                        </li>
+                        <li className="breadcrumb-item active text-secondary" aria-current="page">
+                            {title}
+                        </li>
+                    </ol>
+                </nav>
             </div>
         </div>
     );

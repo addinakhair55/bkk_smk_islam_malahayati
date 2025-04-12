@@ -154,7 +154,7 @@ export const login = async (req, res) => {
 
   // Profile
   export const updateProfile = async (req, res) => {
-    const { name, email, password, deleteFotoProfile, noTelp } = req.body;
+    const { name, email, password, noTelp } = req.body;
     const fotoProfile = req.files?.fotoProfile ? req.files.fotoProfile[0].filename : undefined;
     const cv = req.files?.cv ? req.files.cv[0].filename : undefined;
 
@@ -190,4 +190,4 @@ export const login = async (req, res) => {
     } catch (error) {
         res.status(500).json({ message: "Kesalahan server", error: error.message });
     }
-};
+  };

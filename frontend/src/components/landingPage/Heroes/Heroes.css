@@ -8,24 +8,14 @@
     font-size: 1.9rem;
 }
 
-.button-hero{
-    background-color:  #4065B6;
-    height: 3rem;
-    padding: 0.6rem;
-    justify-content: center;
-    align-items: center;
-    color: #ffffff;
-    font-size: 1rem;
-}
-
 .text-justify {
     text-align: justify;
   }
 
   .text-spacing {
-    line-height: 1.5; /* Line spacing (jarak antar baris) */
-    letter-spacing: 0.5px; /* Letter spacing (jarak antar huruf) */
-    word-spacing: 1px; /* Word spacing (jarak antar kata) */
+    line-height: 1.5; 
+    letter-spacing: 0.5px;
+    word-spacing: 1px;
   }
 
 .font-title2{

@@ -3,7 +3,7 @@ import HeroTitle from "../../../components/landingPage/HeroTitle";
 import Footer from "../../../components/landingPage/Footer";
 import Navbar from "../../../components/landingPage/Navbar";
 import { useEffect } from "react";
-import PageContainer from 'src/components/container/PageContainer';
+import PageContainer from "src/components/container/PageContainer";
 
 export default function ProgramKerja() {
   useEffect(() => {
@@ -11,7 +11,25 @@ export default function ProgramKerja() {
         }, []);
   return (
     <PageContainer title="Program Kerja BKK">
+      <style>{`
+          @keyframes fadeIn {
+          from {
+              opacity: 0;
+              transform: translateY(20px);
+          }
+          to {
+              opacity: 1;
+              transform: translateY(0);
+          }
+          }
+
+          .page-fade {
+          animation: fadeIn 1s ease-out forwards;
+          opacity: 0;
+          }
+      `}</style>
       <Navbar />
+      <div className="page-fade">
         <HeroTitle 
           title="Program Kerja BKK" 
           description="Program Kerja / Kegiatan BKK SMK Islam Malahayati"
@@ -42,6 +60,7 @@ export default function ProgramKerja() {
                 </>
               }
             />
+      </div>
       <Footer />
     </PageContainer>
   );

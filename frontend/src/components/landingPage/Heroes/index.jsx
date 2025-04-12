@@ -1,5 +1,4 @@
 import "./Heroes.css";
-import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { Button } from "react-bootstrap";
 import { FaBuilding, FaGraduationCap } from "react-icons/fa";
@@ -8,22 +7,6 @@ import { Link } from "react-router-dom";
 const bgColors = ["#FFFFFF", "#ECF0F8", "#FFFFFF"];
 
 export default function Heroes({ sections }) {
-  const [openDropdown, setOpenDropdown] = useState(null);
-
-  const toggleDropdown = (dropdown) => {
-    setOpenDropdown(openDropdown === dropdown ? null : dropdown);
-  };
-
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (!event.target.closest(".dropdown-container")) {
-        setOpenDropdown(null);
-      }
-    };
-    document.addEventListener("click", handleClickOutside);
-    return () => document.removeEventListener("click", handleClickOutside);
-  }, []);
-
   return (
     <div>
       {sections.map((section, index) => (
@@ -56,20 +39,15 @@ export default function Heroes({ sections }) {
                 {section.subtitle && <h2 className={section.subtitleClass}>{section.subtitle}</h2>}
                 <p className={section.descClass}>{section.description}</p>
 
-                {section.buttonText &&
-                typeof section.buttonText === "object" &&
-                Object.values(section.buttonText).some((text) => text) ? (
+                {section.button && section.buttons && (
                   <div className="d-flex flex-column flex-md-row gap-3 pt-2">
-                    {/* alumni Button */}
-                    <div className="dropdown-container position-relative">
-                      <Button 
-                        onClick={() => toggleDropdown("alumni")} 
-                        className="rounded-3 w-100" 
-                        style={{ 
-                          position: 'relative', 
-                          padding:"14px 27px",
-                          backgroundColor: '#4065B6',
-                          transition: 'all 0.2s ease-in-out', 
+                    <Link to="/info-loker">
+                      <Button
+                        className="rounded-3 w-100"
+                        style={{
+                          padding: "14px 24px",
+                          backgroundColor: "#4065B6",
+                          transition: "all 0.2s ease-in-out",
                         }}
                         onMouseEnter={(e) => {
                           e.target.style.backgroundColor = "#3050A5";
@@ -80,36 +58,16 @@ export default function Heroes({ sections }) {
                           e.currentTarget.style.transform = "scale(1)";
                         }}
                       >
-                        <FaGraduationCap  className="me-2"/>
-                        {section.buttonText?.alumni || "alumni"}
-                        <span style={{ display: 'none' }}>&#9660;</span>
+                        <FaBuilding className="me-2" />
+                        <span className="fw-bold">{section.button}</span>
                       </Button>
-                      {openDropdown === "alumni" && (
-                        <div className="dropdown-menu show position-absolute mt-2 w-100 p-1" style={{ zIndex: 10, fontSize:"14px" }}>
-                          {section.buttonText?.alumniLogin && (
-                            <Link to="/auth/login" className="dropdown-item">
-                              {section.buttonText.alumniLogin}
-                            </Link>
-                          )}
+                    </Link>
 
-                          {section.buttonText?.alumniRegister && (
-                            <Link to="/auth/register" className="dropdown-item">
-                              {section.buttonText.alumniRegister}
-                            </Link>
-                          )}
-                        </div>
-                      )}
-                    </div>
-
-                    {/* perusahaan Button */}
-                    <div className="dropdown-container position-relative">
-                      <Button 
-
-                        onClick={() => toggleDropdown("perusahaan")} 
-                        className="rounded-3 w-100" 
-                        style={{ 
-                          position: 'relative', 
-                          padding:"14px 27px",
+                    <Link to="/tracer-study">
+                      <Button
+                        className="rounded-3 w-100"
+                        style={{
+                          padding: "14px 24px",
                           color: "#4065B6",
                           backgroundColor: "white",
                           border: "2px solid #4065B6",
@@ -128,30 +86,12 @@ export default function Heroes({ sections }) {
                           e.currentTarget.style.transform = "scale(1)";
                         }}
                       >
-                        <FaBuilding  className="me-2"/>
-                        {section.buttonText?.perusahaan || "perusahaan"}
-                        <span style={{ display: 'none' }}>&#9660;</span>
+                        <FaGraduationCap className="me-2" />
+                        <span className="fw-bold">{section.buttons}</span>
                       </Button>
-                      {openDropdown === "perusahaan" && (
-                        <div className="dropdown-menu show position-absolute mt-2 w-100 p-1" style={{ zIndex: 10, fontSize:"14px" }}>
-                         {section.buttonText?.perusahaanLogin && (
-                            <Link to="/auth/login/perusahaan" className="dropdown-item">
-                              {section.buttonText.perusahaanLogin}
-                            </Link>
-                          )}
-
-                          {section.buttonText?.perusahaanRegister && (
-                            <Link to="/auth/konfirmasi" className="dropdown-item">
-                              {section.buttonText.perusahaanRegister}
-                            </Link>
-                          )}
-                        </div>
-                      )}
-                    </div>
+                    </Link>
                   </div>
-                ) : section.buttonText && typeof section.buttonText === "string" ? (
-                  <button className="btn btn-primary">{section.buttonText}</button>
-                ) : null}
+                )}
 
               </div>
             </div>
@@ -180,17 +120,8 @@ Heroes.propTypes = {
       subtitle: PropTypes.string,
       descClass: PropTypes.string,
       description: PropTypes.string.isRequired,
-      buttonText: PropTypes.oneOfType([
-        PropTypes.string,
-        PropTypes.shape({
-          alumni: PropTypes.string,
-          alumniLogin: PropTypes.string,
-          alumniRegister: PropTypes.string,
-          perusahaan: PropTypes.string,
-          perusahaanLogin: PropTypes.string,
-          perusahaanRegister: PropTypes.string,
-        }),
-      ]),
+      button: PropTypes.string,
+      buttons: PropTypes.string,
     })
   ).isRequired,
 };

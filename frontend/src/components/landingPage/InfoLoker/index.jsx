@@ -1,14 +1,14 @@
-import { Link } from 'react-router-dom';
-import { FaBriefcase, FaBuilding, FaGraduationCap, FaHistory, FaShareAlt, FaUser } from 'react-icons/fa';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchInfoLoker } from '../../redux/slice/infoLokerSlice';
-import { useEffect } from 'react';
+import { Link } from "react-router-dom";
+import { FaBriefcase, FaBuilding, FaGraduationCap, FaHistory, FaShareAlt, FaUser } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchInfoLoker } from "../../redux/slice/infoLokerSlice";
+import { useEffect } from "react";
 import defaultLogo from "../../../assets/images/logos/default-logo.png";
-import { Button } from 'react-bootstrap';
+import { Button } from "react-bootstrap";
 import "./InfoLoker.css";
 import { useNavigate } from "react-router-dom";
 
-const BASE_URL = 'http://localhost:5000/uploads/';
+const BASE_URL = "http://localhost:5000/uploads/";
 
 export default function InfoLoker() {
   const dispatch = useDispatch();
@@ -16,7 +16,7 @@ export default function InfoLoker() {
   const { infoLoker, status, error } = useSelector(state => state.infoLoker);
 
   useEffect(() => {
-    if (status === 'idle') {
+    if (status === "idle") {
       dispatch(fetchInfoLoker());
     }
   }, [status, dispatch]);
@@ -32,11 +32,11 @@ export default function InfoLoker() {
     }).format(angka);
   };
 
-  if (status === 'loading') {
+  if (status === "loading") {
     return <div className="text-center my-5">Loading...</div>;
   }
 
-  if (status === 'failed') {
+  if (status === "failed") {
     return <div className="text-center my-5">Error: {error}</div>;
   }
 
@@ -107,10 +107,8 @@ export default function InfoLoker() {
                 </div>
               </div>
 
-              <div className="row align-items-center mt-auto">
-                {/* Gaji - Tetap di atas di layar kecil */}
-                <div className="col-12 col-md-auto mb-2 mb-md-0">
-                  <h6 className="fw-bold text-success gaji mb-0">
+              <div className="d-flex flex-column flex-md-row gap-3 gap-md-2 justify-content-between align-items-center mt-auto">
+                  <h6 className="fw-bold text-success gaji mb-0 text-center text-md-start flex-grow-0" style={{ fontSize: "0.8rem", width: "55%" }}>
                     {job.gaji_min === "Dirahasiakan" && job.gaji_max === "Dirahasiakan"
                       ? "Negosiasi"
                       : job.gaji_min && job.gaji_max
@@ -121,68 +119,68 @@ export default function InfoLoker() {
                       ? `Hingga ${formatRupiah(job.gaji_max)}`
                       : "Gaji Menarik"}
                   </h6>
-                </div>
 
-                {/* Button Lamar & Share - Tetap sejajar di layar besar */}
-                <div className="col-12 col-md d-flex flex-column flex-sm-row gap-2 justify-content-end">
-                  <Button
-                    size="sm"
-                    className="px-2 py-2 w-auto border-0"
-                    onClick={() => window.open(job.link, "_blank")}
-                    style={{
-                      fontSize:"0.8rem",
-                      color: '#ffffff',
-                      backgroundColor: '#4065B6',
-                      transition: 'all 0.2s ease-in-out',
-                    }}
-                    onMouseEnter={(e) => {
-                      e.target.style.backgroundColor = "#3050A5";
-                      e.currentTarget.style.transform = "scale(1.02)";
-                    }}
-                    onMouseLeave={(e) => {
-                      e.target.style.backgroundColor = "#4065B6";
-                      e.currentTarget.style.transform = "scale(1)";
-                    }}
-                  >
-                    Lamar Sekarang
-                  </Button>
+                  <div className="d-flex flex-column flex-md-row gap-2 flex-wrap w-100 justify-content-md-end">
+                    <Button
+                      size="sm"
+                      className="py-2 border-0 fw-bold"
+                      href={job.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{
+                        padding:"9px",
+                        color: "#ffffff",
+                        backgroundColor: "#4065B6",
+                        transition: "all 0.2s ease-in-out",
+                      }}
+                      onMouseEnter={(e) => {
+                        e.target.style.backgroundColor = "#3050A5";
+                        e.currentTarget.style.transform = "scale(1.05)";
+                      }}
+                      onMouseLeave={(e) => {
+                        e.target.style.backgroundColor = "#4065B6";
+                        e.currentTarget.style.transform = "scale(1)";
+                      }}
+                    >
+                      Lamar Sekarang
+                    </Button>
 
-                  <Button
-                    size="sm"
-                    className="px-2 py-2 w-auto d-flex align-items-center justify-content-center"
-                    onClick={() => {
-                      if (navigator.share) {
-                        navigator.share({
-                          title: job.judul,
-                          text: `Lowongan Kerja: ${job.judul} di ${job.perusahaan}. Cek detailnya sekarang!`,
-                          url: window.location.origin + `/info-loker/${job._id}`,
-                        }).catch((err) => console.log("Gagal berbagi:", err));
-                      } else {
-                        alert("Fitur berbagi tidak didukung di browser ini.");
-                      }
-                    }}
-                    style={{
-                      color: "#a0a0a0",
-                      backgroundColor: "white",
-                      border: "2px solid #a0a0a0",
-                      transition: "all 0.2s ease-in-out",
-                    }}
-                    onMouseEnter={(e) => {
-                      e.target.style.backgroundColor = "#6c757d";
-                      e.target.style.color = "white";
-                      e.target.style.border = "2px solid #6c757d";
-                      e.currentTarget.style.transform = "scale(1.02)";
-                    }}
-                    onMouseLeave={(e) => {
-                      e.target.style.backgroundColor = "white";
-                      e.target.style.color = "#a0a0a0";
-                      e.target.style.border = "2px solid #a0a0a0";
-                      e.currentTarget.style.transform = "scale(1)";
-                    }}
-                  >
-                    <FaShareAlt />
-                  </Button>
-                </div>
+                    <Button
+                      size="sm"
+                      className="px-2 py-2 d-flex align-items-center justify-content-center"
+                      onClick={() => {
+                        if (navigator.share) {
+                          navigator.share({
+                            title: job.judul,
+                            text: `Lowongan Kerja: ${job.judul} di ${job.perusahaan}. Cek detailnya sekarang!`,
+                            url: window.location.origin + `/info-loker/${job._id}`,
+                          }).catch((err) => console.log("Gagal berbagi:", err));
+                        } else {
+                          alert("Fitur berbagi tidak didukung di browser ini.");
+                        }
+                      }}
+                      style={{
+                        color: "#a0a0a0",
+                        backgroundColor: "white",
+                        border: "2px solid #a0a0a0",
+                        transition: "all 0.2s ease-in-out",
+                      }}
+                      onMouseEnter={(e) => {
+                        e.target.style.backgroundColor = "#6c757d";
+                        e.target.style.color = "white";
+                        e.target.style.border = "2px solid #6c757d";
+                        e.currentTarget.style.transform = "scale(1.05)";
+                      }}
+                      onMouseLeave={(e) => {
+                        e.target.style.backgroundColor = "white";
+                        e.target.style.color = "#a0a0a0";
+                        e.target.style.border = "2px solid #a0a0a0";
+                        e.currentTarget.style.transform = "scale(1)";
+                      }}
+                    >
+                      <FaShareAlt />
+                    </Button>
+                  </div>
               </div>
             </div>
           </div>
@@ -212,7 +210,7 @@ export default function InfoLoker() {
           e.target.style.border = "2px solid #4065B6";
           e.currentTarget.style.transform = "scale(1)";
         }}
-        className="rounded-pill px-4 py-2"
+        className="rounded-pill px-4 py-2 fw-bold"
         onClick={() => navigate("/info-loker")}
       >
         Lihat Semua Lowongan

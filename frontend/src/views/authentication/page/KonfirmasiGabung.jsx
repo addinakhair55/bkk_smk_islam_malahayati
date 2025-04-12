@@ -2,13 +2,35 @@ import Navbar from '../../../components/landingPage/Navbar';
 import Footer from '../../../components/landingPage/Footer';
 import { FaExclamationCircle } from 'react-icons/fa';
 import PageContainer from 'src/components/container/PageContainer';
+import { useEffect } from 'react';
 
 export default function KonfirmasiGabung() {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+  
   return (
     <PageContainer title="Konfirmasi Gabung">
+      <style>{`
+          @keyframes fadeIn {
+          from {
+              opacity: 0;
+              transform: translateY(20px);
+          }
+          to {
+              opacity: 1;
+              transform: translateY(0);
+          }
+          }
+
+          .page-fade {
+          animation: fadeIn 1s ease-out forwards;
+          opacity: 0;
+          }
+      `}</style>
       <Navbar />
       <div
-        className="d-flex flex-column justify-content-center align-items-center text-center"
+        className="d-flex flex-column justify-content-center align-items-center text-center page-fade"
         style={{
           background: '#ECF0F8',
           padding: '40px 20px',

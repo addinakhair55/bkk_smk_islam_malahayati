@@ -20,7 +20,7 @@ const kontakList = [
   {
     icon: <FaInstagram className="icon-kontak" />,
     title: "Instagram",
-    desc: "@malahayatiislamicschool",
+    desc: "@bkksmkislammalahayati_20",
   },
 ];
 

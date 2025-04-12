@@ -1,5 +1,6 @@
 import { Carousel } from "react-bootstrap";
 import "./Testimonial.css";
+import Testimoni from "../../../assets/images/profile/user-1.jpg"
 
 export default function Testimonial() {
   return (
@@ -20,19 +21,19 @@ export default function Testimonial() {
             {
               name: "Joko Santoso",
               job: "Web Developer",
-              image: "https://via.placeholder.com/100",
+              image: Testimoni,
               text: "Layanan ini sangat membantu saya dalam menemukan pekerjaan yang tepat. Prosesnya mudah dan sangat user-friendly.",
             },
             {
               name: "Maria Kusuma",
               job: "UI/UX Designer",
-              image: "https://via.placeholder.com/100",
+              image: Testimoni,
               text: "Platform ini sangat berguna untuk mempercepat proses pencarian pekerjaan. Terima kasih!",
             },
             {
               name: "Andi Pratama",
               job: "Mobile Developer",
-              image: "https://via.placeholder.com/100",
+              image: Testimoni,
               text: "Pengalaman yang luar biasa! Layanan ini membantu saya mendapatkan pekerjaan impian.",
             },
           ].map((testimonial, index) => (
@@ -47,9 +48,9 @@ export default function Testimonial() {
                       style={{ width: "100px", height: "100px", objectFit: "cover" }}
                     />
                   </div>
-                  <h5 className="fw-bold text-primary">{testimonial.name}</h5>
+                  <h5 className="fw-bold" style={{color:"#4065B6"}}>{testimonial.name}</h5>
                   <p className="text-muted">{testimonial.job}</p>
-                  <p className="text-secondary">{testimonial.text}</p>
+                  <p className="text-secondary">&quot;{testimonial.text}&quot;</p>
                 </div>
               </div>
             </Carousel.Item>

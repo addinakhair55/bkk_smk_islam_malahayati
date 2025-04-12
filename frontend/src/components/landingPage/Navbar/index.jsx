@@ -1,14 +1,8 @@
 import { Link } from 'react-router-dom';
 import Logo from '../../Image/logo-bkk.png';
 import './Navbar.css';
-import { useState } from 'react';
-import { FaSignInAlt } from 'react-icons/fa';
 
 export default function Navbar() {
-  const [openDropdown, setOpenDropdown] = useState(null);
-  const toggleDropdown = (menu) => {
-    setOpenDropdown(openDropdown === menu ? null : menu);
-  };
   return (
     <nav className="navbar navbar-expand-lg bg-white shadow-sm style-font sticky-top">
       <div className="container-fluid">
@@ -107,13 +101,11 @@ export default function Navbar() {
                 Kontak
               </Link>
             </li>
-            <li className="nav-item p-1 p-lg-0" style={{ position: "relative" }}>
-              <div className="dropdown-container position-relative">
-                <button 
-                  onClick={() => toggleDropdown("masuk")} 
-                  className="rounded-3 w-100" 
-                  style={{ 
-                    position: "relative", 
+            <li className="nav-item p-1 p-lg-0 d-flex gap-2 flex-row">
+              <Link to="/auth/login" className="text-decoration-none w-100">
+                <button
+                  className="rounded-3 w-100"
+                  style={{
                     padding: "9px 15px",
                     color: "#4065B6",
                     backgroundColor: "white",
@@ -121,38 +113,23 @@ export default function Navbar() {
                     transition: "all 0.2s ease-in-out",
                   }}
                   onMouseEnter={(e) => {
-                    e.target.style.backgroundColor = "#3050A5";
-                    e.target.style.color = "white";
-                    e.target.style.border = "2px solid #3050A5";
+                    e.currentTarget.style.backgroundColor = "#3050A5";
+                    e.currentTarget.style.color = "white";
+                    e.currentTarget.style.border = "2px solid #3050A5";
                     e.currentTarget.style.transform = "scale(1.02)";
                   }}
                   onMouseLeave={(e) => {
-                    e.target.style.backgroundColor = "white";
-                    e.target.style.color = "#4065B6";
-                    e.target.style.border = "2px solid #4065B6";
+                    e.currentTarget.style.backgroundColor = "white";
+                    e.currentTarget.style.color = "#4065B6";
+                    e.currentTarget.style.border = "2px solid #4065B6";
                     e.currentTarget.style.transform = "scale(1)";
                   }}
-                  >
-                  <FaSignInAlt className="me-2" />
+                >
                   Masuk
                 </button>
-                {openDropdown === "masuk" && (
-                  <div 
-                  className="dropdown-menu show position-absolute w-100 p-1 px-0 px-lg-2 mt-2"
-                  style={{
-                    fontSize: "14px",
-                    minWidth: "165px", 
-                    right: 0,
-                  }}
-                >
-                  <Link className="dropdown-item p-1" to="/auth/login">Masuk Alumni</Link>
-                  <Link className="dropdown-item p-1" to="/auth/login/perusahaan">Masuk Perusahaan</Link>
-                </div>
-              )}
-
-
-              </div>
+              </Link>
             </li>
+
           </ul>
         </div>
       </div>

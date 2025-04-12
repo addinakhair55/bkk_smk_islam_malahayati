@@ -20,7 +20,7 @@
     background-color: #D6E0F5; /* Warna soft yang tetap nyambung */
   }
   .job-detail:hover {
-    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+    box-shadow: 0px 5px 15px #000000;
     transform: scale(1.02);
   }
   .badge-view {

@@ -1,5 +1,5 @@
 import Footer from "../../../components/landingPage/Footer";
-import Heroes from "../../../components/LandingPage/Heroes";
+import Heroes from "../../../components/landingPage/Heroes";
 import InfoLoker from "../../../components/landingPage/InfoLoker";
 import Manfaat from "../../../components/LandingPage/Manfaat";
 import Testimonial from "../../../components/landingPage/Testimonial";
@@ -7,7 +7,7 @@ import Navbar from "../../../components/landingPage/Navbar";
 import imgHero from "../../../assets/images/backgrounds/4.png";
 import imgHero2 from "../../../components/Image/img-heroes2.png";
 import imgHero3 from "../../../assets/images/backgrounds/5.png";
-import PageContainer from 'src/components/container/PageContainer';
+import PageContainer from "src/components/container/PageContainer";
 import "./Home.css"
 
 const sections = [
@@ -25,14 +25,9 @@ const sections = [
     titleClass2: "fw-bold lh-2 mb-3 font-title",
     description: "Kami menyediakan berbagai informasi karir untuk membantu Anda sukses dalam dunia kerja. Temukan lowongan pekerjaan di sini.",
     descClass: "font-des text-spacing",
-    buttonText: {
-      alumni: "Alumni/Siswa",
-      alumniLogin: "Masuk Akun Anda",
-      alumniRegister: "Daftar Akun Terbaru",
-      perusahaan: "Perusahaan",
-      perusahaanLogin: "Masuk Akun Anda",
-      perusahaanRegister: "Daftar Akun Terbaru",
-    },
+    button: "Lowongan Kerja",
+    buttons: "Tracer Study",
+   
   },
   {
     imgSrc: imgHero2,
@@ -67,12 +62,31 @@ const sections = [
 export default function Home() {
   return (
     <PageContainer title="BKK SMK Islam Malahayati" className="m-auto style-font">
-      <Navbar/>
-      <Heroes sections={sections}/>
-      <Manfaat/>
-      <InfoLoker/>
-      <Testimonial/>
-      <Footer/>
+      <style>{`
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        .page-fade {
+          animation: fadeIn 1s ease-out forwards;
+          opacity: 0;
+        }
+      `}</style>
+        <Navbar/>
+        <div className="page-fade">
+          <Heroes sections={sections}/>
+          <Manfaat/>
+          <InfoLoker/>
+          <Testimonial/>
+        </div>
+        <Footer/>
     </PageContainer>
   );
 }

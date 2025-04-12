@@ -11,7 +11,7 @@ export default function Content({ title, content }) {
                         style={{
                             width: "50px",
                             height: "4px",
-                            backgroundColor: "var(--bs-primary)",
+                            backgroundColor: "#4065B6",
                             marginTop: "10px",
                         }}
                     ></div>
