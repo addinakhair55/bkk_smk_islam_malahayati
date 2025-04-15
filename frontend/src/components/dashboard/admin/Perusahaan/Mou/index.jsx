@@ -1,15 +1,15 @@
-import PageContainer from 'src/components/container/PageContainer';
-import { useState, useEffect, useCallback } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchPerusahaan, updatePerusahaanStatus, deletePerusahaan } from '../../../../redux/slice/mouPerusahaanSlice';
+import PageContainer from "src/components/container/PageContainer";
+import { useState, useEffect, useCallback } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchPerusahaan, updatePerusahaanStatus, deleteMouPerusahaan } from "../../../../redux/slice/mouPerusahaanSlice";
 import axios from "axios";
-import { Link, useNavigate } from 'react-router-dom';
-import { Modal, Tooltip, OverlayTrigger, Pagination, Form, InputGroup, Dropdown, Table, Button, Spinner, Alert, ToastContainer, Toast, CloseButton } from 'react-bootstrap';
+import { Link, useNavigate } from "react-router-dom";
+import { Modal, Tooltip, OverlayTrigger, Pagination, Form, InputGroup, Dropdown, Table, Button, Spinner, Alert, ToastContainer, Toast, CloseButton } from "react-bootstrap";
 import { BsEye, BsPencilSquare, BsTrash } from "react-icons/bs"
 import "./Mou.css"
-import { FaExclamationCircle, FaQuestion } from 'react-icons/fa';
-import { CircularProgress } from '@mui/material';
-import { FiAlertTriangle } from 'react-icons/fi';
+import { FaExclamationCircle, FaQuestion } from "react-icons/fa";
+import { CircularProgress } from "@mui/material";
+import { FiAlertTriangle } from "react-icons/fi";
 
 export default function AdminMouPerusahaan() {
   const dispatch = useDispatch();
@@ -27,7 +27,7 @@ export default function AdminMouPerusahaan() {
 
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [showToast, setShowToast] = useState(false);
-  const [toastMessage, setToastMessage] = useState({ type: '', message: '' });
+  const [toastMessage, setToastMessage] = useState({ type: ", message: " });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [deletingId, setDeletingId] = useState(null);
 
@@ -37,7 +37,7 @@ export default function AdminMouPerusahaan() {
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString('en-GB');
+    return date.toLocaleDateString("en-GB");
   };
 
   const handleStatusChange = useCallback((id, status) => {
@@ -53,7 +53,7 @@ export default function AdminMouPerusahaan() {
     try {
       await axios.patch(`http://localhost:5000/mou-perusahaan/${selectedMouPerusahaanId}/status`, { status: newStatus });
     } catch (error) {
-      console.error('Ada kesalahan saat mengubah status perusahaan!', error);
+      console.error("Ada kesalahan saat mengubah status perusahaan!", error);
     }
   };
 
@@ -66,12 +66,12 @@ export default function AdminMouPerusahaan() {
         setIsSubmitting(true);
         try {
           if (!deletingId) {
-            throw new Error('ID lowongan kerja tidak ditemukan');
+            throw new Error("ID lowongan kerja tidak ditemukan");
           }
-          await dispatch(deletePerusahaan(deletingId)).unwrap();
+          await dispatch(deleteMouPerusahaan(deletingId)).unwrap();
           setToastMessage({ type: "success", message: "MoU ini berhasil dihapus!" });
           setShowToast(true);
-          setTimeout(() => navigate("/info-lowongan-kerja"), 3000);
+          setTimeout(() => navigate("/mou-perusahaan"), 3000);
         } catch (err) {
             setToastMessage({ type: "danger", message: "Gagal hapus MoU ini. Silakan coba lagi." });
             setShowToast(true);
@@ -168,8 +168,8 @@ export default function AdminMouPerusahaan() {
                 fontSize: "1.5rem",
                 transition: "color 0.3s, transform 0.3s"
               }}
-              onMouseEnter={(e) => e.target.style.color = '#989898'}
-              onMouseLeave={(e) => e.target.style.color = 'black'}
+              onMouseEnter={(e) => e.target.style.color = "#989898"}
+              onMouseLeave={(e) => e.target.style.color = "black"}
             />
           </Dropdown.Toggle>
 
@@ -256,13 +256,13 @@ export default function AdminMouPerusahaan() {
                       }
                     >
                       <Button
-                        className={`status-button ${company.status === 'Aktif' ? 'active' : company.status === 'Tidak Aktif' ? 'inactive' : ''}`}
+                        className={`status-button ${company.status === "Aktif" ? "active" : company.status === "Tidak Aktif" ? "inactive" : ""}`}
                         onClick={() => handleStatusChange(company._id, company.status)}
                       >
                         {
-                          company.status === 'Aktif' ? (
+                          company.status === "Aktif" ? (
                             <i className="bi bi-check-circle-fill approved-icon"></i>
-                          ) : company.status === 'Tidak Aktif' ? (
+                          ) : company.status === "Tidak Aktif" ? (
                             <i className="bi bi-x-circle-fill x-icon"></i>
                           ) : null
                         }
@@ -329,9 +329,9 @@ export default function AdminMouPerusahaan() {
                     <FaQuestion
                         className="mb-3 rounded p-2"
                         style={{
-                            fontSize: 'clamp(3rem, 6vw, 3rem)',
-                            color: '#07a0ff',
-                            backgroundColor: '#d6e5fa',
+                            fontSize: "clamp(3rem, 6vw, 3rem)",
+                            color: "#07a0ff",
+                            backgroundColor: "#d6e5fa",
                         }}
                     />
                     <CloseButton
@@ -339,24 +339,24 @@ export default function AdminMouPerusahaan() {
                         onClick={() => setShowModal(false)}
                         aria-label="Tutup modal"
                     />
-                    <h5 className="fw-bold" style={{ fontSize: 'clamp(1.25rem, 4vw, 1.5rem)' }}>
+                    <h5 className="fw-bold" style={{ fontSize: "clamp(1.25rem, 4vw, 1.5rem)" }}>
                         Apakah Anda yakin?
                     </h5>
-                    <p className="text-muted" style={{ fontSize: 'clamp(0.875rem, 3vw, 1rem)' }}>
+                    <p className="text-muted" style={{ fontSize: "clamp(0.875rem, 3vw, 1rem)" }}>
                       Apakah Anda yakin ingin mengubah status MoU perusahaan ini menjadi {" "}
-                      <span className="fw-semibold">{selectedStatus === 'Aktif' ? 'Tidak Aktif' : 'Aktif'}</span>? 
+                      <span className="fw-semibold">{selectedStatus === "Aktif" ? "Tidak Aktif" : "Aktif"}</span>? 
                     </p>
                 </Modal.Body>
                 <Modal.Footer className="border-0 d-flex justify-content-center w-100 pt-0">
                         <div className="row w-100 g-2">
                             <div className="col-12 col-md-6">
                                 <Button
-                                    onClick={() => handleConfirmStatusChange('Aktif')}
+                                    onClick={() => handleConfirmStatusChange("Aktif")}
                                     className="fw-bold py-2 rounded-pill shadow-sm w-100 border-0"
                                     style={{
-                                        color: '#ffffff',
-                                        backgroundColor: '#2e7636',
-                                        transition: 'all 0.2s ease-in-out',
+                                        color: "#ffffff",
+                                        backgroundColor: "#2e7636",
+                                        transition: "all 0.2s ease-in-out",
                                     }}
                                     onMouseEnter={(e) => {
                                         e.target.style.backgroundColor = "#2e7636";
@@ -374,12 +374,12 @@ export default function AdminMouPerusahaan() {
 
                             <div className="col-12 col-md-6">
                                 <Button
-                                    onClick={() => handleConfirmStatusChange('Tidak Aktif')}
+                                    onClick={() => handleConfirmStatusChange("Tidak Aktif")}
                                     className="fw-bold py-2 rounded-pill shadow-sm w-100 border-0"
                                     style={{
-                                      color: '#ffffff',
-                                      backgroundColor: '#fe0202',
-                                      transition: 'all 0.2s ease-in-out',
+                                      color: "#ffffff",
+                                      backgroundColor: "#fe0202",
+                                      transition: "all 0.2s ease-in-out",
                                     }}
                                     onMouseEnter={(e) => {
                                         e.target.style.backgroundColor = "#fe0202";
@@ -437,9 +437,9 @@ export default function AdminMouPerusahaan() {
                     <FiAlertTriangle
                         className="mb-3 rounded p-2"
                         style={{
-                            fontSize: 'clamp(3rem, 6vw, 3rem)',
-                            color: '#ff0707',
-                            backgroundColor: '#fad6d6',
+                            fontSize: "clamp(3rem, 6vw, 3rem)",
+                            color: "#ff0707",
+                            backgroundColor: "#fad6d6",
                         }}
                     />
                     <CloseButton
@@ -447,10 +447,10 @@ export default function AdminMouPerusahaan() {
                         onClick={() => setShowConfirmModal(false)}
                         aria-label="Tutup modal"
                     />
-                    <h5 className="fw-bold" style={{ fontSize: 'clamp(1.25rem, 4vw, 1.5rem)' }}>
+                    <h5 className="fw-bold" style={{ fontSize: "clamp(1.25rem, 4vw, 1.5rem)" }}>
                         Apakah Anda yakin?
                     </h5>
-                    <p className="text-muted" style={{ fontSize: 'clamp(0.875rem, 3vw, 1rem)' }}>
+                    <p className="text-muted" style={{ fontSize: "clamp(0.875rem, 3vw, 1rem)" }}>
                         Apakah Anda yakin ingin menghapus MoU ini?
                     </p>
                 </Modal.Body>
@@ -489,9 +489,9 @@ export default function AdminMouPerusahaan() {
                                     className="fw-bold py-2 rounded-pill shadow-sm w-100 border-0"
                                     disabled={isSubmitting}
                                     style={{
-                                        color: '#ffffff',
-                                        backgroundColor: '#fe0202',
-                                        transition: 'all 0.2s ease-in-out',
+                                        color: "#ffffff",
+                                        backgroundColor: "#fe0202",
+                                        transition: "all 0.2s ease-in-out",
                                     }}
                                     onMouseEnter={(e) => {
                                         e.target.style.backgroundColor = "#fe0202";

@@ -26,25 +26,15 @@ const Login = () => {
             localStorage.setItem("token", token);
             localStorage.setItem("role", role);
     
-            // Redirect berdasarkan role
             if (role === "admin") {
-                console.log("Redirecting to /admin-dashboard");
-                navigate("/dashboard");  // Halaman khusus untuk admin
-
+                navigate("/dashboard"); 
             } else if (role === "alumni") {
-                console.log("Redirecting to /alumni-dashboard");
-                navigate("/alumni");  // Halaman khusus untuk alumni
-            } else if (role === "perusahaan") {
-                console.log("Redirecting to /perusahaan-dashboard");
-                navigate("/perusahaan");  // Halaman khusus untuk alumni
-
+                navigate("/alumni"); 
             } else {
-                console.log("Redirecting to /dashboard");
-                navigate("/dashboard");  // Halaman default
+                navigate("/dashboard");
             }
         } catch (err) {
-            console.error("Login error:", err);
-            setError("Invalid credentials. Please try again.");
+            setError("Email atau kata sandi Anda salah. Silakan coba lagi!");
         }
     };
     
@@ -138,10 +128,6 @@ const Login = () => {
                                 padding: '10px 12px',
                                 border: '1px solid #E5E7EB',
                                 fontSize: '0.9rem',
-                                '@media (min-width: 768px)': {
-                                padding: '12px 15px',
-                                fontSize: '0.95rem'
-                                }
                             }}
                             />
                         </div>
@@ -166,10 +152,6 @@ const Login = () => {
                                 padding: '10px 12px',
                                 border: '1px solid #E5E7EB',
                                 fontSize: '0.9rem',
-                                '@media (min-width: 768px)': {
-                                padding: '12px 15px',
-                                fontSize: '0.95rem'
-                                }
                             }}
                             />
                             <button
@@ -181,10 +163,6 @@ const Login = () => {
                                     transform: "translateY(-30%)",
                                     padding: 0,
                                     color: '#3B82F6',
-                                    '@media (min-width: 768px)': {
-                                    top: "65%",
-                                    right: "15px"
-                                    }
                                 }}
                                 onClick={() => setShowPassword(!showPassword)}
                             >
@@ -199,7 +177,6 @@ const Login = () => {
                             style={{ 
                                 color: '#3B82F6',
                                 fontSize: '0.85rem',
-                                '@media (min-width: 768px)': { fontSize: '0.9rem' }
                             }}
                             >
                             Lupa Kata Sandi?
@@ -230,7 +207,6 @@ const Login = () => {
                             style={{ 
                             color: '#6B7280',
                             fontSize: '0.8rem',
-                            '@media (min-width: 768px)': { fontSize: '0.9rem' }
                             }}
                         >
                             Belum punya akun?{' '}

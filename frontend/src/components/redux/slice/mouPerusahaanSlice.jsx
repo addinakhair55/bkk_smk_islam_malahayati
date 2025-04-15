@@ -14,17 +14,15 @@ export const fetchPerusahaan = createAsyncThunk(
   }
 );
 
-
 export const createMouPerusahaan = createAsyncThunk('perusahaan/createMouPerusahaan', async (data) => {
   const response = await axios.post('http://localhost:5000/mou-perusahaan', data, {
     headers: {
       'Content-Type': 'multipart/form-data',
-      Authorization: `Bearer ${localStorage.getItem('token')}`, // Token auth
+      Authorization: `Bearer ${localStorage.getItem('token')}`,
     },
   });
   return response.data;
 });
-
 
 export const fetchMouDetailById = createAsyncThunk('perusahaan/fetchMouDetailById', async (id) => {
   const response = await axios.get(`http://localhost:5000/mou-perusahaan/${id}`);
@@ -39,11 +37,22 @@ export const updateMouPerusahaan = createAsyncThunk(
               headers: { 'Content-Type': 'multipart/form-data' },
           });
 
-          console.log("Response from API:", response.data);
-          return response.data; // Pastikan server mengembalikan data yang diperbarui
+          return response.data;
       } catch (error) {
           return rejectWithValue(error.response?.data || 'Gagal memperbarui MoU.');
       }
+  }
+);
+
+export const deleteMouPerusahaan = createAsyncThunk(
+  'perusahaan/deleteMouPerusahaan',
+  async (id, { rejectWithValue }) => {
+    try {
+      await axios.delete(`http://localhost:5000/mou-perusahaan/${id}`);
+      return id;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || 'Gagal menghapus MoU.');
+    }
   }
 );
 
@@ -127,7 +136,18 @@ const perusahaanSlice = createSlice({
       .addCase(updateMouPerusahaan.rejected, (state) => {
         state.loading = false;
         state.error = 'Terjadi kesalahan saat memperbarui data MoU.';
+      })
+
+      // delete
+      .addCase(deleteMouPerusahaan.fulfilled, (state, action) => {
+        state.perusahaan = state.perusahaan.filter((company) => company._id !== action.payload);
+        state.loading = false;
+      })
+      .addCase(deleteMouPerusahaan.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || 'Gagal menghapus MoU.';
       });
+      
   },
 });
 

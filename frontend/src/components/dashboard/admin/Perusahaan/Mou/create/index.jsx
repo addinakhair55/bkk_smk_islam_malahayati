@@ -1,41 +1,52 @@
-import PageContainer from 'src/components/container/PageContainer';
-import { CircularProgress } from '@mui/material';
-import { useState } from 'react';
-import { Button, Col, Form, Row, Card, CardBody, Alert, Spinner, Modal, CloseButton } from 'react-bootstrap';
-import { Link, useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { Toast, ToastContainer } from 'react-bootstrap';
-import { createMouPerusahaan } from '../../../../../redux/slice/mouPerusahaanSlice';
-import { FaExclamationCircle, FaSave, FaTimes } from 'react-icons/fa';
-import DashboardCard from '../../../../../shared/DashboardCard';
-import { FiAlertTriangle } from 'react-icons/fi';
+import PageContainer from "src/components/container/PageContainer";
+import { CircularProgress } from "@mui/material";
+import { useEffect, useRef, useState } from "react";
+import { Button, Col, Form, Row, Card, CardBody, Alert, Spinner, Modal, CloseButton } from "react-bootstrap";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { Toast, ToastContainer } from "react-bootstrap";
+import { createMouPerusahaan } from "../../../../../redux/slice/mouPerusahaanSlice";
+import { FaExclamationCircle, FaSave, FaTimes, FaTrash } from "react-icons/fa";
+import DashboardCard from "../../../../../shared/DashboardCard";
+import { FiAlertTriangle } from "react-icons/fi";
 
 export default function CreateMouPerusahaan() {
     const [formData, setFormData] = useState({
-        pihak_1: { nama_perusahaan: '', alamat: '', kontak_person: '', telepon: '', email: '', nama: '', jabatan: '' },
-        pihak_2: { nama_perusahaan: '', alamat: '', kontak_person: '', telepon: '', email: '', nama: '', jabatan: '' },
-        penanggung_jawab: { nama: '', kontak: '' },
-        deskripsi_kerjasama: '',
-        tanggal_mulai: '',
-        tanggal_berakhir: '',
+        pihak_1: { nama_perusahaan: "", alamat: "", kontak_person: "", telepon: "", email: "", nama: "", jabatan: "" },
+        pihak_2: { nama_perusahaan: "", alamat: "", kontak_person: "", telepon: "", email: "", nama: "", jabatan: "" },
+        penanggung_jawab: { nama: "", kontak: "" },
+        deskripsi_kerjasama: "",
+        tanggal_mulai: "",
+        tanggal_berakhir: "",
         dokumen_mou: null,
-        status: 'Aktif'
+        status: "Aktif"
     });
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const { loading, error } = useSelector((state) => state.perusahaan);
     const [showToast, setShowToast] = useState(false);
-    const [toastMessage, setToastMessage] = useState({ type: '', message: '' });
+    const [toastMessage, setToastMessage] = useState({ type: "", message: "" });
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [errors, setErrors] = useState({});
-    const [fileColor, setFileColor] = useState('secondary');
-
+    const [fileColor, setFileColor] = useState("secondary");
     const [showConfirmModal, setShowConfirmModal] = useState(false);
+    const [alertMessage, setAlertMessage] = useState(null);
+    const fileInputRef = useRef(null);
+
+    useEffect(() => {
+        if (alertMessage) {
+            const timer = setTimeout(() => {
+                setAlertMessage(null);
+            }, 3000);
+
+            return () => clearTimeout(timer);
+        }
+    }, [alertMessage]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        const keys = name.split('.');
+        const keys = name.split(".");
     
         setFormData((prev) => {
             const newData = { ...prev };
@@ -43,7 +54,7 @@ export default function CreateMouPerusahaan() {
     
             keys.forEach((key, index) => {
                 if (index === keys.length - 1) {
-                    temp[key] = value || '';
+                    temp[key] = value || "";
                 } else {
                     temp[key] = temp[key] ? { ...temp[key] } : {};
                     temp = temp[key];
@@ -55,80 +66,95 @@ export default function CreateMouPerusahaan() {
     
         setErrors((prevErrors) => {
             let newErrors = { ...prevErrors };
-        
+    
             if (name.includes("telepon") || name === "penanggung_jawab.kontak") {
-                const cleanedValue = value.replace(/-/g, "");
-                newErrors[name] = /^\d{8,13}$/.test(cleanedValue) 
-                    ? undefined 
-                    : "Nomor harus memiliki 8 hingga 13 digit angka (boleh mengandung tanda (-))";
+                if (value.trim() === "") {
+                    newErrors[name] = "Wajib diisi!";
+                } else if (!/^\d*$/.test(value)) {
+                    newErrors[name] = "Nomor harus angka!";
+                } else {
+                    newErrors[name] = undefined;
+                }
             } else {
-                newErrors[name] = value.trim() === '' ? 'Wajib diisi' : undefined;
+                newErrors[name] = value.trim() === "" ? "Wajib diisi!" : undefined;
             }
-        
+    
             return newErrors;
         });
     };
 
     const handleFileChange = (e) => {
         const file = e.target.files[0];
-    
+
         if (file) {
             if (file.type !== "application/pdf") {
-                alert("Dokumen MoU harus dalam format PDF!");
+                setAlertMessage("File MoU harus dalam format PDF!");
                 setFileColor("danger");
+                setFormData((prev) => ({ ...prev, dokumen_mou: null }));
+                if (fileInputRef.current) fileInputRef.current.value = "";
                 return;
             }
             setFileColor("success");
+            setErrors((prev) => ({ ...prev, dokumen_mou: undefined }));
         } else {
             setFileColor("secondary");
+            setErrors((prev) => ({ ...prev, dokumen_mou: "File wajib diunggah berformat PDF!" }));
         }
-    
+
         setFormData((prev) => ({
             ...prev,
             dokumen_mou: file || null,
         }));
-    
-        setErrors((prev) => ({
-            ...prev,
-            dokumen_mou: file ? null : "Dokumen MoU wajib diunggah",
-        }));
     };
-    
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setShowConfirmModal(true);
-    }
-    
-    const confirmSubmit = async () => {
-       
-        setIsSubmitting(true);
-    
+
+    const handleRemoveFile = () => {
+        setFormData((prev) => ({ ...prev, dokumen_mou: null }));
+        setFileColor("secondary");
+        setErrors((prev) => ({ ...prev, dokumen_mou: "File wajib diunggah berformat PDF!" }));
+        if (fileInputRef.current) {
+            fileInputRef.current.value = "";
+        }
+    };
+
+    const validateForm = () => {
         let newErrors = {};
-    
+
         Object.entries(formData).forEach(([key, value]) => {
-            if (typeof value === 'object' && value !== null) {
+            if (typeof value === "object" && value !== null && key !== "dokumen_mou") {
                 Object.entries(value).forEach(([subKey, subValue]) => {
                     if (!subValue.trim()) {
-                        newErrors[`${key}.${subKey}`] = "Wajib diisi";
-                    } else if ((subKey === "telepon" || key === "penanggung_jawab" && subKey === "kontak") && !/^\d{10,13}$/.test(subValue)) {
-                        newErrors[`${key}.${subKey}`] = "Nomor harus antara 10 hingga 13 digit";
+                        newErrors[`${key}.${subKey}`] = "Wajib diisi!";
+                    } else if ((subKey === "telepon" || (key === "penanggung_jawab" && subKey === "kontak")) && !/^\d+$/.test(subValue)) {
+                        newErrors[`${key}.${subKey}`] = "Nomor harus angka!";
                     }
                 });
             } else if (key !== "dokumen_mou" && !value.trim()) {
-                newErrors[key] = "Wajib diisi";
+                newErrors[key] = "Wajib diisi!";
             }
         });
-    
+
         if (!formData.dokumen_mou) {
-            newErrors.dokumen_mou = "Dokumen MoU wajib diunggah";
+            newErrors.dokumen_mou = "File wajib diunggah berformat PDF!";
         }
-    
+
+        setErrors(newErrors);
         if (Object.keys(newErrors).length > 0) {
-            setErrors(newErrors);
-            setIsSubmitting(false);
+            setAlertMessage("Formulir belum lengkap. Mohon pastikan semua kolom wajib sudah terisi dengan benar!");
+        }
+        return Object.keys(newErrors).length === 0;
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        if (!validateForm()) {
             return;
         }
-    
+        setShowConfirmModal(true);
+    };
+
+    const confirmSubmit = async () => {
+        setIsSubmitting(true);
+
         const formDataToSend = new FormData();
         Object.entries(formData).forEach(([key, value]) => {
             if (key !== "dokumen_mou" && typeof value === "object" && value !== null) {
@@ -139,11 +165,11 @@ export default function CreateMouPerusahaan() {
                 formDataToSend.append(key, value);
             }
         });
-    
+
         if (formData.dokumen_mou) {
             formDataToSend.append("dokumen_mou", formData.dokumen_mou);
         }
-    
+
         try {
             await dispatch(createMouPerusahaan(formDataToSend)).unwrap();
             setToastMessage({ type: "success", message: "MOU berhasil ditambahkan!" });
@@ -167,7 +193,7 @@ export default function CreateMouPerusahaan() {
             </div>
         );
     }
-    
+
     if (error) {
         return (
             <div className="d-flex justify-content-center">
@@ -179,12 +205,12 @@ export default function CreateMouPerusahaan() {
                         color: "#062707",
                         borderLeft: "6px solid #FF463F",
                         borderRight: "none",
-                        padding: "1.3rem", 
+                        padding: "1.3rem",
                         borderRadius: "10px 0 0 10px",
                     }}
                 >
-                    <FaExclamationCircle style={{ color: "#FF463F", fontSize: "1.2rem" }} className="mx-2"/>
-                        Gagal memuat data. Silakan cek database Anda!
+                    <FaExclamationCircle style={{ color: "#FF463F", fontSize: "1.2rem" }} className="mx-2" />
+                    Gagal memuat data. Silakan cek database Anda!
                 </Alert>
             </div>
         );
@@ -197,6 +223,23 @@ export default function CreateMouPerusahaan() {
                     <Toast.Body className="text-white">{toastMessage.message}</Toast.Body>
                 </Toast>
             </ToastContainer>
+            {alertMessage && (
+                <Alert
+                    variant="danger"
+                    className="mb-4 fw-bold align-items-center"
+                    style={{
+                        background: "linear-gradient(50deg, #ffdfdf, #ffffff)",
+                        color: "#062707",
+                        borderLeft: "6px solid #FF463F",
+                        borderRight: "none",
+                        padding: "1.3rem",
+                        borderRadius: "10px 0 0 10px",
+                    }}
+                >
+                    <FaExclamationCircle style={{ color: "#FF463F", fontSize: "1.2rem" }} className="mx-2" />
+                    {alertMessage}
+                </Alert>
+            )}
             <nav aria-label="breadcrumb" className="mb-4">
                 <ol className="breadcrumb">
                 <li className="breadcrumb-item">
@@ -296,30 +339,23 @@ export default function CreateMouPerusahaan() {
                                     <CardBody>
                                     <Row>
                                     {[
-                                        { id: 'pihak_1.nama_perusahaan', label: 'Nama Perusahaan' },
-                                        { id: 'pihak_1.email', label: 'Email' },
-                                        { id: 'pihak_1.kontak_person', label: 'Kontak Person' },
-                                        { id: 'pihak_1.telepon', label: 'Telepon' },
-                                        { id: 'pihak_1.nama', label: 'Nama Pihak 1' },
-                                        { id: 'pihak_1.jabatan', label: 'Jabatan' },
-                                        { id: 'pihak_1.alamat', label: 'Alamat', type: 'textarea' },
-                                    ].map(({ id, label, type = 'text' }) => {
-                                        const value = id.split('.').reduce((o, i) => (o ? o[i] : ''), formData);
-
+                                        { id: "pihak_1.nama_perusahaan", label: "Nama Perusahaan" },
+                                        { id: "pihak_1.email", label: "Email" },
+                                        { id: "pihak_1.kontak_person", label: "Kontak Person" },
+                                        { id: "pihak_1.telepon", label: "Telepon" },
+                                        { id: "pihak_1.nama", label: "Nama Pihak 1" },
+                                        { id: "pihak_1.jabatan", label: "Jabatan" },
+                                        { id: "pihak_1.alamat", label: "Alamat", type: "textarea" },
+                                    ].map(({ id, label, type = "text" }) => {
+                                        const value = id.split(".").reduce((o, i) => (o ? o[i] : ""), formData);
                                         const errorMessage = errors[id];
-
-                                        let borderColor = 'gray';
-                                        if (errorMessage) {
-                                            borderColor = 'red';
-                                        } else if (value) {
-                                            borderColor = 'green';
-                                        }
+                                        const borderColor = errorMessage ? "red" : value ? "green" : "gray";
 
                                         return (
-                                            <Col md={id === 'pihak_1.alamat' ? 12 : 6} key={id}>
+                                            <Col md={id === "pihak_1.alamat" ? 12 : 6} key={id}>
                                                 <Form.Group controlId={id} className="mb-3">
                                                     <Form.Label className="text-secondary text-uppercase">{label}</Form.Label>
-                                                    {type === 'textarea' ? (
+                                                    {type === "textarea" ? (
                                                         <Form.Control
                                                             as="textarea"
                                                             rows={3}
@@ -327,19 +363,25 @@ export default function CreateMouPerusahaan() {
                                                             value={value}
                                                             onChange={handleChange}
                                                             required
+                                                            isInvalid={!!errors[id]} 
+                                                            isValid={value && !errors[id]}
                                                             style={{ borderColor }}
                                                         />
                                                     ) : (
                                                         <Form.Control
-                                                            type={type}
-                                                            name={id}
-                                                            value={value}
-                                                            onChange={handleChange}
-                                                            required
+                                                            type={type} 
+                                                            name={id} 
+                                                            value={formData[id]} 
+                                                            onChange={handleChange} 
+                                                            isInvalid={!!errors[id]}
+                                                            isValid={value && !errors[id]}
+                                                            required 
                                                             style={{ borderColor }}
                                                         />
                                                     )}
-                                                    {errorMessage && <small className="text-danger">{errorMessage}</small>}
+                                                    <Form.Control.Feedback type="invalid">
+                                                        {errors[id]}
+                                                    </Form.Control.Feedback>
                                                 </Form.Group>
                                             </Col>
                                         );
@@ -355,30 +397,23 @@ export default function CreateMouPerusahaan() {
                                     <CardBody>
                                     <Row>
                                     {[
-                                        { id: 'pihak_2.nama_perusahaan', label: 'Nama Perusahaan' },
-                                        { id: 'pihak_2.email', label: 'Email' },
-                                        { id: 'pihak_2.kontak_person', label: 'Kontak Person' },
-                                        { id: 'pihak_2.telepon', label: 'Telepon' },
-                                        { id: 'pihak_2.nama', label: 'Nama Pihak 1' },
-                                        { id: 'pihak_2.jabatan', label: 'Jabatan' },
-                                        { id: 'pihak_2.alamat', label: 'Alamat', type: 'textarea' },
-                                    ].map(({ id, label, type = 'text' }) => {
-                                        const value = id.split('.').reduce((o, i) => (o ? o[i] : ''), formData);
-
+                                        { id: "pihak_2.nama_perusahaan", label: "Nama Perusahaan" },
+                                        { id: "pihak_2.email", label: "Email" },
+                                        { id: "pihak_2.kontak_person", label: "Kontak Person" },
+                                        { id: "pihak_2.telepon", label: "Telepon" },
+                                        { id: "pihak_2.nama", label: "Nama Pihak 2" },
+                                        { id: "pihak_2.jabatan", label: "Jabatan" },
+                                        { id: "pihak_2.alamat", label: "Alamat", type: "textarea" },
+                                    ].map(({ id, label, type = "text" }) => {
+                                        const value = id.split(".").reduce((o, i) => (o ? o[i] : ""), formData);
                                         const errorMessage = errors[id];
-
-                                        let borderColor = 'gray';
-                                        if (errorMessage) {
-                                            borderColor = 'red'; 
-                                        } else if (value) {
-                                            borderColor = 'green'; 
-                                        }
+                                        const borderColor = errorMessage ? "red" : value ? "green" : "gray";
 
                                         return (
-                                            <Col md={id === 'pihak_2.alamat' ? 12 : 6} key={id}>
+                                            <Col md={id === "pihak_2.alamat" ? 12 : 6} key={id}>
                                                 <Form.Group controlId={id} className="mb-3">
                                                     <Form.Label className="text-secondary text-uppercase">{label}</Form.Label>
-                                                    {type === 'textarea' ? (
+                                                    {type === "textarea" ? (
                                                         <Form.Control
                                                             as="textarea"
                                                             rows={3}
@@ -386,19 +421,25 @@ export default function CreateMouPerusahaan() {
                                                             value={value}
                                                             onChange={handleChange}
                                                             required
+                                                            isInvalid={!!errors[id]} 
+                                                            isValid={value && !errors[id]}
                                                             style={{ borderColor }}
                                                         />
                                                     ) : (
                                                         <Form.Control
-                                                            type={type}
-                                                            name={id}
-                                                            value={value}
-                                                            onChange={handleChange}
-                                                            required
+                                                            type={type} 
+                                                            name={id} 
+                                                            value={formData[id]} 
+                                                            onChange={handleChange} 
+                                                            isInvalid={!!errors[id]}
+                                                            isValid={value && !errors[id]}
+                                                            required 
                                                             style={{ borderColor }}
                                                         />
                                                     )}
-                                                    {errorMessage && <small className="text-danger">{errorMessage}</small>}
+                                                    <Form.Control.Feedback type="invalid">
+                                                        {errors[id]}
+                                                    </Form.Control.Feedback>
                                                 </Form.Group>
                                             </Col>
                                         );
@@ -408,7 +449,6 @@ export default function CreateMouPerusahaan() {
                                     </CardBody>
                                 </Card>
                             </div>
-                            
 
                             {/* Data lainnya */}
                             <div className="mb-4">
@@ -417,32 +457,28 @@ export default function CreateMouPerusahaan() {
                                     <Card.Body>
                                         <Row>
                                             {[
-                                                { id: 'deskripsi_kerjasama', label: 'Deskripsi Kerjasama', type: 'textarea', col: 12 },
-                                                { id: 'tanggal_mulai', label: 'Tanggal Mulai', type: 'date', col: 6 },
-                                                { id: 'tanggal_berakhir', label: 'Tanggal Berakhir', type: 'date', col: 6 },
-                                                { id: 'penanggung_jawab.nama', label: 'Nama Penanggung Jawab', col: 6 },
-                                                { id: 'penanggung_jawab.kontak', label: 'Telepon Penanggung Jawab', col: 6 } // Sudah cukup, tidak perlu input tambahan
-                                            ].map(({ id, label, type = 'text', col }) => {
-                                                const value = id.split('.').reduce((o, i) => (o ? o[i] : ''), formData);
+                                                { id: "deskripsi_kerjasama", label: "Deskripsi Kerjasama", type: "textarea", col: 12 },
+                                                { id: "tanggal_mulai", label: "Tanggal Mulai", type: "date", col: 6 },
+                                                { id: "tanggal_berakhir", label: "Tanggal Berakhir", type: "date", col: 6 },
+                                                { id: "penanggung_jawab.nama", label: "Nama Penanggung Jawab", col: 6 },
+                                                { id: "penanggung_jawab.kontak", label: "Telepon Penanggung Jawab", col: 6 }
+                                            ].map(({ id, label, type = "text", col }) => {
+                                                const value = id.split(".").reduce((o, i) => (o ? o[i] : ""), formData);
                                                 const errorMessage = errors[id];
-
-                                                let borderColor = 'gray';
-                                                if (errorMessage) {
-                                                    borderColor = 'red'; 
-                                                } else if (value) {
-                                                    borderColor = 'green'; 
-                                                }
+                                                const borderColor = errorMessage ? "red" : value ? "green" : "gray";
 
                                                 return (
                                                     <Col md={col} key={id}>
                                                         <Form.Group controlId={id} className="mb-3">
                                                             <Form.Label className="text-secondary text-uppercase">{label}</Form.Label>
-                                                            {type === 'textarea' ? (
-                                                                <Form.Control as="textarea" rows={3} name={id} value={value} onChange={handleChange} required style={{ borderColor }}/>
+                                                            {type === "textarea" ? (
+                                                                <Form.Control as="textarea" rows={3} name={id} value={value} onChange={handleChange} required isInvalid={!!errors[id]} isValid={value && !errors[id]} style={{ borderColor }}/>
                                                             ) : (
-                                                                <Form.Control type={type} name={id} value={value} onChange={handleChange} required style={{ borderColor }}/>
+                                                                <Form.Control type={type} name={id} value={value} onChange={handleChange} required isInvalid={!!errors[id]} isValid={value && !errors[id]} style={{ borderColor }}/>
                                                             )}
-                                                            {errorMessage && <small className="text-danger">{errorMessage}</small>}
+                                                            <Form.Control.Feedback type="invalid">
+                                                                {errors[id]}
+                                                            </Form.Control.Feedback>
                                                         </Form.Group>
                                                     </Col>
                                                 );
@@ -455,17 +491,38 @@ export default function CreateMouPerusahaan() {
 
                         </Row>
 
-                        <Form.Group controlId="dokumen_mou" className="mb-3">
-                            <Form.Label>Dokumen MoU</Form.Label>
-                            <Form.Control 
-                                type="file" 
-                                accept="application/pdf" 
-                                onChange={handleFileChange} 
-                                isInvalid={!!errors.dokumen_mou}
-                                className={`border border-${fileColor}`}
-                            />
-                            {errors.dokumen_mou && <Form.Control.Feedback type="invalid">{errors.dokumen_mou}</Form.Control.Feedback>}
-                        </Form.Group>
+                        <Form.Group controlId="dokumen_mou" className="mb-4">
+                                <Form.Label className="text-uppercase text-secondary">Dokumen MoU (PDF)</Form.Label>
+                                <Form.Control
+                                    type="file"
+                                    name="dokumen_mou"
+                                    accept="application/pdf"
+                                    onChange={handleFileChange}
+                                    ref={fileInputRef}
+                                    isInvalid={!!errors.dokumen_mou}
+                                    isValid={formData.dokumen_mou && !errors.dokumen_mou}
+                                    style={{
+                                        borderColor: errors.dokumen_mou ? "red" : fileColor === "success" ? "green" : fileColor === "danger" ? "red" : "gray"
+                                    }}
+                                    required
+                                />
+                                {formData.dokumen_mou && (
+                                    <div className="mt-2 d-flex align-items-center">
+                                        <span className="me-2">{formData.dokumen_mou.name}</span>
+                                        <Button
+                                            variant="outline-danger"
+                                            size="sm"
+                                            onClick={handleRemoveFile}
+                                            className="d-flex align-items-center"
+                                        >
+                                            <FaTrash />
+                                        </Button>
+                                    </div>
+                                )}
+                                <Form.Control.Feedback type="invalid">
+                                    {errors.dokumen_mou}
+                                </Form.Control.Feedback>
+                            </Form.Group>
                     </Form>
                 )}
             </DashboardCard>
@@ -481,9 +538,9 @@ export default function CreateMouPerusahaan() {
                         <FiAlertTriangle
                             className="mb-3 rounded p-2"
                             style={{
-                                fontSize: 'clamp(3rem, 6vw, 3rem)',
-                                color: '#ff9807',
-                                backgroundColor: '#faecd6',
+                                fontSize: "clamp(3rem, 6vw, 3rem)",
+                                color: "#ff9807",
+                                backgroundColor: "#faecd6",
                             }}
                         />
                         <CloseButton
@@ -491,10 +548,10 @@ export default function CreateMouPerusahaan() {
                             onClick={() => setShowConfirmModal(false)}
                             aria-label="Tutup modal"
                         />
-                        <h5 className="fw-bold" style={{ fontSize: 'clamp(1.25rem, 4vw, 1.5rem)' }}>
+                        <h5 className="fw-bold" style={{ fontSize: "clamp(1.25rem, 4vw, 1.5rem)" }}>
                             Apakah Anda yakin?
                         </h5>
-                        <p className="text-muted" style={{ fontSize: 'clamp(0.875rem, 3vw, 1rem)' }}>
+                        <p className="text-muted" style={{ fontSize: "clamp(0.875rem, 3vw, 1rem)" }}>
                             Apakah Anda yakin ingin menambah MoU?
                         </p>
                     </Modal.Body>
@@ -533,9 +590,9 @@ export default function CreateMouPerusahaan() {
                                     className="fw-bold py-2 rounded-pill shadow-sm w-100 border-0"
                                     disabled={isSubmitting}
                                     style={{
-                                        color: '#ffffff',
-                                        backgroundColor: '#3083ff',
-                                        transition: 'all 0.2s ease-in-out',
+                                        color: "#ffffff",
+                                        backgroundColor: "#3083ff",
+                                        transition: "all 0.2s ease-in-out",
                                     }}
                                     onMouseEnter={(e) => {
                                         e.target.style.backgroundColor = "#3083ff";

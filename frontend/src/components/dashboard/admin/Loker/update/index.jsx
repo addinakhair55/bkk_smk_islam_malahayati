@@ -1,35 +1,37 @@
-import PageContainer from 'src/components/container/PageContainer';
-import { CircularProgress } from '@mui/material';
-import { useState, useEffect, useRef } from 'react';
-import { Button, CloseButton, Col, Form, Modal, OverlayTrigger, Row, Spinner, Toast, ToastContainer, Tooltip, Alert} from 'react-bootstrap';
-import { Link, useNavigate, useParams } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchInfoLokerById, updateInfoLoker } from '../../../../redux/slice/infoLokerSlice';
-import ReactQuill from 'react-quill';
-import DashboardCard from '../../../../shared/DashboardCard';
-import { FaExclamationCircle, FaSave, FaTimes, FaTrash } from 'react-icons/fa';
-import Cropper from 'cropperjs';
-import { FiAlertTriangle } from 'react-icons/fi';
+import PageContainer from "src/components/container/PageContainer";
+import { CircularProgress } from "@mui/material";
+import { useState, useEffect, useRef } from "react";
+import { Button, CloseButton, Col, Form, Modal, OverlayTrigger, Row, Spinner, Toast, ToastContainer, Tooltip, Alert} from "react-bootstrap";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchInfoLokerById, updateInfoLoker } from "../../../../redux/slice/infoLokerSlice";
+import ReactQuill from "react-quill";
+import DashboardCard from "../../../../shared/DashboardCard";
+import { FaExclamationCircle, FaSave, FaTimes, FaTrash } from "react-icons/fa";
+import Cropper from "cropperjs";
+import { FiAlertTriangle } from "react-icons/fi";
 import defaultLogo from "../../../../../assets/images/logos/default-logo.png";
 
 // Base URL dari server backend
-const BASE_URL = 'http://localhost:5000/uploads/';
+const BASE_URL = "http://localhost:5000/uploads/";
 
 export default function EditInfoLoker() {
     const { id } = useParams();
     const initialFormState = {
-        judul: '', perusahaan: '', lokasi: '', bidang: '', jenis: '',
-        jenis_kelamin: '', minimal_pendidikan: '', riwayat_pengalaman: '',
-        link: '', deskripsi: '', persyaratan: '', keterampilan: '',
-        gaji_min: '', gaji_max: '', poster: null, logo: null
+        judul: "", perusahaan: "", lokasi: "", bidang: "", jenis: "",
+        jenis_kelamin: "", minimal_pendidikan: "", riwayat_pengalaman: "",
+        link: "", deskripsi: "", persyaratan: "", keterampilan: "",
+        gaji_min: "", gaji_max: "", poster: null, logo: null
     };
 
     const [formData, setFormData] = useState(initialFormState);
     const [errors, setErrors] = useState({});
     const [showToast, setShowToast] = useState(false);
-    const [toastMessage, setToastMessage] = useState({ type: '', message: '' });
+    const [toastMessage, setToastMessage] = useState({ type: "", message: "" });
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isGajiSecret, setIsGajiSecret] = useState(false);
+
+    const [alertMessage, setAlertMessage] = useState(null);
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -45,6 +47,16 @@ export default function EditInfoLoker() {
     const [posterKey, setPosterKey] = useState(Date.now());
 
     useEffect(() => {
+        if (alertMessage) {
+            const timer = setTimeout(() => {
+                setAlertMessage(null);
+            }, 3000);
+
+            return () => clearTimeout(timer);
+        }
+    }, [alertMessage]);
+
+    useEffect(() => {
         if (id) {
             dispatch(fetchInfoLokerById(id));
         }
@@ -55,20 +67,20 @@ export default function EditInfoLoker() {
             const foundLoker = infoLoker.find(loker => String(loker.id) === String(id));
             if (foundLoker) {
                 setFormData({
-                    judul: foundLoker.judul || '',
-                    perusahaan: foundLoker.perusahaan || '',
-                    lokasi: foundLoker.lokasi || '',
-                    bidang: foundLoker.bidang || '',
-                    jenis: foundLoker.jenis || '',
-                    jenis_kelamin: foundLoker.jenis_kelamin || '',
-                    minimal_pendidikan: foundLoker.minimal_pendidikan || '',
-                    riwayat_pengalaman: foundLoker.riwayat_pengalaman || '',
-                    link: foundLoker.link || '',
-                    deskripsi: foundLoker.deskripsi || '',
-                    persyaratan: Array.isArray(foundLoker.persyaratan) ? foundLoker.persyaratan.join(', ') : '',
-                    keterampilan: Array.isArray(foundLoker.keterampilan) ? foundLoker.keterampilan.join(', ') : '',
-                    gaji_min: foundLoker.gaji_min || '',
-                    gaji_max: foundLoker.gaji_max || '',
+                    judul: foundLoker.judul || "",
+                    perusahaan: foundLoker.perusahaan || "",
+                    lokasi: foundLoker.lokasi || "",
+                    bidang: foundLoker.bidang || "",
+                    jenis: foundLoker.jenis || "",
+                    jenis_kelamin: foundLoker.jenis_kelamin || "",
+                    minimal_pendidikan: foundLoker.minimal_pendidikan || "",
+                    riwayat_pengalaman: foundLoker.riwayat_pengalaman || "",
+                    link: foundLoker.link || "",
+                    deskripsi: foundLoker.deskripsi || "",
+                    persyaratan: Array.isArray(foundLoker.persyaratan) ? foundLoker.persyaratan.join(", ") : "",
+                    keterampilan: Array.isArray(foundLoker.keterampilan) ? foundLoker.keterampilan.join(", ") : "",
+                    gaji_min: foundLoker.gaji_min || "",
+                    gaji_max: foundLoker.gaji_max || "",
                     poster: foundLoker.poster || null,
                     logo: infoLoker.logo ? `${BASE_URL}${infoLoker.logo}` : null
                 });
@@ -76,20 +88,20 @@ export default function EditInfoLoker() {
             }
         } else if (typeof infoLoker === "object" && infoLoker !== null) {
             setFormData({
-                judul: infoLoker.judul || '',
-                perusahaan: infoLoker.perusahaan || '',
-                lokasi: infoLoker.lokasi || '',
-                bidang: infoLoker.bidang || '',
-                jenis: infoLoker.jenis || '',
-                jenis_kelamin: infoLoker.jenis_kelamin || '',
-                minimal_pendidikan: infoLoker.minimal_pendidikan || '',
-                riwayat_pengalaman: infoLoker.riwayat_pengalaman || '',
-                link: infoLoker.link || '',
-                deskripsi: infoLoker.deskripsi || '',
-                persyaratan: Array.isArray(infoLoker.persyaratan) ? infoLoker.persyaratan.join(', ') : '',
-                keterampilan: Array.isArray(infoLoker.keterampilan) ? infoLoker.keterampilan.join(', ') : '',
-                gaji_min: infoLoker.gaji_min || '',
-                gaji_max: infoLoker.gaji_max || '',
+                judul: infoLoker.judul || "",
+                perusahaan: infoLoker.perusahaan || "",
+                lokasi: infoLoker.lokasi || "",
+                bidang: infoLoker.bidang || "",
+                jenis: infoLoker.jenis || "",
+                jenis_kelamin: infoLoker.jenis_kelamin || "",
+                minimal_pendidikan: infoLoker.minimal_pendidikan || "",
+                riwayat_pengalaman: infoLoker.riwayat_pengalaman || "",
+                link: infoLoker.link || "",
+                deskripsi: infoLoker.deskripsi || "",
+                persyaratan: Array.isArray(infoLoker.persyaratan) ? infoLoker.persyaratan.join(", ") : "",
+                keterampilan: Array.isArray(infoLoker.keterampilan) ? infoLoker.keterampilan.join(", ") : "",
+                gaji_min: infoLoker.gaji_min || "",
+                gaji_max: infoLoker.gaji_max || "",
                 poster: infoLoker.poster || null,
                 logo: infoLoker.logo ? `${BASE_URL}${infoLoker.logo}` : null
             });
@@ -121,7 +133,7 @@ export default function EditInfoLoker() {
         }
         setFormData(prev => ({ ...prev, poster: null }));
         if (posterInputRef.current) {
-            posterInputRef.current.value = '';
+            posterInputRef.current.value = "";
         }
         setPosterKey(Date.now());
     };
@@ -134,71 +146,73 @@ export default function EditInfoLoker() {
             gaji_min: isChecked ? "Dirahasiakan" : "",
             gaji_max: isChecked ? "Dirahasiakan" : ""
         }));
+        setErrors(prevErrors => ({
+            ...prevErrors,
+            gaji_min: isChecked ? undefined : prevErrors.gaji_min,
+            gaji_max: isChecked ? undefined : prevErrors.gaji_max
+        }));
     };
 
     const handleChange = (e) => {
         const { name, files, value } = e.target;
         let newValue = value;
-
+    
         if (name === "gaji_min" || name === "gaji_max") {
             if (/[.,;/-]/.test(value)) {
                 setErrors(prevErrors => ({
                     ...prevErrors,
-                    [name]: 'Wajib angka. Contoh: 1000000'
+                    [name]: "Wajib angka. Contoh: 1000000",
                 }));
                 return;
             }
             newValue = value.replace(/\D/g, "");
         }
-
-        if ((name === "logo" || name === "poster") && files && files.length > 0) {
+    
+        if (name === "logo" && files.length > 0) {
             const file = files[0];
-            if (name === "logo") {
-                const reader = new FileReader();
-                reader.onload = (event) => {
-                    setImageSrc(event.target.result);
-                    setFormData(prevState => ({
-                        ...prevState,
-                        logo: file
-                    }));
-                    setShowCropModal(true);
-                };
-                reader.readAsDataURL(file);
-            } else {
-                setFormData(prevState => ({
-                    ...prevState,
-                    poster: file
-                }));
-                setPosterKey(Date.now());
-            }
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                setImageSrc(event.target.result);
+                setShowCropModal(true);
+            };
+            reader.readAsDataURL(file);
         } else {
+            if (name === "judul" && Array.isArray(newValue)) {
+                newValue = newValue[0] || "";
+            }
             setFormData(prevState => ({
                 ...prevState,
-                [name]: files ? (files.length > 0 ? files[0] : prevState[name]) : newValue
+                [name]: files ? (files.length > 0 ? files[0] : prevState[name]) : newValue,
             }));
-        }
-
-        setErrors(prevErrors => {
-            const newErrors = { ...prevErrors };
-            if (name === "gaji_min" || name === "gaji_max") {
-                if (!newValue.trim()) {
-                    newErrors[name] = 'Wajib diisi. Contoh: 1000000';
-                } else if (isNaN(newValue) || newValue.includes('.') || newValue.includes('-')) {
-                    newErrors[name] = 'Wajib Angka. Contoh: 1000000 tanpa (. ; -)';
-                } else {
-                    newErrors[name] = undefined;
+    
+            setErrors(prevErrors => {
+                const newErrors = { ...prevErrors };
+                if (name === "gaji_min" || name === "gaji_max") {
+                    if (!isGajiSecret) {
+                        if (!newValue.trim()) {
+                            newErrors[name] = "Wajib berupa angka! Contoh: 1000000";
+                        } else if (isNaN(newValue) || newValue.includes(".") || newValue.includes("-")) {
+                            newErrors[name] = "Wajib Angka. Contoh: 1000000 tanpa (. ; -)";
+                        } else {
+                            newErrors[name] = undefined;
+                        }
+                    }
+                } else if (name !== "link") {
+                    newErrors[name] = newValue.trim() ? undefined : "Wajib diisi!";
                 }
-            } else {
-                newErrors[name] = newValue.trim() ? undefined : 'Wajib diisi';
-            }
-            return newErrors;
-        });
+                return newErrors;
+            });
+        }
     };
 
     const handleQuillChange = (value, field) => {
         setFormData(prevState => ({
             ...prevState,
-            [field]: value || ''
+            [field]: value || ""
+        }));
+        setErrors((prevErrors) => ({
+            ...prevErrors,
+            [field]: value.trim() ? undefined : "Wajib diisi!",
         }));
     };
 
@@ -206,13 +220,13 @@ export default function EditInfoLoker() {
         if (cropperRef.current) {
             const canvas = cropperRef.current.getCroppedCanvas({ width: 100, height: 100 });
             canvas.toBlob((blob) => {
-                const croppedFile = new File([blob], 'cropped_logo.jpg', { type: 'image/jpeg' });
+                const croppedFile = new File([blob], "cropped_logo.jpg", { type: "image/jpeg" });
                 setFormData(prevState => ({
                     ...prevState,
                     logo: croppedFile,
                 }));
                 setShowCropModal(false);
-            }, 'image/jpeg');
+            }, "image/jpeg");
         }
     };
 
@@ -235,44 +249,52 @@ export default function EditInfoLoker() {
 
     const validateForm = () => {
         const newErrors = {};
-        Object.keys(formData).forEach(key => {
-            if (!formData[key] && key !== 'poster' && key !== 'logo') {
-                newErrors[key] = 'Wajib diisi';
+        Object.keys(formData).forEach((key) => {
+            if (key !== "poster" && key !== "logo" && key !== "link") {
+                if (key === "gaji_min" || key === "gaji_max") {
+                    if (!isGajiSecret && !formData[key]) {
+                        newErrors[key] = "Wajib diisi! Contoh: 1000000";
+                    } else if (!isGajiSecret && (isNaN(formData[key]) || formData[key].includes(".") || formData[key].includes("-"))) {
+                        newErrors[key] = "Wajib angka. Contoh: 1000000 tanpa (.,;-)";
+                    }
+                } else if (!formData[key]) {
+                    newErrors[key] = "Wajib diisi!";
+                }
             }
         });
 
-        if (!formData.jenis) newErrors.jenis = 'Jenis pekerjaan harus dipilih';
-        if (!formData.jenis_kelamin) newErrors.jenis_kelamin = 'Jenis kelamin harus dipilih';
-
         setErrors(newErrors);
+        if (Object.keys(newErrors).length > 0) {
+            setAlertMessage("Formulir belum lengkap. Mohon pastikan semua kolom wajib sudah terisi dengan benar!");
+        }
         return Object.keys(newErrors).length === 0;
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        if (!validateForm()) {
+            return;
+        }
         setShowConfirmModal(true);
     };
 
     const confirmSubmit = async () => {
-        if (!validateForm()) {
-            return;
-        }
-
         setIsSubmitting(true);
-
+    
         try {
             const formDataToSend = new FormData();
             Object.entries(formData).forEach(([key, value]) => {
-                if (key === 'logo' || key === 'poster') {
-                    // Kirim null secara eksplisit jika dihapus
-                    formDataToSend.append(key, value instanceof File ? value : value || '');
+                if (key === "logo" || key === "poster") {
+                    formDataToSend.append(key, value instanceof File ? value : value || "");
+                } else if (key === "gaji_min" || key === "gaji_max") {
+                    formDataToSend.append(key, isGajiSecret ? "Dirahasiakan" : (value || ""));
                 } else if (value !== null && value !== undefined) {
-                    formDataToSend.append(key, value instanceof File ? value : value.toString());
+                    formDataToSend.append(key, value.toString());
                 }
             });
-
+    
             await dispatch(updateInfoLoker({ id, updatedData: formDataToSend })).unwrap();
-            setToastMessage({ type: "success", message: "Informasi Lowongan berhasil diperbarui!" });
+            setToastMessage({ type: "success", message: "Lowongan kerja berhasil diperbarui!" });
             setShowToast(true);
             setTimeout(() => navigate("/info-lowongan-kerja"), 3000);
         } catch (err) {
@@ -323,6 +345,23 @@ export default function EditInfoLoker() {
                     <Toast.Body className="text-white">{toastMessage.message}</Toast.Body>
                 </Toast>
             </ToastContainer>
+            {alertMessage && (
+                <Alert
+                    variant="danger"
+                    className="mb-4 fw-bold align-items-center"
+                    style={{
+                        background: "linear-gradient(50deg, #ffdfdf, #ffffff)",
+                        color: "#062707",
+                        borderLeft: "6px solid #FF463F",
+                        borderRight: "none",
+                        padding: "1.3rem",
+                        borderRadius: "10px 0 0 10px",
+                    }}
+                >
+                    <FaExclamationCircle style={{ color: "#FF463F", fontSize: "1.2rem" }} className="mx-2" />
+                    {alertMessage}
+                </Alert>
+            )}
             <nav aria-label="breadcrumb" className="mb-4">
                 <ol className="breadcrumb">
                     <li className="breadcrumb-item">
@@ -368,7 +407,7 @@ export default function EditInfoLoker() {
                             e.target.style.border = "2px solid #6c757d";
                         }}
                         type="button"
-                        onClick={() => navigate('/info-lowongan-kerja')}
+                        onClick={() => navigate("/info-lowongan-kerja")}
                     >
                         <FaTimes size={16} /> Batal
                     </Button>
@@ -380,69 +419,70 @@ export default function EditInfoLoker() {
                     <Form>
                         <Row>
                             {[
-                                { id: 'judul', label: 'Judul Pekerjaan', type: 'text' },
-                                { id: 'perusahaan', label: 'Nama Perusahaan', type: 'text' },
-                                { id: 'lokasi', label: 'Lokasi Pekerjaan', type: 'text' },
+                                { id: "judul", label: "Judul Pekerjaan", type: "text" },
+                                { id: "perusahaan", label: "Nama Perusahaan", type: "text" },
+                                { id: "lokasi", label: "Lokasi Pekerjaan", type: "text" },
                                 {
-                                    id: 'bidang',
-                                    label: 'Bidang Pekerjaan',
-                                    type: 'select',
+                                    id: "bidang",
+                                    label: "Bidang Pekerjaan",
+                                    type: "select",
                                     options: [
-                                        'Teknologi Informasi (IT)',
-                                        'Manufaktur dan Produksi',
-                                        'Pendidikan',
-                                        'Kesehatan',
-                                        'Keuangan dan Akuntansi',
-                                        'Manajemen Bisnis dan Administrasi',
-                                        'Teknik dan Industri',
-                                        'Ekonomi',
-                                        'Pemasaran dan Penjualan',
-                                        'Pendidikan dan Pelatihan',
-                                        'Hukum',
-                                        'Pariwisata dan Perhotelan',
-                                        'Energi dan Lingkungan',
-                                        'Desain dan Seni',
+                                        "Teknologi Informasi (IT)",
+                                        "Manufaktur dan Produksi",
+                                        "Pendidikan",
+                                        "Kesehatan",
+                                        "Keuangan dan Akuntansi",
+                                        "Manajemen Bisnis dan Administrasi",
+                                        "Teknik dan Industri",
+                                        "Ekonomi",
+                                        "Pemasaran dan Penjualan",
+                                        "Pendidikan dan Pelatihan",
+                                        "Hukum",
+                                        "Pariwisata dan Perhotelan",
+                                        "Energi dan Lingkungan",
+                                        "Desain dan Seni",
                                     ],
                                 },
                                 {
-                                    id: 'jenis',
-                                    label: 'Jenis Pekerjaan',
-                                    type: 'select',
-                                    options: ['Full-Time', 'Kontrak', 'Part-Time', 'Freelance', 'Magang', 'Volunter'],
+                                    id: "jenis",
+                                    label: "Jenis Pekerjaan",
+                                    type: "select",
+                                    options: ["Full-Time", "Kontrak", "Part-Time", "Freelance", "Magang", "Volunter"],
                                 },
-                                { id: 'jenis_kelamin', label: 'Jenis Kelamin', type: 'select', options: ['Laki-Laki', 'Perempuan', 'Laki-Laki / Perempuan'] },
+                                { id: "jenis_kelamin", label: "Jenis Kelamin", type: "select", options: ["Laki-Laki", "Perempuan", "Laki-Laki / Perempuan"] },
                                 {
-                                    id: 'minimal_pendidikan',
-                                    label: 'Minimal Pendidikan',
-                                    type: 'select',
-                                    options: ['SD/SMP', 'SMA/SMK', 'D3/D4', 'S1', 'S2', 'S3'],
+                                    id: "minimal_pendidikan",
+                                    label: "Minimal Pendidikan",
+                                    type: "select",
+                                    options: ["SD/SMP", "SMA/SMK", "D3/D4", "S1", "S2", "S3"],
                                 },
                                 {
-                                    id: 'riwayat_pengalaman',
-                                    label: 'Riwayat Pengalaman',
-                                    type: 'select',
-                                    options: ['Berpengalaman', 'Tanpa Pengalaman/Fresh Graduate'],
+                                    id: "riwayat_pengalaman",
+                                    label: "Riwayat Pengalaman",
+                                    type: "select",
+                                    options: ["Berpengalaman", "Tanpa Pengalaman/Fresh Graduate"],
                                 },
-                                { id: 'deskripsi', label: 'Deskripsi Pekerjaan', type: 'quill' },
-                                { id: 'persyaratan', label: 'Persyaratan Pekerjaan', type: 'quill' },
-                                { id: 'keterampilan', label: 'Keterampilan Pekerjaan', type: 'quill' },
-                                { id: 'link', label: 'Link Lamaran', type: 'text' },
-                                { id: 'gaji_min', label: 'Nominal Gaji Minimum', type: 'text' },
-                                { id: 'gaji_max', label: 'Nominal Gaji Maksimal', type: 'text' },
+                                { id: "deskripsi", label: "Deskripsi Pekerjaan", type: "quill" },
+                                { id: "persyaratan", label: "Persyaratan Pekerjaan", type: "quill" },
+                                { id: "keterampilan", label: "Keterampilan Pekerjaan", type: "quill" },
+                                { id: "link", label: "Link Lamaran", type: "text" },
+                                { id: "gaji_min", label: "Nominal Gaji Minimum", type: "text" },
+                                { id: "gaji_max", label: "Nominal Gaji Maksimal", type: "text" },
                             ].map(({ id, label, type, options }) => (
-                                <Col md={type === 'quill' ? 12 : 6} key={id}>
+                                <Col md={type === "quill" ? 12 : 6} key={id}>
                                     <Form.Group controlId={id} className="mb-4">
                                         <Form.Label className="text-uppercase text-secondary">{label}</Form.Label>
-                                        {type === 'select' ? (
+                                        {type === "select" ? (
                                             <Form.Select
                                                 name={id}
-                                                value={formData[id] || ''}
+                                                value={formData[id]}
                                                 onChange={handleChange}
                                                 isInvalid={!!errors[id]}
+                                                isValid={formData[id] && !errors[id]}
                                                 style={{
-                                                    borderColor: errors[id] ? 'red' : formData[id] ? 'green' : 'gray'
+                                                    borderColor: errors[id] ? "red" : formData[id] ? "green" : "gray"
                                                 }}
-                                                required
+                                                required={id !== "link"}
                                             >
                                                 <option value="">Pilih</option>
                                                 {options.map(option => (
@@ -451,35 +491,43 @@ export default function EditInfoLoker() {
                                                     </option>
                                                 ))}
                                             </Form.Select>
-                                        ) : type === 'quill' ? (
-                                            <ReactQuill
-                                                value={formData[id] || ''}
-                                                onChange={(value) => handleQuillChange(value, id)}
-                                                theme="snow"
-                                                modules={{
-                                                    toolbar: [
-                                                        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-                                                        [{ 'align': [] }],
-                                                        ['bold', 'italic', 'underline'],
-                                                        ['link'],
-                                                    ],
-                                                }}
-                                                style={{
-                                                    borderColor: errors[id] ? 'red' : formData[id] ? 'green' : 'gray'
-                                                }}
-                                                required
-                                            />
+                                        ) : type === "quill" ? (
+                                            <>
+                                                <ReactQuill
+                                                    value={formData[id]}
+                                                    onChange={(value) => handleQuillChange(value, id)}
+                                                    theme="snow"
+                                                    modules={{
+                                                        toolbar: [
+                                                            [{ "list": "ordered" }, { "list": "bullet" }],
+                                                            [{ "align": [] }],
+                                                            ["bold", "italic", "underline"],
+                                                            ["link"],
+                                                        ],
+                                                    }}
+                                                    style={{
+                                                        borderColor: errors[id] ? "red" : formData[id] ? "green" : "gray"
+                                                    }}
+                                                    required
+                                                />
+                                                {errors[id] && (
+                                                    <Form.Control.Feedback type="invalid" className="d-block">
+                                                        {errors[id]}
+                                                    </Form.Control.Feedback>
+                                                )}
+                                            </>
                                         ) : (
                                             <Form.Control
                                                 type={type}
                                                 name={id}
-                                                value={formData[id] || ''}
+                                                value={formData[id]}
                                                 onChange={handleChange}
                                                 isInvalid={!!errors[id]}
+                                                isValid={(id === "gaji_min" || id === "gaji_max") ? isGajiSecret || (formData[id] && !errors[id]) : (formData[id] && !errors[id])}
                                                 style={{
-                                                    borderColor: errors[id] ? 'red' : formData[id] ? 'green' : 'gray'
+                                                    borderColor: errors[id] ? "red" : ((id === "gaji_min" || id === "gaji_max") && isGajiSecret) ? "green" : formData[id] ? "green" : "gray"
                                                 }}
-                                                required
+                                                required={id !== "link"}
                                             />
                                         )}
                                         <Form.Control.Feedback type="invalid">
@@ -501,7 +549,7 @@ export default function EditInfoLoker() {
                                         marginRight: "8px"
                                     }}
                                 />
-                                <Form.Label
+                                <Form.Label 
                                     className="m-0 text-uppercase text-secondary"
                                     style={{ cursor: "pointer", fontSize: "16px" }}
                                 >
@@ -514,7 +562,7 @@ export default function EditInfoLoker() {
                             <div className="d-flex align-items-center gap-3">
                                 <div
                                     style={{
-                                        border: `2px dashed ${errors.logo ? 'red' : formData.logo ? 'green' : 'gray'}`,
+                                        border: `2px dashed ${errors.logo ? "red" : formData.logo ? "green" : "gray"}`,
                                         borderRadius: "50px",
                                         padding: "10px",
                                         width: "100px",
@@ -544,23 +592,27 @@ export default function EditInfoLoker() {
                                             cursor: "pointer",
                                         }}
                                     />
-                                    <img
-                                        src={
-                                            formData.logo instanceof File
-                                                ? URL.createObjectURL(formData.logo)
-                                                : formData.logo || defaultLogo
-                                        }
-                                        alt="Logo Perusahaan"
-                                        style={{
-                                            maxWidth: "100%",
-                                            borderRadius: "50px",
-                                            maxHeight: "100%",
-                                            objectFit: "cover",
-                                        }}
-                                        onError={(e) => {
-                                            e.target.src = defaultLogo;
-                                        }}
-                                    />
+                                    {formData.logo ? (
+                                        <img
+                                            src={
+                                                formData.logo instanceof File
+                                                    ? URL.createObjectURL(formData.logo)
+                                                    : formData.logo
+                                            }
+                                            alt="Logo Perusahaan"
+                                            style={{
+                                                maxWidth: "100%",
+                                                borderRadius: "50px",
+                                                maxHeight: "100%",
+                                                objectFit: "cover",
+                                            }}
+                                            onError={(e) => {
+                                                e.target.src = defaultLogo;
+                                            }}
+                                        />
+                                    ) : (
+                                        <span style={{ fontSize: "14px", color: "gray" }}>Upload Logo</span>
+                                    )}
                                 </div>
 
                                 {formData.logo && (
@@ -615,12 +667,12 @@ export default function EditInfoLoker() {
                                         src={
                                             formData.poster instanceof File 
                                                 ? URL.createObjectURL(formData.poster)
-                                                : formData.poster ? `${BASE_URL}${formData.poster}` : ''
+                                                : formData.poster ? `${BASE_URL}${formData.poster}` : ""
                                         }
                                         alt="Poster Pekerjaan"
                                         style={{ maxWidth: "100%", borderRadius: "8px", objectFit: "cover" }}
                                         onError={(e) => {
-                                            e.target.style.display = 'none';
+                                            e.target.style.display = "none";
                                         }}
                                     />
                                 </div>
@@ -640,7 +692,7 @@ export default function EditInfoLoker() {
                                 ref={imageRef}
                                 src={imageSrc}
                                 alt="Logo Preview"
-                                style={{ maxWidth: '100%' }}
+                                style={{ maxWidth: "100%" }}
                                 onLoad={initializeCropper}
                             />
                         )}
@@ -666,9 +718,9 @@ export default function EditInfoLoker() {
                         <FiAlertTriangle
                             className="mb-3 rounded p-2"
                             style={{
-                                fontSize: 'clamp(3rem, 6vw, 3rem)',
-                                color: '#ff9807',
-                                backgroundColor: '#faecd6',
+                                fontSize: "clamp(3rem, 6vw, 3rem)",
+                                color: "#ff9807",
+                                backgroundColor: "#faecd6",
                             }}
                         />
                         <CloseButton
@@ -676,10 +728,10 @@ export default function EditInfoLoker() {
                             onClick={() => setShowConfirmModal(false)}
                             aria-label="Tutup modal"
                         />
-                        <h5 className="fw-bold" style={{ fontSize: 'clamp(1.25rem, 4vw, 1.5rem)' }}>
+                        <h5 className="fw-bold" style={{ fontSize: "clamp(1.25rem, 4vw, 1.5rem)" }}>
                             Apakah Anda yakin?
                         </h5>
-                        <p className="text-muted" style={{ fontSize: 'clamp(0.875rem, 3vw, 1rem)' }}>
+                        <p className="text-muted" style={{ fontSize: "clamp(0.875rem, 3vw, 1rem)" }}>
                             Apakah Anda yakin ingin mengubah info lowongan kerja ini?
                         </p>
                     </Modal.Body>
@@ -718,9 +770,9 @@ export default function EditInfoLoker() {
                                     className="fw-bold py-2 rounded-pill shadow-sm w-100 border-0"
                                     disabled={isSubmitting}
                                     style={{
-                                        color: '#ffffff',
-                                        backgroundColor: '#3083ff',
-                                        transition: 'all 0.2s ease-in-out',
+                                        color: "#ffffff",
+                                        backgroundColor: "#3083ff",
+                                        transition: "all 0.2s ease-in-out",
                                     }}
                                     onMouseEnter={(e) => {
                                         e.target.style.backgroundColor = "#3083ff";

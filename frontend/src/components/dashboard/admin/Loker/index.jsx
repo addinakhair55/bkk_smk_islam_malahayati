@@ -1,14 +1,14 @@
-import PageContainer from 'src/components/container/PageContainer';
-import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchInfoLoker, deleteInfoLoker } from '../../../redux/slice/infoLokerSlice';
-import { Link, useNavigate } from 'react-router-dom';
-import { Pagination, Form, InputGroup, Dropdown, Table, Button, OverlayTrigger, Tooltip, Spinner, Alert, ToastContainer, Toast, Modal, CloseButton } from 'react-bootstrap';
-import './Loker.css';
-import { BsEye, BsPencilSquare, BsTrash } from 'react-icons/bs';
-import { FaExclamationCircle } from 'react-icons/fa';
-import { FiAlertTriangle } from 'react-icons/fi';
-import { CircularProgress } from '@mui/material';
+import PageContainer from "src/components/container/PageContainer";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchInfoLoker, deleteInfoLoker } from "../../../redux/slice/infoLokerSlice";
+import { Link, useNavigate } from "react-router-dom";
+import { Pagination, Form, InputGroup, Dropdown, Table, Button, OverlayTrigger, Tooltip, Spinner, Alert, ToastContainer, Toast, Modal, CloseButton } from "react-bootstrap";
+import "./Loker.css";
+import { BsEye, BsPencilSquare, BsTrash } from "react-icons/bs";
+import { FaExclamationCircle } from "react-icons/fa";
+import { FiAlertTriangle } from "react-icons/fi";
+import { CircularProgress } from "@mui/material";
 
 export default function AdminInfoLoker() {
   const dispatch = useDispatch();
@@ -36,7 +36,7 @@ export default function AdminInfoLoker() {
 
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [showToast, setShowToast] = useState(false);
-  const [toastMessage, setToastMessage] = useState({ type: '', message: '' });
+  const [toastMessage, setToastMessage] = useState({ type: "", message: "" });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [deletingId, setDeletingId] = useState(null);
   
@@ -57,7 +57,7 @@ export default function AdminInfoLoker() {
       setIsSubmitting(true);
       try {
         if (!deletingId) {
-          throw new Error('ID lowongan kerja tidak ditemukan');
+          throw new Error("ID lowongan kerja tidak ditemukan");
         }
         await dispatch(deleteInfoLoker(deletingId)).unwrap();
         setToastMessage({ type: "success", message: "Info lowongan Kerja ini berhasil dihapus!" });
@@ -73,7 +73,7 @@ export default function AdminInfoLoker() {
       }
   };
 
-  if (status === 'loading') 
+  if (status === "loading") 
     return <div className="d-flex justify-content-center">
             <Spinner animation="border" role="status">
                 <span className="visually-hidden">Loading...</span>
@@ -81,7 +81,7 @@ export default function AdminInfoLoker() {
           </div>
   ;
   
-  if (status === 'failed') return 
+  if (status === "failed") return 
     <div className="d-flex justify-content-center">
         <Alert
             variant="white"
@@ -130,8 +130,8 @@ export default function AdminInfoLoker() {
                         fontSize: "1.5rem",
                         transition: "color 0.3s, transform 0.3s"
                       }}
-                      onMouseEnter={(e) => e.target.style.color = '#989898'}
-                      onMouseLeave={(e) => e.target.style.color = 'black'}
+                      onMouseEnter={(e) => e.target.style.color = "#989898"}
+                      onMouseLeave={(e) => e.target.style.color = "black"}
                     />
                   </Dropdown.Toggle>
 
@@ -161,20 +161,20 @@ export default function AdminInfoLoker() {
                           <Form.Select style={{ fontSize: "0.90rem" }} onChange={(e) => setFilter((prev) => ({ ...prev, bidang: e.target.value }))}>
                             <option value="">Pilih</option>
                             {[
-                              'Teknologi Informasi (IT)', 
-                              'Manufaktur dan Produksi', 
-                              'Pendidikan',
-                              'Kesehatan', 
-                              'Keuangan dan Akuntansi',
-                              'Manajemen Bisnis dan Administrasi',
-                              'Teknik dan Industri',
-                              'Ekonomi',
-                              'Pemasaran dan Penjualan',
-                              'Pendidikan dan Pelatihan',
-                              'Hukum',
-                              'Pariwisata dan Perhotelan',
-                              'Energi dan Lingkungan',
-                              'Desain dan Seni',
+                              "Teknologi Informasi (IT)", 
+                              "Manufaktur dan Produksi", 
+                              "Pendidikan",
+                              "Kesehatan", 
+                              "Keuangan dan Akuntansi",
+                              "Manajemen Bisnis dan Administrasi",
+                              "Teknik dan Industri",
+                              "Ekonomi",
+                              "Pemasaran dan Penjualan",
+                              "Pendidikan dan Pelatihan",
+                              "Hukum",
+                              "Pariwisata dan Perhotelan",
+                              "Energi dan Lingkungan",
+                              "Desain dan Seni",
                             ].map((bidang, index) => (
                               <option key={index} value={bidang}>{bidang}</option>
                             ))}
@@ -264,9 +264,9 @@ export default function AdminInfoLoker() {
                         <FiAlertTriangle
                             className="mb-3 rounded p-2"
                             style={{
-                                fontSize: 'clamp(3rem, 6vw, 3rem)',
-                                color: '#ff0707',
-                                backgroundColor: '#fad6d6',
+                                fontSize: "clamp(3rem, 6vw, 3rem)",
+                                color: "#ff0707",
+                                backgroundColor: "#fad6d6",
                             }}
                         />
                         <CloseButton
@@ -274,10 +274,10 @@ export default function AdminInfoLoker() {
                             onClick={() => setShowConfirmModal(false)}
                             aria-label="Tutup modal"
                         />
-                        <h5 className="fw-bold" style={{ fontSize: 'clamp(1.25rem, 4vw, 1.5rem)' }}>
+                        <h5 className="fw-bold" style={{ fontSize: "clamp(1.25rem, 4vw, 1.5rem)" }}>
                             Apakah Anda yakin?
                         </h5>
-                        <p className="text-muted" style={{ fontSize: 'clamp(0.875rem, 3vw, 1rem)' }}>
+                        <p className="text-muted" style={{ fontSize: "clamp(0.875rem, 3vw, 1rem)" }}>
                             Apakah Anda yakin ingin menghapus lowongan ini?
                         </p>
                     </Modal.Body>
@@ -316,9 +316,9 @@ export default function AdminInfoLoker() {
                                     className="fw-bold py-2 rounded-pill shadow-sm w-100 border-0"
                                     disabled={isSubmitting}
                                     style={{
-                                        color: '#ffffff',
-                                        backgroundColor: '#fe0202',
-                                        transition: 'all 0.2s ease-in-out',
+                                        color: "#ffffff",
+                                        backgroundColor: "#fe0202",
+                                        transition: "all 0.2s ease-in-out",
                                     }}
                                     onMouseEnter={(e) => {
                                         e.target.style.backgroundColor = "#fe0202";

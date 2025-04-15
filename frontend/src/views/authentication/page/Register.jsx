@@ -28,7 +28,7 @@ const Register = () => {
     return (
         <PageContainer title="Register Portal Alumni">
         <div 
-            className="d-flex justify-content-center align-items-center p-0 p-md-3"
+            className="d-flex justify-content-center align-items-center p-3"
             style={{ 
                 background: 'linear-gradient(135deg, #4065B6 0%, #3B82F6 100%)',
                 minHeight: '100%',
@@ -114,10 +114,6 @@ const Register = () => {
                             padding: '10px 12px',
                             border: '1px solid #E5E7EB',
                             fontSize: '0.9rem',
-                            '@media (min-width: 768px)': {
-                                padding: '12px 15px',
-                                fontSize: '0.95rem'
-                            }
                             }}
                         />
                         </div>
@@ -142,10 +138,6 @@ const Register = () => {
                             padding: '10px 12px',
                             border: '1px solid #E5E7EB',
                             fontSize: '0.9rem',
-                            '@media (min-width: 768px)': {
-                                padding: '12px 15px',
-                                fontSize: '0.95rem'
-                            }
                             }}
                         />
                         </div>
@@ -170,10 +162,6 @@ const Register = () => {
                             padding: '10px 12px',
                             border: '1px solid #E5E7EB',
                             fontSize: '0.9rem',
-                            '@media (min-width: 768px)': {
-                                padding: '12px 15px',
-                                fontSize: '0.95rem'
-                            }
                             }}
                         />
                         <button
@@ -185,10 +173,6 @@ const Register = () => {
                             transform: "translateY(-30%)",
                             padding: 0,
                             color: '#3B82F6',
-                            '@media (min-width: 768px)': {
-                                top: "65%",
-                                right: "15px"
-                            }
                             }}
                             onClick={() => setShowPassword(!showPassword)}
                         >
@@ -220,7 +204,6 @@ const Register = () => {
                         style={{ 
                             color: '#6B7280',
                             fontSize: '0.8rem',
-                            '@media (min-width: 768px)': { fontSize: '0.9rem' }
                         }}
                         >
                         Sudah punya akun?{' '}

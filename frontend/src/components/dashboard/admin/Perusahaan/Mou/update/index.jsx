@@ -1,11 +1,11 @@
 import PageContainer from 'src/components/container/PageContainer';
 import { CircularProgress } from '@mui/material';
-import { useEffect, useState } from 'react';
-import { Button, Card, CardBody, CloseButton, Col, Form, Modal, Row } from 'react-bootstrap';
+import { useEffect, useRef, useState } from 'react';
+import { Alert, Button, Card, CardBody, CloseButton, Col, Form, Modal, Row, Spinner } from 'react-bootstrap';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import DashboardCard from '../../../../../shared/DashboardCard';
-import { FaSave, FaTimes } from "react-icons/fa";
+import { FaExclamationCircle, FaSave, FaTimes, FaTrash } from "react-icons/fa";
 import { fetchMouDetailById, updateMouPerusahaan } from '../../../../../redux/slice/mouPerusahaanSlice';
 import { Toast, ToastContainer } from 'react-bootstrap';
 import { FiAlertTriangle } from 'react-icons/fi';
@@ -15,6 +15,7 @@ export default function UpdateMouPerusahaan() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const { loading, error } = useSelector((state) => state.perusahaan);
+    const [dokumenLama, setDokumenLama] = useState(null);
 
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [previewUrl, setPreviewUrl] = useState('');
@@ -22,8 +23,9 @@ export default function UpdateMouPerusahaan() {
     const [toastMessage, setToastMessage] = useState({ type: '', message: '' });
     const [errors, setErrors] = useState({});
     const [fileColor, setFileColor] = useState('secondary');
-
     const [showConfirmModal, setShowConfirmModal] = useState(false);
+    const [alertMessage, setAlertMessage] = useState(null);
+    const fileInputRef = useRef(null);
 
     const [formData, setFormData] = useState({
         pihak_1: { nama_perusahaan: '', alamat: '', kontak_person: '', telepon: '', email: '', nama: '', jabatan: '' },
@@ -43,23 +45,39 @@ export default function UpdateMouPerusahaan() {
                     ...prev,
                     ...response.payload,
                     tanggal_mulai: response.payload.tanggal_mulai ? response.payload.tanggal_mulai.slice(0, 10) : '',
-                    tanggal_berakhir: response.payload.tanggal_berakhir ? response.payload.tanggal_berakhir.slice(0, 10) : ''
+                    tanggal_berakhir: response.payload.tanggal_berakhir ? response.payload.tanggal_berakhir.slice(0, 10) : '',
+                    dokumen_mou: prev.dokumen_mou
                 }));
+                
                 if (response.payload.dokumen_mou) {
                     setPreviewUrl(`http://localhost:5000/uploads/${response.payload.dokumen_mou}`);
+                    setFileColor('success');
+                    setDokumenLama(response.payload.dokumen_mou);
                 }
             }
+            
+            
         });
-    }, [dispatch, id]);         
+    }, [dispatch, id]);
+
+    useEffect(() => {
+        if (alertMessage) {
+            const timer = setTimeout(() => {
+                setAlertMessage(null);
+                setErrors({});
+            }, 3000);
+            return () => clearTimeout(timer);
+        }
+    }, [alertMessage]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
         const keys = name.split('.');
-    
+
         setFormData((prev) => {
             const newData = { ...prev };
             let temp = newData;
-    
+
             keys.forEach((key, index) => {
                 if (index === keys.length - 1) {
                     temp[key] = value || '';
@@ -68,72 +86,130 @@ export default function UpdateMouPerusahaan() {
                     temp = temp[key];
                 }
             });
-    
+
             return newData;
         });
-    
+
         setErrors((prevErrors) => {
             let newErrors = { ...prevErrors };
-        
+
             if (name.includes("telepon") || name === "penanggung_jawab.kontak") {
-                const cleanedValue = value.replace(/-/g, "");
-                newErrors[name] = /^\d{8,13}$/.test(cleanedValue) 
-                    ? undefined 
-                    : "Nomor harus memiliki 8 hingga 13 digit angka (boleh mengandung tanda (-))";
+                if (value.trim() === "") {
+                    newErrors[name] = "Wajib diisi!";
+                } else if (!/^\d*$/.test(value)) {
+                    newErrors[name] = "Nomor harus angka!";
+                } else {
+                    newErrors[name] = undefined;
+                }
             } else {
-                newErrors[name] = value.trim() === '' ? 'Wajib diisi' : undefined;
+                newErrors[name] = value.trim() === "" ? "Wajib diisi!" : undefined;
             }
-        
+
             return newErrors;
         });
-    };    
+    };
+
+    const handleRemoveFile = () => {
+        setFormData((prev) => ({ ...prev, dokumen_mou: null }));
+        setFileColor("secondary");
+        setErrors((prev) => ({ ...prev, dokumen_mou: "File wajib diunggah berformat PDF!" }));
+        if (fileInputRef.current) {
+            fileInputRef.current.value = "";
+        }
+    };
 
     const handleFileChange = (e) => {
         const file = e.target.files[0];
     
         if (file) {
             if (file.type !== "application/pdf") {
-                alert("Dokumen MoU harus dalam format PDF!");
+                setAlertMessage("Dokumen MoU harus dalam format PDF!");
                 setFileColor("danger");
+                setFormData((prev) => ({ ...prev, dokumen_mou: null }));
+                if (fileInputRef.current) fileInputRef.current.value = "";
                 return;
             }
             setFileColor("success");
+            setErrors((prev) => ({ ...prev, dokumen_mou: undefined }));
+            setPreviewUrl(URL.createObjectURL(file));
+            setFormData((prev) => ({
+                ...prev,
+                dokumen_mou: file,
+            }));
         } else {
-            setFileColor("secondary");
+            setFileColor(dokumenLama ? "success" : "secondary");
+            setErrors((prev) => ({
+                ...prev,
+                dokumen_mou: dokumenLama ? undefined : "Dokumen MoU wajib diunggah berformat PDF!",
+            }));
+            setFormData((prev) => ({
+                ...prev,
+                dokumen_mou: null,
+            }));
+            setPreviewUrl(dokumenLama ? `http://localhost:5000/uploads/${dokumenLama}` : "");
+        }
+    };
+
+    const validateForm = () => {
+        let newErrors = {};
+    
+        Object.entries(formData).forEach(([key, value]) => {
+            if (typeof value === "object" && value !== null && key !== "dokumen_mou") {
+                Object.entries(value).forEach(([subKey, subValue]) => {
+                    if (subValue === null || subValue === undefined || subValue.toString().trim() === "") {
+                        newErrors[`${key}.${subKey}`] = "Wajib diisi!";
+                    } else if ((subKey === "telepon" || (key === "penanggung_jawab" && subKey === "kontak")) && !/^\d+$/.test(subValue)) {
+                        newErrors[`${key}.${subKey}`] = "Nomor harus angka!";
+                    }
+                });
+            } else if (key !== "dokumen_mou" && key !== "status") {
+                if (value === null || value === undefined || value.toString().trim() === "") {
+                    newErrors[key] = "Wajib diisi!";
+                }
+            }
+        });
+    
+        // Validasi dokumen_mou hanya jika dokumen baru diunggah atau dokumen lama tidak ada
+        if (!formData.dokumen_mou && !dokumenLama) {
+            newErrors.dokumen_mou = "File wajib diunggah berformat PDF!";
         }
     
-        setFormData((prev) => ({
-            ...prev,
-            dokumen_mou: file || null,
-        }));
+        setErrors(newErrors);
+        if (Object.keys(newErrors).length > 0) {
+            setAlertMessage("Formulir belum lengkap. Mohon pastikan semua kolom wajib sudah terisi dengan benar!");
+        } else {
+            setAlertMessage(null); // Reset alertMessage jika validasi berhasil
+        }
     
-        setErrors((prev) => ({
-            ...prev,
-            dokumen_mou: file ? null : "Dokumen MoU wajib diunggah.",
-        }));
-    };    
+        return Object.keys(newErrors).length === 0;
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if (!validateForm()) {
+            return;
+        }
         setShowConfirmModal(true);
-    }
+    };
 
     const confirmSubmit = async () => {
         setIsSubmitting(true);
     
         const formDataToSend = new FormData();
         Object.entries(formData).forEach(([key, value]) => {
-            if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
+            if (typeof value === "object" && value !== null && !Array.isArray(value) && key !== "dokumen_mou") {
                 Object.entries(value).forEach(([subKey, subValue]) => {
-                    formDataToSend.append(`${key}[${subKey}]`, subValue);
+                    formDataToSend.append(`${key}[${subKey}]`, subValue || "");
                 });
-            } else {
-                formDataToSend.append(key, value);
+            } else if (key !== "dokumen_mou") {
+                formDataToSend.append(key, value || "");
             }
         });
     
         if (formData.dokumen_mou instanceof File) {
             formDataToSend.append("dokumen_mou", formData.dokumen_mou);
+        } else if (dokumenLama) {
+            formDataToSend.append("dokumen_mou_lama", dokumenLama);
         }
     
         try {
@@ -141,23 +217,48 @@ export default function UpdateMouPerusahaan() {
             if (response.error) {
                 throw new Error(response.error.message);
             }
-            setToastMessage({ type: 'success', message: 'MoU berhasil diperbarui!' });
+            setToastMessage({ type: "success", message: "MoU berhasil diperbarui!" });
             setShowToast(true);
     
             setTimeout(() => {
-                navigate('/mou-perusahaan');
+                navigate("/mou-perusahaan");
             }, 3000);
         } catch (error) {
-            setToastMessage({ type: 'danger', message: 'Gagal memperbarui MoU. Silakan coba lagi.' });
+            console.error("Error updating MoU:", error); // Tambahkan logging untuk debugging
+            setToastMessage({ type: "danger", message: "Gagal memperbarui MoU. Silakan coba lagi." });
             setShowToast(true);
         } finally {
             setIsSubmitting(false);
             setShowConfirmModal(false);
         }
     };
-    
-    if (loading) return <p>Loading...</p>;
-    if (error) return <p>Error: {error}</p>;
+
+    if (loading) return (
+        <div className="d-flex justify-content-center">
+            <Spinner animation="border" role="status">
+                <span className="visually-hidden">Loading...</span>
+            </Spinner>
+        </div>
+    );
+    if (error) return (
+        <div className="d-flex justify-content-center">
+            <Alert
+                variant="white"
+                className="mb-4 fw-bold align-items-center"
+                style={{
+                    background: "linear-gradient(50deg, #ffdfdf, #ffffff)",
+                    color: "#062707",
+                    borderLeft: "6px solid #FF463F",
+                    borderRight: "none",
+                    padding: "1.3rem",
+                    borderRadius: "10px 0 0 10px",
+                }}
+            >
+                <FaExclamationCircle style={{ color: "#FF463F", fontSize: "1.2rem" }} className="mx-2" />
+                Gagal memuat data. Silakan cek database Anda!
+            </Alert>
+        </div>
+    );
 
     return (
         <PageContainer title="Edit MoU Perusahaan">
@@ -172,6 +273,23 @@ export default function UpdateMouPerusahaan() {
                     <Toast.Body className="text-white">{toastMessage.message}</Toast.Body>
                 </Toast>
             </ToastContainer>
+            {alertMessage && (
+                <Alert
+                    variant="danger"
+                    className="mb-4 fw-bold align-items-center"
+                    style={{
+                        background: "linear-gradient(50deg, #ffdfdf, #ffffff)",
+                        color: "#062707",
+                        borderLeft: "6px solid #FF463F",
+                        borderRight: "none",
+                        padding: "1.3rem",
+                        borderRadius: "10px 0 0 10px",
+                    }}
+                >
+                    <FaExclamationCircle style={{ color: "#FF463F", fontSize: "1.2rem" }} className="mx-2" />
+                    {alertMessage}
+                </Alert>
+            )}
             <nav aria-label="breadcrumb" className="mb-4">
                 <ol className="breadcrumb">
                 <li className="breadcrumb-item">
@@ -279,16 +397,9 @@ export default function UpdateMouPerusahaan() {
                                         { id: 'pihak_1.jabatan', label: 'Jabatan' },
                                         { id: 'pihak_1.alamat', label: 'Alamat', type: 'textarea' },
                                     ].map(({ id, label, type = 'text' }) => {
-                                        const value = id.split('.').reduce((o, i) => (o ? o[i] : ''), formData);
-
+                                        const value = id.split(".").reduce((o, i) => (o ? o[i] : ""), formData);
                                         const errorMessage = errors[id];
-
-                                        let borderColor = 'gray';
-                                        if (errorMessage) {
-                                            borderColor = 'red';
-                                        } else if (value) {
-                                            borderColor = 'green';
-                                        }
+                                        const borderColor = errorMessage ? "red" : value ? "green" : "gray";
 
                                         return (
                                             <Col md={id === 'pihak_1.alamat' ? 12 : 6} key={id}>
@@ -302,6 +413,8 @@ export default function UpdateMouPerusahaan() {
                                                             value={value}
                                                             onChange={handleChange}
                                                             required
+                                                            isInvalid={!!errors[id]} 
+                                                            isValid={value && !errors[id]}
                                                             style={{ borderColor }}
                                                         />
                                                     ) : (
@@ -311,10 +424,14 @@ export default function UpdateMouPerusahaan() {
                                                             value={value}
                                                             onChange={handleChange}
                                                             required
+                                                            isInvalid={!!errors[id]} 
+                                                            isValid={value && !errors[id]}
                                                             style={{ borderColor }}
                                                         />
                                                     )}
-                                                    {errorMessage && <small className="text-danger">{errorMessage}</small>}
+                                                    <Form.Control.Feedback type="invalid">
+                                                        {errors[id]}
+                                                    </Form.Control.Feedback>
                                                 </Form.Group>
                                             </Col>
                                         );
@@ -324,8 +441,7 @@ export default function UpdateMouPerusahaan() {
                                     </CardBody>
                                 </Card>
                             </div>
-
-                                <div className="mb-4">
+                            <div className="mb-4">
                                 <Card.Title className="fw-bold text-secondary mb-1">B. Informasi Perusahaan Pihak 2</Card.Title>
                                 <Card className="border-0 shadow-sm p-3">
                                     <CardBody>
@@ -335,20 +451,13 @@ export default function UpdateMouPerusahaan() {
                                         { id: 'pihak_2.email', label: 'Email' },
                                         { id: 'pihak_2.kontak_person', label: 'Kontak Person' },
                                         { id: 'pihak_2.telepon', label: 'Telepon' },
-                                        { id: 'pihak_2.nama', label: 'Nama Pihak 1' },
+                                        { id: 'pihak_2.nama', label: 'Nama Pihak 2' },
                                         { id: 'pihak_2.jabatan', label: 'Jabatan' },
                                         { id: 'pihak_2.alamat', label: 'Alamat', type: 'textarea' },
                                     ].map(({ id, label, type = 'text' }) => {
-                                        const value = id.split('.').reduce((o, i) => (o ? o[i] : ''), formData);
-
+                                        const value = id.split(".").reduce((o, i) => (o ? o[i] : ""), formData);
                                         const errorMessage = errors[id];
-
-                                        let borderColor = 'gray';
-                                        if (errorMessage) {
-                                            borderColor = 'red'; 
-                                        } else if (value) {
-                                            borderColor = 'green'; 
-                                        }
+                                        const borderColor = errorMessage ? "red" : value ? "green" : "gray";
 
                                         return (
                                             <Col md={id === 'pihak_2.alamat' ? 12 : 6} key={id}>
@@ -362,6 +471,8 @@ export default function UpdateMouPerusahaan() {
                                                             value={value}
                                                             onChange={handleChange}
                                                             required
+                                                            isInvalid={!!errors[id]} 
+                                                            isValid={value && !errors[id]}
                                                             style={{ borderColor }}
                                                         />
                                                     ) : (
@@ -371,10 +482,14 @@ export default function UpdateMouPerusahaan() {
                                                             value={value}
                                                             onChange={handleChange}
                                                             required
+                                                            isInvalid={!!errors[id]} 
+                                                            isValid={value && !errors[id]}
                                                             style={{ borderColor }}
                                                         />
                                                     )}
-                                                    {errorMessage && <small className="text-danger">{errorMessage}</small>}
+                                                    <Form.Control.Feedback type="invalid">
+                                                        {errors[id]}
+                                                    </Form.Control.Feedback>
                                                 </Form.Group>
                                             </Col>
                                         );
@@ -384,6 +499,8 @@ export default function UpdateMouPerusahaan() {
                                     </CardBody>
                                 </Card>
                             </div>
+
+                            
 
                             <div className="mb-4">
                                 <Card.Title className="fw-bold text-secondary mb-1">C. Informasi Lainnya</Card.Title>
@@ -395,26 +512,20 @@ export default function UpdateMouPerusahaan() {
                                                 { id: 'tanggal_mulai', label: 'Tanggal Mulai', type: 'date', col: 6 },
                                                 { id: 'tanggal_berakhir', label: 'Tanggal Berakhir', type: 'date', col: 6 },
                                                 { id: 'penanggung_jawab.nama', label: 'Nama Penanggung Jawab', col: 6 },
-                                                { id: 'penanggung_jawab.kontak', label: 'Telepon Penanggung Jawab', col: 6 } // Sudah cukup, tidak perlu input tambahan
+                                                { id: 'penanggung_jawab.kontak', label: 'Telepon Penanggung Jawab', col: 6 }
                                             ].map(({ id, label, type = 'text', col }) => {
-                                                const value = id.split('.').reduce((o, i) => (o ? o[i] : ''), formData);
+                                                const value = id.split(".").reduce((o, i) => (o ? o[i] : ""), formData);
                                                 const errorMessage = errors[id];
-
-                                                let borderColor = 'gray';
-                                                if (errorMessage) {
-                                                    borderColor = 'red'; 
-                                                } else if (value) {
-                                                    borderColor = 'green'; 
-                                                }
+                                                const borderColor = errorMessage ? "red" : value ? "green" : "gray";
 
                                                 return (
                                                     <Col md={col} key={id}>
                                                         <Form.Group controlId={id} className="mb-3">
                                                             <Form.Label className="text-secondary text-uppercase">{label}</Form.Label>
                                                             {type === 'textarea' ? (
-                                                                <Form.Control as="textarea" rows={3} name={id} value={value} onChange={handleChange} required style={{ borderColor }}/>
+                                                                <Form.Control as="textarea" rows={3} name={id} value={value} onChange={handleChange} isInvalid={!!errors[id]} isValid={value && !errors[id]} required style={{ borderColor }}/>
                                                             ) : (
-                                                                <Form.Control type={type} name={id} value={value} onChange={handleChange} required style={{ borderColor }}/>
+                                                                <Form.Control type={type} name={id} value={value} onChange={handleChange} isInvalid={!!errors[id]} isValid={value && !errors[id]} required style={{ borderColor }}/>
                                                             )}
                                                             {errorMessage && <small className="text-danger">{errorMessage}</small>}
                                                         </Form.Group>
@@ -427,21 +538,41 @@ export default function UpdateMouPerusahaan() {
                             </div>
                         </Row>
 
-                        <Form.Group controlId="dokumen_mou" className="mb-3">
-                            <Form.Label>Dokumen MoU</Form.Label>
-                            <Form.Control 
-                                type="file" 
-                                accept="application/pdf" 
-                                onChange={handleFileChange} 
-                                isInvalid={!!errors.dokumen_mou}
-                                className={`border border-${fileColor}`}
-                            />
-                            {errors.dokumen_mou && <Form.Control.Feedback type="invalid">{errors.dokumen_mou}</Form.Control.Feedback>}
-                        </Form.Group>
+                        <Form.Group controlId="dokumen_mou" className="mb-4">
+                                                        <Form.Label className="text-uppercase text-secondary">Dokumen MoU (PDF)</Form.Label>
+                                                        <Form.Control
+                                                            type="file"
+                                                            name="dokumen_mou"
+                                                            accept="application/pdf"
+                                                            onChange={handleFileChange}
+                                                            ref={fileInputRef}
+                                                            isInvalid={!!errors.dokumen_mou}
+                                                            isValid={formData.dokumen_mou && !errors.dokumen_mou}
+                                                            style={{
+                                                                borderColor: errors.dokumen_mou ? "red" : fileColor === "success" ? "green" : fileColor === "danger" ? "red" : "gray"
+                                                            }}
+                                                            required
+                                                        />
+                                                        {formData.dokumen_mou && (
+                                                            <div className="mt-2 d-flex align-items-center">
+                                                                <span className="me-2">{formData.dokumen_mou.name}</span>
+                                                                <Button
+                                                                    variant="outline-danger"
+                                                                    size="sm"
+                                                                    onClick={handleRemoveFile}
+                                                                    className="d-flex align-items-center"
+                                                                >
+                                                                    <FaTrash />
+                                                                </Button>
+                                                            </div>
+                                                        )}
+                                                        <Form.Control.Feedback type="invalid">
+                                                            {errors.dokumen_mou}
+                                                        </Form.Control.Feedback>
+                                                    </Form.Group>
 
                         {previewUrl && (
                             <div className="mb-3">
-                                <h6 className="fw-bold text-secondary">Preview Dokumen</h6>
                                 <iframe
                                     src={previewUrl}
                                     width="100%"

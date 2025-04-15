@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { deletePerusahaan, fetchMouDetailById } from '../../../../../redux/slice/mouPerusahaanSlice';
+import { deleteMouPerusahaan, fetchMouDetailById } from '../../../../../redux/slice/mouPerusahaanSlice';
 import PageContainer from 'src/components/container/PageContainer';
 import { ArrowLeft } from "lucide-react"
 import DashboardCard from '../../../../../shared/DashboardCard';
@@ -24,6 +24,8 @@ export default function DetailMouPerusahaan() {
     const [showToast, setShowToast] = useState(false);
     const [toastMessage, setToastMessage] = useState({ type: '', message: '' });
 
+    const [deletingId, setDeletingId] = useState(null);
+
     useEffect(() => {
         dispatch(fetchMouDetailById(id));
     }, [dispatch, id]);
@@ -41,27 +43,29 @@ export default function DetailMouPerusahaan() {
     };
 
     const handleDelete = () => {
+        setDeletingId(id); 
         setShowConfirmModal(true);
     };
     
     const confirmDelete = async () => {
-        setIsSubmitting(true);
-        try {
-            if (!mouDetail?._id) {
-            throw new Error('ID lowongan kerja tidak ditemukan');
+            setIsSubmitting(true);
+            try {
+              if (!deletingId) {
+                throw new Error("ID lowongan kerja tidak ditemukan");
+              }
+              await dispatch(deleteMouPerusahaan(deletingId)).unwrap();
+              setToastMessage({ type: "success", message: "MoU ini berhasil dihapus!" });
+              setShowToast(true);
+              setTimeout(() => navigate("/mou-perusahaan"), 3000);
+            } catch (err) {
+                setToastMessage({ type: "danger", message: "Gagal hapus MoU ini. Silakan coba lagi." });
+                setShowToast(true);
+            } finally {
+              setIsSubmitting(false);
+              setShowConfirmModal(false);
+              setDeletingId(null);
             }
-            await dispatch(deletePerusahaan(mouDetail._id)).unwrap();
-            setToastMessage({ type: "success", message: "MoU ini berhasil dihapus!" });
-            setShowToast(true);
-            setTimeout(() => navigate("/mou-perusahaan"), 3000);
-        } catch (err) {
-            setToastMessage({ type: "danger", message: "Gagal hapus MoU ini. Silakan coba lagi." });
-            setShowToast(true);
-        } finally {
-            setIsSubmitting(false);
-            setShowConfirmModal(false);
-        }
-    };
+        };
 
     if (loading) {
         return (
@@ -283,7 +287,6 @@ export default function DetailMouPerusahaan() {
 
                 {previewUrl && (
                     <div className="mt-4">
-                        <h6 className="fw-bold text-secondary">Preview Dokumen</h6>
                         <iframe src={previewUrl} width="100%" height="500px" className="border rounded shadow-sm"></iframe>
                     </div>
                 )}

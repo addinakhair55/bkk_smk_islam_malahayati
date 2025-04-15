@@ -1,53 +1,54 @@
-import PageContainer from 'src/components/container/PageContainer';
-import { CircularProgress } from '@mui/material';
-import { useRef, useState } from 'react';
-import { Alert, Button, CloseButton, Col, Form, Modal, Row, Spinner, Toast, ToastContainer } from 'react-bootstrap';
-import { Link, useNavigate } from 'react-router-dom';
-import DashboardCard from '../../../../shared/DashboardCard';
-import { useDispatch, useSelector } from 'react-redux';
-import { createTracerStudy } from '../../../../redux/slice/tracerStudySlice';
-import { FaExclamationCircle, FaPlus, FaSave, FaTimes } from 'react-icons/fa';
-import Cropper from 'cropperjs';
-import 'cropperjs/dist/cropper.css';
-import { FiAlertTriangle } from 'react-icons/fi';
+import PageContainer from "src/components/container/PageContainer";
+import { CircularProgress } from "@mui/material";
+import { useEffect, useRef, useState } from "react";
+import { Alert, Button, CloseButton, Col, Form, Modal, Row, Spinner, Toast, ToastContainer } from "react-bootstrap";
+import { Link, useNavigate } from "react-router-dom";
+import DashboardCard from "../../../../shared/DashboardCard";
+import { useDispatch, useSelector } from "react-redux";
+import { createTracerStudy } from "../../../../redux/slice/tracerStudySlice";
+import { FaExclamationCircle, FaPlus, FaSave, FaTimes } from "react-icons/fa";
+import Cropper from "cropperjs";
+import "cropperjs/dist/cropper.css";
+import { FiAlertTriangle } from "react-icons/fi";
 
 export default function CreateTracerStudy() {
     const dispatch = useDispatch();
     const { loading, error } = useSelector((state) => state.tracerStudy);
     const [showToast, setShowToast] = useState(false);
-    const [toastMessage, setToastMessage] = useState({ type: '', message: '' });
+    const [toastMessage, setToastMessage] = useState({ type: "", message: "" });
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [errors, setErrors] = useState({});
     const [showConfirmModal, setShowConfirmModal] = useState(false);
+    const [alertMessage, setAlertMessage] = useState(null);
 
     const [formData, setFormData] = useState({
         nama_lengkap: "", jenis_kelamin: "", tanggal_lahir: "", kota_kelahiran: "", agama: "",
         alamat: "", nisn: "", nis: "", tahun_lulus: "", email: "", handphone: "", jurusan: "",
         status_anda: "", nama_perusahaan: "", posisi_jabatan: "", nama_kampus: "", program_studi: "",
         kepuasan_materi: "", kepuasan_fasilitas: "", kepuasan_guru: "", saran_smk: "", foto_alumni: null,
-        status: 'Pending',
+        status: "Pending",
     });
 
     const formFields = [
-        { id: 'nisn', label: 'NISN (Nomor Induk Siswa Nasional)', type: 'text' },
-        { id: 'nis', label: 'NIS (Nomor Induk Siswa)', type: 'text' },
-        { id: 'nama_lengkap', label: 'Nama Lengkap', type: 'text' },
-        { id: 'jenis_kelamin', label: 'Jenis Kelamin', type: 'select', options: ['Laki-Laki', 'Perempuan'] },
-        { id: 'kota_kelahiran', label: 'Kota Kelahiran', type: 'text' },
-        { id: 'tanggal_lahir', label: 'Tanggal Lahir', type: 'date' },
-        { id: 'agama', label: 'Agama', type: 'select', options: ['Islam', 'Kristen Protestan', 'Kristen Katolik', 'Hindu', 'Buddha', 'Konghucu', 'Lainnya'] },
-        { id: 'tahun_lulus', label: 'Tahun Lulus', type: 'text' },
-        { id: 'email', label: 'Email', type: 'email' },
-        { id: 'jurusan', label: 'Jurusan', type: 'select', options: ['Teknik Komputer dan Jaringan (TKJ)', 'Akuntansi (AK)', 'Administrasi Perkantoran (AP)'] },
-        { id: 'handphone', label: 'Handphone', type: 'text' },
-        { id: 'alamat', label: 'Alamat Tempat Tinggal', type: 'textarea' },
+        { id: "nisn", label: "NISN (Nomor Induk Siswa Nasional)", type: "text" },
+        { id: "nis", label: "NIS (Nomor Induk Siswa)", type: "text" },
+        { id: "nama_lengkap", label: "Nama Lengkap", type: "text" },
+        { id: "jenis_kelamin", label: "Jenis Kelamin", type: "select", options: ["Laki-Laki", "Perempuan"] },
+        { id: "kota_kelahiran", label: "Kota Kelahiran", type: "text" },
+        { id: "tanggal_lahir", label: "Tanggal Lahir", type: "date" },
+        { id: "agama", label: "Agama", type: "select", options: ["Islam", "Kristen Protestan", "Kristen Katolik", "Hindu", "Buddha", "Konghucu", "Lainnya"] },
+        { id: "tahun_lulus", label: "Tahun Lulus", type: "text" },
+        { id: "email", label: "Email", type: "email" },
+        { id: "jurusan", label: "Jurusan", type: "select", options: ["Teknik Komputer dan Jaringan (TKJ)", "Akuntansi (AK)", "Administrasi Perkantoran (AP)"] },
+        { id: "handphone", label: "Handphone", type: "text" },
+        { id: "alamat", label: "Alamat Tempat Tinggal", type: "textarea" },
     ];
     
     const feedbackFields = [
-        { id: 'kepuasan_materi', label: '1. Berikan kepuasan Anda terhadap materi yang dipelajari di SMK Islam Malahayati?', type: 'radio', options: ['Sangat Puas', 'Puas', 'Cukup Puas', 'Kurang Puas', 'Tidak Puas'] },
-        { id: 'kepuasan_fasilitas', label: '2. Berikan kepuasan Anda terhadap fasilitas (laboratorium, alat praktik, dll.) yang disediakan oleh SMK Islam Malahayati?', type: 'radio', options: ['Sangat Puas', 'Puas', 'Cukup Puas', 'Kurang Puas', 'Tidak Puas'] },
-        { id: 'kepuasan_guru', label: '3. Berikan kepuasan Anda terhadap kualitas guru di SMK Islam Malahayati?', type: 'radio', options: ['Sangat Puas', 'Puas', 'Cukup Puas', 'Kurang Puas', 'Tidak Puas'] },
-        { id: 'saran_smk', label: '4. Berikan saran Anda untuk meningkatkan kualitas keseluruhan di SMK Islam Malahayati.', type: 'textarea' },
+        { id: "kepuasan_materi", label: "1. Berikan kepuasan Anda terhadap materi yang dipelajari di SMK Islam Malahayati?", type: "radio", options: ["Sangat Puas", "Puas", "Cukup Puas", "Kurang Puas", "Tidak Puas"] },
+        { id: "kepuasan_fasilitas", label: "2. Berikan kepuasan Anda terhadap fasilitas (laboratorium, alat praktik, dll.) yang disediakan oleh SMK Islam Malahayati?", type: "radio", options: ["Sangat Puas", "Puas", "Cukup Puas", "Kurang Puas", "Tidak Puas"] },
+        { id: "kepuasan_guru", label: "3. Berikan kepuasan Anda terhadap kualitas guru di SMK Islam Malahayati?", type: "radio", options: ["Sangat Puas", "Puas", "Cukup Puas", "Kurang Puas", "Tidak Puas"] },
+        { id: "saran_smk", label: "4. Berikan saran Anda untuk meningkatkan kualitas keseluruhan di SMK Islam Malahayati.", type: "textarea" },
     ];
 
     const [imageSrc, setImageSrc] = useState(null);
@@ -57,15 +58,25 @@ export default function CreateTracerStudy() {
 
     const navigate = useNavigate();
 
+    useEffect(() => {
+        if (alertMessage) {
+            const timer = setTimeout(() => {
+                setAlertMessage(null);
+            }, 2000);
+
+            return () => clearTimeout(timer);
+        }
+    }, [alertMessage]);
+
     const handleChange = ({ target: { name, value, files } }) => {
-        if (name === 'foto_alumni' && files[0]) {
+        if (name === "foto_alumni" && files[0]) {
             const file = files[0];
-            const validFormats = ['image/png', 'image/jpeg', 'image/jpg'];
+            const validFormats = ["image/png", "image/jpeg", "image/jpg"];
     
             if (!validFormats.includes(file.type)) {
                 setErrors((prevErrors) => ({
                     ...prevErrors,
-                    foto_alumni: 'Format file harus PNG, JPG, atau JPEG',
+                    foto_alumni: "Format file harus PNG, JPG, atau JPEG",
                 }));
                 return;
             }
@@ -77,13 +88,50 @@ export default function CreateTracerStudy() {
             };
             reader.readAsDataURL(file);
         } else {
+            if (name === "nisn" || name === "nis") {
+                if (!/^\d*$/.test(value)) {
+                    setErrors((prevErrors) => ({
+                        ...prevErrors,
+                        [name]: "Format harus angka!",
+                    }));
+                    return;
+                }
+                if (value.length > 10) {
+                    setErrors((prevErrors) => ({
+                        ...prevErrors,
+                        [name]: "Maksimal 10 angka!",
+                    }));
+                    return;
+                }
+            }
+
+            if (name === "tahun_lulus") {
+                if (!/^\d*$/.test(value)) {
+                    setErrors((prevErrors) => ({
+                        ...prevErrors,
+                        [name]: "Format harus angka!",
+                    }));
+                    return;
+                }
+            }
+    
+            if (name === "handphone") {
+                if (!/^\d*$/.test(value)) {
+                    setErrors((prevErrors) => ({
+                        ...prevErrors,
+                        [name]: "Nomor handphone harus berupa angka!",
+                    }));
+                    return;
+                }
+            }
+    
             setFormData((prevState) => ({
                 ...prevState,
                 [name]: value,
             }));
             setErrors((prevErrors) => ({
                 ...prevErrors,
-                [name]: value ? '' : 'Wajib diisi',
+                [name]: value.trim() ? "" : "Wajib diisi!",
             }));
         }
     };
@@ -95,18 +143,46 @@ export default function CreateTracerStudy() {
                 height: 600,
             });
             canvas.toBlob((blob) => {
-                const croppedFile = new File([blob], 'foto_alumni.jpg', { type: 'image/jpeg' });
+                const croppedFile = new File([blob], "foto_alumni.jpg", { type: "image/jpeg" });
                 setFormData((prevState) => ({
                     ...prevState,
                     foto_alumni: croppedFile,
                 }));
                 setShowCropModal(false);
-            }, 'image/jpeg');
+            }, "image/jpeg");
         }
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        const newErrors = {};
+        Object.keys(formData).forEach((key) => {
+            if (key !== "foto_alumni" && !formData[key] && key !== "nama_perusahaan" && key !== "posisi_jabatan" && key !== "nama_kampus" && key !== "program_studi") {
+                newErrors[key] = "Wajib diisi!";
+            }
+        });
+    
+        if (!formData.foto_alumni) {
+            newErrors.foto_alumni = "Foto wajib diunggah";
+        }
+    
+        if (formData.status_anda === "Bekerja") {
+            if (!formData.nama_perusahaan) newErrors.nama_perusahaan = "Wajib diisi!";
+            if (!formData.posisi_jabatan) newErrors.posisi_jabatan = "Wajib diisi!";
+        } else if (formData.status_anda === "Melanjutkan Pendidikan") {
+            if (!formData.nama_kampus) newErrors.nama_kampus = "Wajib diisi!";
+            if (!formData.program_studi) newErrors.program_studi = "Wajib diisi!";
+        }
+    
+        setErrors(newErrors);
+    
+        if (Object.keys(newErrors).length > 0) {
+            setAlertMessage("Formulir belum lengkap. Mohon pastikan semua kolom wajib sudah terisi dengan benar!");
+            setTimeout(() => {
+                setAlertMessage(null);
+            }, 3000);
+            return;
+        }
         setShowConfirmModal(true);
     };
 
@@ -192,6 +268,24 @@ export default function CreateTracerStudy() {
                 </Toast>
             </ToastContainer>
 
+            {alertMessage && (
+                <Alert
+                    variant="danger"
+                    className="mb-4 fw-bold align-items-center"
+                    style={{
+                        background: "linear-gradient(50deg, #ffdfdf, #ffffff)",
+                        color: "#062707",
+                        borderLeft: "6px solid #FF463F",
+                        borderRight: "none",
+                        padding: "1.3rem",
+                        borderRadius: "10px 0 0 10px",
+                    }}
+                >
+                    <FaExclamationCircle style={{ color: "#FF463F", fontSize: "1.2rem" }} className="mx-2" />
+                    {alertMessage}
+                </Alert>
+            )}
+
             <nav aria-label="breadcrumb" className="mb-4">
                 <ol className="breadcrumb">
                 <li className="breadcrumb-item">
@@ -274,7 +368,7 @@ export default function CreateTracerStudy() {
                                 e.currentTarget.style.transform = "scale(1)";
                             }}
                             type="button"
-                            onClick={() => navigate("/mou-perusahaan")}
+                            onClick={() => navigate("/tracerStudy")}
                         >
                             <FaTimes size="clamp(14px, 2vw, 16px)" /> Batal
                         </Button>
@@ -366,25 +460,26 @@ export default function CreateTracerStudy() {
 
                                 {formFields.map(({ id, label, type, options }) => {
                                     const errorMessage = errors[id];
-                                    const borderColor = errorMessage ? 'red' : formData[id] ? 'green' : 'gray';
-
+                                    const borderColor = errorMessage ? "red" : formData[id] ? "green" : "gray";
                                     return (
                                         <Col md={6} key={id}>
                                             <Form.Group controlId={id} className="mb-4">
                                                 <Form.Label className="text-uppercase text-secondary">{label}</Form.Label>
-                                                {type === 'select' ? (
-                                                    <Form.Select name={id} value={formData[id]} onChange={handleChange} style={{ borderColor }} required>
+                                                {type === "select" ? (
+                                                    <Form.Select name={id} value={formData[id]} onChange={handleChange} style={{ borderColor }} isInvalid={!!errors[id]} required>
                                                         <option value="" disabled className="text-secondary">Pilih {label}</option>
                                                         {options.map(option => (
                                                             <option key={option} value={option}>{option}</option>
                                                         ))}
                                                     </Form.Select>
-                                                ) : type === 'textarea' ? (
+                                                ) : type === "textarea" ? (
                                                     <Form.Control 
                                                         as="textarea" 
                                                         name={id} 
                                                         value={formData[id]} 
                                                         onChange={handleChange} 
+                                                        isInvalid={!!errors[id]}
+                                                        isValid={formData[id] && !errors[id]}
                                                         rows={3} 
                                                         required 
                                                         style={{ borderColor }}
@@ -395,11 +490,15 @@ export default function CreateTracerStudy() {
                                                         name={id} 
                                                         value={formData[id]} 
                                                         onChange={handleChange} 
+                                                        isInvalid={!!errors[id]}
+                                                        isValid={formData[id] && !errors[id]}
                                                         required 
                                                         style={{ borderColor }}
                                                     />
                                                 )}
-                                                {errorMessage && <small className="text-danger">{errorMessage}</small>}
+                                                <Form.Control.Feedback type="invalid">
+                                                    {errors[id]}
+                                                </Form.Control.Feedback>
                                             </Form.Group>
                                         </Col>
                                     );
@@ -413,7 +512,7 @@ export default function CreateTracerStudy() {
                                 <Modal.Title className="fw-bold text-primary">Crop Foto</Modal.Title>
                             </Modal.Header>
                             <Modal.Body className="text-center">
-                                <div className="d-flex justify-content-center align-items-center bg-light rounded p-3" style={{ maxHeight: '400px', overflow: 'hidden' }}>
+                                <div className="d-flex justify-content-center align-items-center bg-light rounded p-3" style={{ maxHeight: "400px", overflow: "hidden" }}>
                                     {imageSrc ? (
                                         <img
                                             ref={imageRef}
@@ -445,143 +544,174 @@ export default function CreateTracerStudy() {
                             B. Aktivitas Setelah Lulus
                         </h5>
                         <div className="card shadow-sm border-0 p-3">
-                            {(() => {
-                                const errorMessage = errors?.status_anda;
-                                const borderColor = errorMessage ? "red" : formData.status_anda ? "green" : "gray";
+                            <Row>
+                                <Form.Group controlId="status_anda" className="mb-3">
+                                    <Form.Label className="text-uppercase text-secondary">
+                                        Apa aktivitas Anda saat ini?
+                                    </Form.Label>
+                                    <Form.Select
+                                        name="status_anda"
+                                        value={formData.status_anda}
+                                        onChange={handleChange}
+                                        style={{
+                                            borderColor: errors.status_anda ? "red" : formData.status_anda ? "green" : "gray",
+                                        }}
+                                        isInvalid={!!errors.status_anda}
+                                        isValid={formData.status_anda && !errors.status_anda}
+                                        required
+                                    >
+                                        <option value="">Pilih</option>
+                                        {["Bekerja", "Melanjutkan Pendidikan", "Tidak bekerja dan tidak melanjutkan pendidikan", "Wirausaha"].map(option => (
+                                            <option key={option} value={option}>
+                                                {option}
+                                            </option>
+                                        ))}
+                                    </Form.Select>
+                                    <Form.Control.Feedback type="invalid">
+                                        {errors.status_anda}
+                                    </Form.Control.Feedback>
+                                </Form.Group>
+                            </Row>
 
-                                return (
-                                    <>
-                                        <Row>
-                                            <Form.Group id="status_anda" className="mb-3">
-                                                <Form.Label className="text-uppercase text-secondary">Apa aktivitas Anda saat ini?</Form.Label>
-                                                <Form.Select
-                                                name="status_anda"
-                                                value={formData.status_anda}
+                            {formData.status_anda === "Bekerja" && (
+                                <Row className="g-3 mb-3">
+                                    <Col xs={12} md={6}>
+                                        <Form.Group controlId="nama_perusahaan">
+                                            <Form.Label className="text-uppercase text-secondary">Nama Perusahaan</Form.Label>
+                                            <Form.Control
+                                                type="text"
+                                                name="nama_perusahaan"
+                                                value={formData.nama_perusahaan}
                                                 onChange={handleChange}
-                                                style={{ borderColor }}
+                                                style={{
+                                                    borderColor: errors.nama_perusahaan ? "red" : formData.nama_perusahaan ? "green" : "gray",
+                                                }}
+                                                isInvalid={!!errors.nama_perusahaan}
+                                                isValid={formData.nama_perusahaan && !errors.nama_perusahaan}
                                                 required
-                                                >
-                                                <option value="">Pilih</option>
-                                                {["Bekerja", "Melanjutkan Pendidikan", "Tidak bekerja dan tidak melanjutkan pendidikan", "Wirausaha"].map(option => (
-                                                    <option key={option} value={option}>{option}</option>
-                                                ))}
-                                                </Form.Select>
-                                            </Form.Group>
-                                        </Row>
+                                            />
+                                            <Form.Control.Feedback type="invalid">
+                                                {errors.nama_perusahaan}
+                                            </Form.Control.Feedback>
+                                        </Form.Group>
+                                    </Col>
+                                    <Col xs={12} md={6}>
+                                        <Form.Group controlId="posisi_jabatan">
+                                            <Form.Label className="text-uppercase text-secondary">Posisi/Jabatan</Form.Label>
+                                            <Form.Control
+                                                type="text"
+                                                name="posisi_jabatan"
+                                                value={formData.posisi_jabatan}
+                                                onChange={handleChange}
+                                                style={{
+                                                    borderColor: errors.posisi_jabatan ? "red" : formData.posisi_jabatan ? "green" : "gray",
+                                                }}
+                                                isInvalid={!!errors.posisi_jabatan}
+                                                isValid={formData.posisi_jabatan && !errors.posisi_jabatan}
+                                                required
+                                            />
+                                            <Form.Control.Feedback type="invalid">
+                                                {errors.posisi_jabatan}
+                                            </Form.Control.Feedback>
+                                        </Form.Group>
+                                    </Col>
+                                </Row>
+                            )}
 
-                                        {formData.status_anda === "Bekerja" && (
-                                            <Row className="g-3">
-                                                <Col xs={12} md={6}>
-                                                    <Form.Group id="nama_perusahaan">
-                                                        <Form.Label className="text-uppercase text-secondary">Nama Perusahaan</Form.Label>
-                                                        <Form.Control
-                                                            type="text"
-                                                            name="nama_perusahaan"
-                                                            value={formData.nama_perusahaan}
-                                                            onChange={handleChange}
-                                                            style={{ borderColor }}
-                                                            required
-                                                        />
-                                                    </Form.Group>
-                                                </Col>
-                                                <Col xs={12} md={6}>
-                                                    <Form.Group id="posisi_jabatan">
-                                                        <Form.Label className="text-uppercase text-secondary">Posisi/Jabatan</Form.Label>
-                                                        <Form.Control
-                                                            type="text"
-                                                            name="posisi_jabatan"
-                                                            value={formData.posisi_jabatan}
-                                                            onChange={handleChange}
-                                                            style={{ borderColor }}
-                                                            required
-                                                        />
-                                                    </Form.Group>
-                                                </Col>
-                                            </Row>
-                                        )}
-
-                                        {formData.status_anda === "Melanjutkan Pendidikan" && (
-                                            <Row className="g-3">
-                                                <Col xs={12} md={6}>
-                                                    <Form.Group id="nama_kampus">
-                                                        <Form.Label className="text-uppercase text-secondary">Nama Kampus</Form.Label>
-                                                        <Form.Control
-                                                            type="text"
-                                                            name="nama_kampus"
-                                                            value={formData.nama_kampus}
-                                                            onChange={handleChange}
-                                                            style={{ borderColor }}
-                                                            required
-                                                        />
-                                                    </Form.Group>
-                                                </Col>
-                                                <Col xs={12} md={6}>
-                                                    <Form.Group id="program_studi">
-                                                        <Form.Label className="text-uppercase text-secondary">Program Studi</Form.Label>
-                                                        <Form.Control
-                                                            type="text"
-                                                            name="program_studi"
-                                                            value={formData.program_studi}
-                                                            onChange={handleChange}
-                                                            style={{ borderColor }}
-                                                            required
-                                                        />
-                                                    </Form.Group>
-                                                </Col>
-                                            </Row>
-                                        )}
-                                            </>
-                                        );
-                                })()}
+                            {formData.status_anda === "Melanjutkan Pendidikan" && (
+                                <Row className="g-3 mb-3">
+                                    <Col xs={12} md={6}>
+                                        <Form.Group controlId="nama_kampus">
+                                            <Form.Label className="text-uppercase text-secondary">Nama Kampus</Form.Label>
+                                            <Form.Control
+                                                type="text"
+                                                name="nama_kampus"
+                                                value={formData.nama_kampus}
+                                                onChange={handleChange}
+                                                style={{
+                                                    borderColor: errors.nama_kampus ? "red" : formData.nama_kampus ? "green" : "gray",
+                                                }}
+                                                isInvalid={!!errors.nama_kampus}
+                                                isValid={formData.nama_kampus && !errors.nama_kampus}
+                                                required
+                                            />
+                                            <Form.Control.Feedback type="invalid">
+                                                {errors.nama_kampus}
+                                            </Form.Control.Feedback>
+                                        </Form.Group>
+                                    </Col>
+                                    <Col xs={12} md={6}>
+                                        <Form.Group controlId="program_studi">
+                                            <Form.Label className="text-uppercase text-secondary">Program Studi</Form.Label>
+                                            <Form.Control
+                                                type="text"
+                                                name="program_studi"
+                                                value={formData.program_studi}
+                                                onChange={handleChange}
+                                                style={{
+                                                    borderColor: errors.program_studi ? "red" : formData.program_studi ? "green" : "gray",
+                                                }}
+                                                isInvalid={!!errors.program_studi}
+                                                isValid={formData.program_studi && !errors.program_studi}
+                                                required
+                                            />
+                                            <Form.Control.Feedback type="invalid">
+                                                {errors.program_studi}
+                                            </Form.Control.Feedback>
+                                        </Form.Group>
+                                    </Col>
+                                </Row>
+                            )}
                         </div>
 
                         <h5 className="mb-3 mt-4 fw-bold text-secondary">
                             C. Feedback untuk SMK Islam Malahayati
                         </h5>
                         <div className="card shadow-sm border-0 p-3">
-                            {(() => {
-                                const errorMessage = errors?.status_anda;
-                                const borderColor = errorMessage ? "red" : formData.status_anda ? "green" : "gray";
-
-                                return (
-                                    <Row>
-                                        {feedbackFields.map(({ id, label, type, options }) => (
-                                            <Col md={12} key={id}>
-                                                <Form.Group controlId={id} className="mb-3">
-                                                    <Form.Label className="text-uppercase text-secondary">{label}</Form.Label>
-                                                        {type === "radio" ? (
-                                                            options.map((option) => (
-                                                            <Form.Check
-                                                                type="radio"
-                                                                name={id}
-                                                                value={option}
-                                                                label={option}
-                                                                key={option}
-                                                                onChange={handleChange}
-                                                                checked={formData[id] === option}
-                                                                className="mx-3"
-                                                                style={{ borderColor }}
-                                                                required
-                                                            />
-                                                        ))
-                                                    ) : (
-                                                        <Form.Control
-                                                            as="textarea"
-                                                            name={id}
-                                                            value={formData[id]}
-                                                            onChange={handleChange}
-                                                            rows={3}
-                                                            className="form-control"
-                                                            style={{ borderColor }}
-                                                            required
-                                                        />
-                                                    )}
-                                                </Form.Group>
-                                            </Col>
-                                        ))}
-                                    </Row>
-                                );
-                            })()}
+                            <Row>
+                                {feedbackFields.map(({ id, label, type, options }) => (
+                                    <Col md={12} key={id}>
+                                        <Form.Group controlId={id} className="mb-3">
+                                            <Form.Label className="text-uppercase text-secondary">{label}</Form.Label>
+                                            {type === "radio" ? (
+                                                options.map((option) => (
+                                                    <Form.Check
+                                                        type="radio"
+                                                        name={id}
+                                                        value={option}
+                                                        label={option}
+                                                        key={option}
+                                                        onChange={handleChange}
+                                                        checked={formData[id] === option}
+                                                        className="mx-3"
+                                                        isInvalid={!!errors[id]}
+                                                        isValid={formData[id] && !errors[id]}
+                                                        required
+                                                    />
+                                                ))
+                                            ) : (
+                                                <Form.Control
+                                                    as="textarea"
+                                                    name={id}
+                                                    value={formData[id]}
+                                                    onChange={handleChange}
+                                                    rows={3}
+                                                    className="form-control"
+                                                    style={{
+                                                        borderColor: errors[id] ? "red" : formData[id] ? "green" : "gray",
+                                                    }}
+                                                    isInvalid={!!errors[id]}
+                                                    isValid={formData[id] && !errors[id]}
+                                                    required
+                                                />
+                                            )}
+                                            <Form.Control.Feedback type="invalid">
+                                                    {errors[id]}
+                                                </Form.Control.Feedback>
+                                        </Form.Group>
+                                    </Col>
+                                ))}
+                            </Row>
                         </div>
                     </Form>
                 )}
@@ -597,9 +727,9 @@ export default function CreateTracerStudy() {
                         <FiAlertTriangle
                             className="mb-3 rounded p-2"
                             style={{
-                                fontSize: 'clamp(3rem, 6vw, 3rem)',
-                                color: '#ff9807',
-                                backgroundColor: '#faecd6',
+                                fontSize: "clamp(3rem, 6vw, 3rem)",
+                                color: "#ff9807",
+                                backgroundColor: "#faecd6",
                             }}
                         />
                         <CloseButton
@@ -607,10 +737,10 @@ export default function CreateTracerStudy() {
                             onClick={() => setShowConfirmModal(false)}
                             aria-label="Tutup modal"
                         />
-                        <h5 className="fw-bold" style={{ fontSize: 'clamp(1.25rem, 4vw, 1.5rem)' }}>
+                        <h5 className="fw-bold" style={{ fontSize: "clamp(1.25rem, 4vw, 1.5rem)" }}>
                             Apakah Anda yakin?
                         </h5>
-                        <p className="text-muted" style={{ fontSize: 'clamp(0.875rem, 3vw, 1rem)' }}>
+                        <p className="text-muted" style={{ fontSize: "clamp(0.875rem, 3vw, 1rem)" }}>
                             Apakah Anda yakin ingin menambah Tracer Study?
                         </p>
                     </Modal.Body>
@@ -649,9 +779,9 @@ export default function CreateTracerStudy() {
                                     className="fw-bold py-2 rounded-pill shadow-sm w-100 border-0"
                                     disabled={isSubmitting}
                                     style={{
-                                        color: '#ffffff',
-                                        backgroundColor: '#3083ff',
-                                        transition: 'all 0.2s ease-in-out',
+                                        color: "#ffffff",
+                                        backgroundColor: "#3083ff",
+                                        transition: "all 0.2s ease-in-out",
                                     }}
                                     onMouseEnter={(e) => {
                                         e.target.style.backgroundColor = "#3083ff";

@@ -98,21 +98,45 @@ export const updateInfoLoker = async (req, res) => {
         const infoLoker = await infoLokerModel.findById(req.params.id);
 
         if (!infoLoker) {
-            return res.status(404).json({ message: "Lowongan tidak ditemukan" });
+            return res.status(404).json({ message: 'Lowongan tidak ditemukan' });
         }
 
-        // Hapus pengecekan untuk perusahaan
-        if (req.user.role !== "admin" && req.user.id !== infoLoker.createdBy.toString()) {
-            return res.status(403).json({ message: "Anda tidak memiliki izin untuk mengedit lowongan ini" });
-        }        
+        if (req.user.role !== 'admin' && req.user.id !== infoLoker.createdBy.toString()) {
+            return res.status(403).json({ message: 'Anda tidak memiliki izin untuk mengedit lowongan ini' });
+        }
 
         const updatedData = {
             ...req.body,
-            poster: req.files?.poster?.[0]?.filename || req.body.poster,
-            logo: req.files?.logo?.[0]?.filename || req.body.logo,
+            poster: req.files?.poster?.[0]?.filename || req.body.poster || infoLoker.poster,
         };
 
-        const updatedInfoLoker = await infoLokerModel.findByIdAndUpdate(req.params.id, updatedData, { new: true });
+        if (Array.isArray(req.body.judul)) {
+            updatedData.judul = req.body.judul[0] || '';
+        } else if (req.body.judul !== undefined) {
+            updatedData.judul = req.body.judul.toString();
+        }
+
+        if (req.files?.logo?.[0]?.filename) {
+            updatedData.logo = req.files.logo[0].filename;
+        } else if (req.body.logo === '' || req.body.logo === null) {
+            if (infoLoker.logo) {
+                const filePath = path.join(__dirname, '..', 'uploads', infoLoker.logo);
+                try {
+                    await fs.unlink(filePath);
+                } catch (err) {
+                    console.error(`Gagal menghapus file logo: ${err.message}`);
+                }
+            }
+            updatedData.logo = null;
+        } else {
+            updatedData.logo = infoLoker.logo;
+        }
+
+        const updatedInfoLoker = await infoLokerModel.findByIdAndUpdate(
+            req.params.id,
+            updatedData,
+            { new: true }
+        );
 
         res.status(200).json(updatedInfoLoker);
     } catch (error) {

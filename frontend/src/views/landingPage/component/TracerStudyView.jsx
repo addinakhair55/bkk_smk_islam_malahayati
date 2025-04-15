@@ -1,15 +1,17 @@
 import Table from "react-bootstrap/Table";
 import { useState, useEffect } from "react";
-import axios from "axios";
 import Navbar from "../../../components/landingPage/Navbar";
 import Footer from "../../../components/landingPage/Footer";
 import HeroTitle from "../../../components/landingPage/HeroTitle";
 import PageContainer from "src/components/container/PageContainer";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchTracerStudy } from "../../../components/redux/slice/tracerStudySlice";
 
 export default function TracerStudyView() {
-    const [tracerStudy, setTracerStudy] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+    const dispatch = useDispatch();
+
+    const { tracerStudy, loading, error } = useSelector((state) => state.tracerStudy);
+
     const [searchQuery, setSearchQuery] = useState("");
     const [filterGender, setFilterGender] = useState("");
     const [filterJurusan, setFilterJurusan] = useState("");
@@ -18,23 +20,15 @@ export default function TracerStudyView() {
 
     useEffect(() => {
         window.scrollTo(0, 0);
-        const fetchTracerStudy = async () => {
-            try {
-                const response = await axios.get("http://localhost:5000/tracer-study");
-                const data = response.data;
-                setTracerStudy(data);
-    
-                // Ambil tahun unik
-                const years = [...new Set(data.map(item => item.tahun_lulus))].sort((a, b) => b - a);
-                setUniqueYears(years);
-            } catch (error) {
-                setError("Terjadi kesalahan saat mengambil data tracer study.");
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchTracerStudy();
-    }, []);
+        dispatch(fetchTracerStudy());
+    }, [dispatch]);
+
+    useEffect(() => {
+        if (tracerStudy.length > 0) {
+            const years = [...new Set(tracerStudy.map(item => item.tahun_lulus))].sort((a, b) => b - a);
+            setUniqueYears(years);
+        }
+    }, [tracerStudy]);
 
     const filteredAlumni = tracerStudy.filter(user =>
         user.status.toLowerCase() !== "tolak" &&
@@ -48,7 +42,6 @@ export default function TracerStudyView() {
 
     if (loading) return <p className="text-center mt-5">Loading...</p>;
     if (error) return <p className="text-center text-danger mt-5">{error}</p>;
-
     return (
         <PageContainer title="Tracer Study">
             <style>{`
@@ -92,7 +85,7 @@ export default function TracerStudyView() {
                         />
                         <div className="row">
                             {[{label: "Jenis Kelamin", value: filterGender, setter: setFilterGender, options: ["", "Laki-Laki", "Perempuan"]},
-                            {label: "Jurusan", value: filterJurusan, setter: setFilterJurusan, options: ["", "Akuntasi", "Teknik Komputer Jaringan", "Administrasi"]},
+                            {label: "Jurusan", value: filterJurusan, setter: setFilterJurusan, options: ["", "Akuntasi (AK)", "Teknik Komputer dan Jaringan (TKJ)", "Administrasi Perkantoran (AP)"]},
                             {label: "Tahun Lulus", value: filterTahun, setter: setFilterTahun, options: ["", ...uniqueYears]}
                             ].map((filter, idx) => (
                                 <div className="col-md-4 p-2" key={idx}>
