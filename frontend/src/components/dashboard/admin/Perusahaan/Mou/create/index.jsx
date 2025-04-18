@@ -172,7 +172,7 @@ export default function CreateMouPerusahaan() {
 
         try {
             await dispatch(createMouPerusahaan(formDataToSend)).unwrap();
-            setToastMessage({ type: "success", message: "MOU berhasil ditambahkan!" });
+            setToastMessage({ type: "success", message: "MoU berhasil ditambahkan!" });
             setShowToast(true);
             setTimeout(() => navigate("/mou-perusahaan"), 3000);
         } catch (error) {

@@ -84,8 +84,8 @@ export default function TracerStudyView() {
                             onChange={(e) => setSearchQuery(e.target.value)}
                         />
                         <div className="row">
-                            {[{label: "Jenis Kelamin", value: filterGender, setter: setFilterGender, options: ["", "Laki-Laki", "Perempuan"]},
-                            {label: "Jurusan", value: filterJurusan, setter: setFilterJurusan, options: ["", "Akuntasi (AK)", "Teknik Komputer dan Jaringan (TKJ)", "Administrasi Perkantoran (AP)"]},
+                            {[{label: "Jenis Kelamin", value: filterGender, setter: setFilterGender, options: ["", "Laki-laki", "Perempuan"]},
+                            {label: "Jurusan", value: filterJurusan, setter: setFilterJurusan, options: ["", "Akuntansi (AK)", "Teknik Komputer dan Jaringan (TKJ)", "Administrasi Perkantoran (AP)"]},
                             {label: "Tahun Lulus", value: filterTahun, setter: setFilterTahun, options: ["", ...uniqueYears]}
                             ].map((filter, idx) => (
                                 <div className="col-md-4 p-2" key={idx}>

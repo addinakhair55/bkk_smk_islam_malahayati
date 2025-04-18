@@ -10,6 +10,7 @@ import { FaCheckCircle, FaExclamationCircle } from 'react-icons/fa';
 import { CircularProgress } from '@mui/material';
 import { FiAlertTriangle } from 'react-icons/fi';
 import { BsPencilSquare, BsTrash } from 'react-icons/bs';
+import { FiDownload } from 'react-icons/fi';
 
 export default function DetailMouPerusahaan() {
     const dispatch = useDispatch();
@@ -65,8 +66,36 @@ export default function DetailMouPerusahaan() {
               setShowConfirmModal(false);
               setDeletingId(null);
             }
-        };
+    };
 
+    const handleDownload = async () => {
+        try {
+            const response = await fetch(previewUrl, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/pdf',
+                },
+            });
+    
+            if (!response.ok) {
+                throw new Error('Gagal mengunduh dokumen');
+            }
+    
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = mouDetail?.dokumen_mou || 'dokumen_mou.pdf';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            window.URL.revokeObjectURL(url);
+        } catch (error) {
+            setToastMessage({ type: 'danger', message: 'Gagal mengunduh dokumen. Silakan coba lagi.' });
+            setShowToast(true);
+        }
+    };
+    
     if (loading) {
         return (
             <div className="d-flex justify-content-center">
@@ -284,12 +313,40 @@ export default function DetailMouPerusahaan() {
                         </div>
                     </div>
                 </div>
-
                 {previewUrl && (
-                    <div className="mt-4">
-                        <iframe src={previewUrl} width="100%" height="500px" className="border rounded shadow-sm"></iframe>
+                <div className="mt-4">
+                    <div className="mb-2">
+                        <Button
+                            onClick={handleDownload}
+                            className="fw-bold d-flex align-items-center justify-content-center"
+                            style={{
+                                backgroundColor: "#4A90E2",
+                                border: "none",
+                                transition: "background-color 0.2s ease-in-out",
+                            }}
+                            onMouseEnter={(e) => {
+                                e.target.style.backgroundColor = "#357ABD";
+                                e.currentTarget.style.transform = "scale(1.05)";
+                            }}
+                            onMouseLeave={(e) => {
+                                e.target.style.backgroundColor = "#4A90E2";
+                                e.currentTarget.style.transform = "scale(1)";
+                            }}
+                        >
+                            <FiDownload size={18} className="me-2" />
+                            Unduh Dokumen
+                        </Button>
                     </div>
+                    <iframe
+                    src={previewUrl}
+                    width="100%"
+                    height="500"
+                    className="border rounded shadow-sm"
+                    title="Dokumen MoU Preview"
+                    ></iframe>
+                </div>
                 )}
+
             </DashboardCard>
             <Modal
                 show={showConfirmModal}

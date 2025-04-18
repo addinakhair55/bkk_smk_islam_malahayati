@@ -169,7 +169,6 @@ export default function UpdateMouPerusahaan() {
             }
         });
     
-        // Validasi dokumen_mou hanya jika dokumen baru diunggah atau dokumen lama tidak ada
         if (!formData.dokumen_mou && !dokumenLama) {
             newErrors.dokumen_mou = "File wajib diunggah berformat PDF!";
         }
@@ -178,7 +177,7 @@ export default function UpdateMouPerusahaan() {
         if (Object.keys(newErrors).length > 0) {
             setAlertMessage("Formulir belum lengkap. Mohon pastikan semua kolom wajib sudah terisi dengan benar!");
         } else {
-            setAlertMessage(null); // Reset alertMessage jika validasi berhasil
+            setAlertMessage(null);
         }
     
         return Object.keys(newErrors).length === 0;

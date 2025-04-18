@@ -45,7 +45,7 @@ export default function UpdateTracerStudy() {
         { id: "nisn", label: "NISN (Nomor Induk Siswa Nasional)", type: "text" },
         { id: "nis", label: "NIS (Nomor Induk Siswa)", type: "text" },
         { id: "nama_lengkap", label: "Nama Lengkap", type: "text" },
-        { id: "jenis_kelamin", label: "Jenis Kelamin", type: "select", options: ["Laki-Laki", "Perempuan"] },
+        { id: "jenis_kelamin", label: "Jenis Kelamin", type: "select", options: ["Laki-laki", "Perempuan"] },
         { id: "kota_kelahiran", label: "Kota Kelahiran", type: "text" },
         { id: "tanggal_lahir", label: "Tanggal Lahir", type: "date" },
         { id: "agama", label: "Agama", type: "select", options: ["Islam", "Kristen Protestan", "Kristen Katolik", "Hindu", "Buddha", "Konghucu", "Lainnya"] },
@@ -274,7 +274,7 @@ export default function UpdateTracerStudy() {
 
         try {
         await dispatch(updateTracerStudy({ id, updatedData })).unwrap();
-        setToastMessage({ type: "success", message: "Tracer Study berhasil diperbarui!" });
+        setToastMessage({ type: "success", message: "Tracer study berhasil diperbarui!" });
         setShowToast(true);
         setTimeout(() => navigate("/tracerStudy"), 3000);
         } catch (error) {

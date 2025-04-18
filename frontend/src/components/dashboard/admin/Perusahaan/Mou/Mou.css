@@ -133,7 +133,7 @@
     }
 
     .text-truncate {
-      max-width: 100px;
+      max-width: 150px;
     }
 
     .table button {
@@ -154,6 +154,10 @@
       
     .table-responsive {
         max-height: 400px;
+    }
+
+    .text-truncate {
+      max-width: 135px;
     }
   }
     

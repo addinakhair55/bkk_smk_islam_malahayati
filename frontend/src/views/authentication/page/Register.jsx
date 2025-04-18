@@ -12,6 +12,7 @@ const Register = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState("");
     const navigate = useNavigate();
+    const [success, setSuccess] = useState(false);
 
     const handleRegister = async (e) => {
         e.preventDefault();
@@ -19,9 +20,12 @@ const Register = () => {
         try {
             const { data } = await axios.post("http://localhost:5000/auth/register", { name, email, password });
             localStorage.setItem("token", data.token);
-            navigate("/auth/login");
+            setSuccess(true);
+            setTimeout(() => {
+                navigate("/auth/login");
+            }, 2000);
         } catch (error) {
-            setError("Error registering user");
+            setError("Terjadi kesalahan saat registrasi!");
         }
     };
 
@@ -69,6 +73,17 @@ const Register = () => {
                                 <FaHome />
                             </Link>
                         </div>
+                        {success && (
+                            <div className="alert alert-success" role="alert">
+                                Registrasi berhasil! Anda dapat login sekarang.
+                            </div>
+                        )}
+
+                        {error && (
+                            <div className="alert alert-danger" role="alert">
+                                {error}
+                            </div>
+                        )}
 
                         <div className="text-center mb-3">
                             <h2 

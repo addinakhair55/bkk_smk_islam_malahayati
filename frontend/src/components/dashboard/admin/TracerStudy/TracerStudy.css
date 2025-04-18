@@ -115,7 +115,7 @@
 
     @media (min-width: 992px) {
         .table {
-            min-width: 120%;
+            min-width: 125%;
           }
         .table-responsive {
             max-height: 400px;

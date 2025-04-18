@@ -109,7 +109,7 @@ export default function AdminInfoLoker() {
                 </Toast>
             </ToastContainer>
             <div className="d-flex justify-content-end align-items-center mb-3 gap-3">
-                <InputGroup className="w-25">
+                <InputGroup style={{width:'350px'}}>
                   <Form.Control
                     type="text"
                     placeholder="Cari nama perusahaan..."

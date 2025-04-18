@@ -33,7 +33,7 @@ export default function CreateTracerStudy() {
         { id: "nisn", label: "NISN (Nomor Induk Siswa Nasional)", type: "text" },
         { id: "nis", label: "NIS (Nomor Induk Siswa)", type: "text" },
         { id: "nama_lengkap", label: "Nama Lengkap", type: "text" },
-        { id: "jenis_kelamin", label: "Jenis Kelamin", type: "select", options: ["Laki-Laki", "Perempuan"] },
+        { id: "jenis_kelamin", label: "Jenis Kelamin", type: "select", options: ["Laki-laki", "Perempuan"] },
         { id: "kota_kelahiran", label: "Kota Kelahiran", type: "text" },
         { id: "tanggal_lahir", label: "Tanggal Lahir", type: "date" },
         { id: "agama", label: "Agama", type: "select", options: ["Islam", "Kristen Protestan", "Kristen Katolik", "Hindu", "Buddha", "Konghucu", "Lainnya"] },
@@ -197,7 +197,7 @@ export default function CreateTracerStudy() {
         
         try {
             await dispatch(createTracerStudy(formDataToSend)).unwrap();
-            setToastMessage({ type: "success", message: "Tracer Study berhasil ditambahkan!" });
+            setToastMessage({ type: "success", message: "Tracer study berhasil ditambahkan!" });
             setShowToast(true);
             setTimeout(() => navigate("/tracerStudy"), 3000);
         } catch (error) {
@@ -741,7 +741,7 @@ export default function CreateTracerStudy() {
                             Apakah Anda yakin?
                         </h5>
                         <p className="text-muted" style={{ fontSize: "clamp(0.875rem, 3vw, 1rem)" }}>
-                            Apakah Anda yakin ingin menambah Tracer Study?
+                            Apakah Anda yakin ingin menambah tracer study?
                         </p>
                     </Modal.Body>
                     <Modal.Footer className="border-0 d-flex justify-content-center w-100 pt-0">

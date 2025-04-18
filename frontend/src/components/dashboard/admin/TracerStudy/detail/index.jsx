@@ -1,15 +1,15 @@
-import PageContainer from 'src/components/container/PageContainer';
-import DashboardCard from '../../../../shared/DashboardCard';
-import { useEffect, useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
-import { Row, Col, Alert, Button, Modal, CloseButton, ToastContainer, Toast, Spinner } from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
-import { deleteTracerStudy, fetchTracerStudyDetail } from '../../../../redux/slice/tracerStudySlice';
-import { ArrowLeft } from 'lucide-react';
-import { CircularProgress } from '@mui/material';
-import { FiAlertTriangle } from 'react-icons/fi';
-import { BsPencilSquare, BsTrash } from 'react-icons/bs';
-import { FaCheckCircle, FaClock, FaExclamationCircle } from 'react-icons/fa';
+import PageContainer from "src/components/container/PageContainer";
+import DashboardCard from "../../../../shared/DashboardCard";
+import { useEffect, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { Row, Col, Alert, Button, Modal, CloseButton, ToastContainer, Toast, Spinner } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteTracerStudy, fetchTracerStudyDetail } from "../../../../redux/slice/tracerStudySlice";
+import { ArrowLeft } from "lucide-react";
+import { CircularProgress } from "@mui/material";
+import { FiAlertTriangle } from "react-icons/fi";
+import { BsPencilSquare, BsTrash } from "react-icons/bs";
+import { FaCheckCircle, FaClock, FaExclamationCircle } from "react-icons/fa";
 
 export default function DetailTracerStudy() {
     const { id } = useParams();
@@ -22,28 +22,28 @@ export default function DetailTracerStudy() {
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const [showToast, setShowToast] = useState(false);
-    const [toastMessage, setToastMessage] = useState({ type: '', message: '' });
+    const [toastMessage, setToastMessage] = useState({ type: "", message: "" });
 
     const personalInfoFields = [
-        { key: 'nisn', label: 'NISN' },
-        { key: 'nis', label: 'NIS' },
-        { key: 'nama_lengkap', label: 'Nama Lengkap' },
-        { key: 'jenis_kelamin', label: 'Jenis Kelamin' },
-        { key: 'kota_kelahiran', label: 'Kota Kelahiran' },
-        { key: 'tanggal_lahir', label: 'Tanggal Lahir' },
-        { key: 'agama', label: 'Agama' },
-        { key: 'tahun_lulus', label: 'Tahun Lulus' },
-        { key: 'email', label: 'Email' },
-        { key: 'jurusan', label: 'Jurusan' },
-        { key: 'handphone', label: 'No Handphone / No WhatsApp' },
-        { key: 'alamat', label: 'Alamat Tempat Tinggal' },
+        { key: "nisn", label: "NISN" },
+        { key: "nis", label: "NIS" },
+        { key: "nama_lengkap", label: "Nama Lengkap" },
+        { key: "jenis_kelamin", label: "Jenis Kelamin" },
+        { key: "kota_kelahiran", label: "Kota Kelahiran" },
+        { key: "tanggal_lahir", label: "Tanggal Lahir" },
+        { key: "agama", label: "Agama" },
+        { key: "tahun_lulus", label: "Tahun Lulus" },
+        { key: "email", label: "Email" },
+        { key: "jurusan", label: "Jurusan" },
+        { key: "handphone", label: "No Handphone / No WhatsApp" },
+        { key: "alamat", label: "Alamat Tempat Tinggal" },
     ];
 
     const feedbackFields = [
-        { key: 'kepuasan_materi', label: '1. Berikan kepuasan Anda terhadap materi yang dipelajari di SMK Islam Malahayati?' },
-        { key: 'kepuasan_fasilitas', label: '2. Berikan kepuasan Anda terhadap fasilitas (laboratorium, alat praktik, dll.) yang disediakan oleh SMK Islam Malahayati?' },
-        { key: 'kepuasan_guru', label: '3. Berikan kepuasan Anda terhadap kualitas guru di SMK Islam Malahayati?' },
-        { key: 'saran_smk', label: '4. Berikan saran Anda untuk meningkatkan kualitas keseluruhan di SMK Islam Malahayati.' },
+        { key: "kepuasan_materi", label: "1. Berikan kepuasan Anda terhadap materi yang dipelajari di SMK Islam Malahayati?" },
+        { key: "kepuasan_fasilitas", label: "2. Berikan kepuasan Anda terhadap fasilitas (laboratorium, alat praktik, dll.) yang disediakan oleh SMK Islam Malahayati?" },
+        { key: "kepuasan_guru", label: "3. Berikan kepuasan Anda terhadap kualitas guru di SMK Islam Malahayati?" },
+        { key: "saran_smk", label: "4. Berikan saran Anda untuk meningkatkan kualitas keseluruhan di SMK Islam Malahayati." },
     ];
 
     useEffect(() => {
@@ -52,10 +52,10 @@ export default function DetailTracerStudy() {
 
     const formatDate = (dateString) => {
         const date = new Date(dateString);
-        if (isNaN(date)) return '-';
+        if (isNaN(date)) return "-";
 
-        const day = String(date.getDate()).padStart(2, '0');
-        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, "0");
+        const month = String(date.getMonth() + 1).padStart(2, "0");
         const year = date.getFullYear();
 
         return `${day}/${month}/${year}`;
@@ -69,7 +69,7 @@ export default function DetailTracerStudy() {
         setIsSubmitting(true);
         try {
             if (!tracerStudyDetail?._id) {
-            throw new Error('ID lowongan kerja tidak ditemukan');
+            throw new Error("ID lowongan kerja tidak ditemukan");
             }
             await dispatch(deleteTracerStudy(tracerStudyDetail._id)).unwrap();
             setToastMessage({ type: "success", message: "Tracer Study ini berhasil dihapus!" });
@@ -191,7 +191,7 @@ export default function DetailTracerStudy() {
                     </div>
                 </div>
             </div>
-            {tracerStudyDetail.status === 'Pending' && (
+            {tracerStudyDetail.status === "Pending" && (
                     <>
                             <Alert
                                 variant="white"
@@ -206,12 +206,12 @@ export default function DetailTracerStudy() {
                                 }}
                             >
                                 <FaClock style={{ color: "#ffbd30", fontSize: "1.2rem" }} className="mx-2"/>
-                                 {tracerStudyDetail.status || 'Status not available'}
+                                 {tracerStudyDetail.status || "Status not available"}
                             </Alert>
                     </>
             )}
 
-            {tracerStudyDetail.status === 'Tolak' && (
+            {tracerStudyDetail.status === "Tolak" && (
                 <>
                         <Alert
                             variant="white"
@@ -226,12 +226,12 @@ export default function DetailTracerStudy() {
                             }}
                         >
                             <FaExclamationCircle style={{ color: "#FF463F", fontSize: "1.2rem" }} className="mx-2"/>
-                                {tracerStudyDetail.status || 'Status not available'}
+                                {tracerStudyDetail.status || "Status not available"}
                         </Alert>
                 </>
             )}
 
-            {tracerStudyDetail.status === 'Setuju' && (
+            {tracerStudyDetail.status === "Setuju" && (
                 <>
                     <Alert
                         variant="white"
@@ -246,7 +246,7 @@ export default function DetailTracerStudy() {
                         }}
                     >
                         <FaCheckCircle style={{ color: "#23B85E", fontSize: "1.2rem" }} className="mx-2"/>
-                        {tracerStudyDetail.status || 'Status not available'}
+                        {tracerStudyDetail.status || "Status not available"}
                     </Alert>
                 </>
             )}
@@ -275,10 +275,10 @@ export default function DetailTracerStudy() {
                             {personalInfoFields.map(({ key, label }) => (
                                 <Col md={6} className="mb-3" key={key}>
                                     <label className="form-label text-muted text-uppercase">{label}</label>
-                                    {key === 'alamat' ? (
+                                    {key === "alamat" ? (
                                         <textarea
                                             className="form-control bg-light"
-                                            value={tracerStudyDetail[key] || '-'}
+                                            value={tracerStudyDetail[key] || "-"}
                                             rows="3"
                                             disabled
                                         />
@@ -287,9 +287,9 @@ export default function DetailTracerStudy() {
                                             type="text"
                                             className="form-control bg-light"
                                             value={
-                                                key.toLowerCase().includes('tanggal') 
+                                                key.toLowerCase().includes("tanggal") 
                                                     ? formatDate(tracerStudyDetail[key]) 
-                                                    : tracerStudyDetail[key] || '-'
+                                                    : tracerStudyDetail[key] || "-"
                                             }
                                             disabled
                                         />
@@ -310,18 +310,18 @@ export default function DetailTracerStudy() {
                                 <input
                                     type="text"
                                     className="form-control bg-light"
-                                    value={tracerStudyDetail.status_anda || '-'}
+                                    value={tracerStudyDetail.status_anda || "-"}
                                     disabled
                                 />
                             </Col>
-                            {tracerStudyDetail.status_anda === 'Bekerja' && (
+                            {tracerStudyDetail.status_anda === "Bekerja" && (
                                 <>
                                     <Col md={6} className="mb-3">
                                         <label className="form-label text-muted text-uppercase">Nama Perusahaan</label>
                                         <input
                                             type="text"
                                             className="form-control bg-light"
-                                            value={tracerStudyDetail.nama_perusahaan || '-'}
+                                            value={tracerStudyDetail.nama_perusahaan || "-"}
                                             disabled
                                         />
                                     </Col>
@@ -330,20 +330,20 @@ export default function DetailTracerStudy() {
                                         <input
                                             type="text"
                                             className="form-control bg-light"
-                                            value={tracerStudyDetail.posisi_jabatan || '-'}
+                                            value={tracerStudyDetail.posisi_jabatan || "-"}
                                             disabled
                                         />
                                     </Col>
                                 </>
                             )}
-                            {tracerStudyDetail.status_anda === 'Melanjutkan Pendidikan' && (
+                            {tracerStudyDetail.status_anda === "Melanjutkan Pendidikan" && (
                                 <>
                                     <Col md={6} className="mb-3">
                                         <label className="form-label text-muted text-uppercase">Nama Kampus</label>
                                         <input
                                             type="text"
                                             className="form-control bg-light"
-                                            value={tracerStudyDetail.nama_kampus || '-'}
+                                            value={tracerStudyDetail.nama_kampus || "-"}
                                             disabled
                                         />
                                     </Col>
@@ -352,7 +352,7 @@ export default function DetailTracerStudy() {
                                         <input
                                             type="text"
                                             className="form-control bg-light"
-                                            value={tracerStudyDetail.program_studi || '-'}
+                                            value={tracerStudyDetail.program_studi || "-"}
                                             disabled
                                         />
                                     </Col>
@@ -369,10 +369,10 @@ export default function DetailTracerStudy() {
                             {feedbackFields.map(({ key, label }) => (
                                 <Col md={12} className="mb-3" key={key}>
                                     <label className="form-label text-muted text-uppercase">{label}</label>
-                                    {key === 'saran_smk' ? (
+                                    {key === "saran_smk" ? (
                                         <textarea
                                             className="form-control bg-light"
-                                            value={tracerStudyDetail[key] || '-'}
+                                            value={tracerStudyDetail[key] || "-"}
                                             rows="4"
                                             disabled
                                         />
@@ -380,7 +380,7 @@ export default function DetailTracerStudy() {
                                         <input
                                             type="text"
                                             className="form-control bg-light"
-                                            value={tracerStudyDetail[key] || '-'}
+                                            value={tracerStudyDetail[key] || "-"}
                                             disabled
                                         />
                                     )}
@@ -401,9 +401,9 @@ export default function DetailTracerStudy() {
                         <FiAlertTriangle
                             className="mb-3 rounded p-2"
                             style={{
-                                fontSize: 'clamp(3rem, 6vw, 3rem)',
-                                color: '#ff0707',
-                                backgroundColor: '#fad6d6',
+                                fontSize: "clamp(3rem, 6vw, 3rem)",
+                                color: "#ff0707",
+                                backgroundColor: "#fad6d6",
                             }}
                         />
                         <CloseButton
@@ -411,10 +411,10 @@ export default function DetailTracerStudy() {
                             onClick={() => setShowConfirmModal(false)}
                             aria-label="Tutup modal"
                         />
-                        <h5 className="fw-bold" style={{ fontSize: 'clamp(1.25rem, 4vw, 1.5rem)' }}>
+                        <h5 className="fw-bold" style={{ fontSize: "clamp(1.25rem, 4vw, 1.5rem)" }}>
                             Apakah Anda yakin?
                         </h5>
-                        <p className="text-muted" style={{ fontSize: 'clamp(0.875rem, 3vw, 1rem)' }}>
+                        <p className="text-muted" style={{ fontSize: "clamp(0.875rem, 3vw, 1rem)" }}>
                             Apakah Anda yakin ingin menghapus tracer study ini?
                         </p>
                     </Modal.Body>
@@ -453,9 +453,9 @@ export default function DetailTracerStudy() {
                                     className="fw-bold py-2 rounded-pill shadow-sm w-100 border-0"
                                     disabled={isSubmitting}
                                     style={{
-                                        color: '#ffffff',
-                                        backgroundColor: '#fe0202',
-                                        transition: 'all 0.2s ease-in-out',
+                                        color: "#ffffff",
+                                        backgroundColor: "#fe0202",
+                                        transition: "all 0.2s ease-in-out",
                                     }}
                                     onMouseEnter={(e) => {
                                         e.target.style.backgroundColor = "#fe0202";

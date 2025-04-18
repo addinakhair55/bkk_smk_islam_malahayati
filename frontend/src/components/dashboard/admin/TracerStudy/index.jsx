@@ -1,15 +1,17 @@
-import PageContainer from 'src/components/container/PageContainer';
-import { useEffect, useCallback, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchTracerStudy, updateStatus, deleteTracerStudy } from '../../../redux/slice/tracerStudySlice';
-import { Link, useNavigate } from 'react-router-dom';
-import { Modal, Tooltip, OverlayTrigger, Form, InputGroup, Dropdown, Table, Pagination, Button, Alert, Spinner, ToastContainer, Toast, CloseButton } from 'react-bootstrap';
+import PageContainer from "src/components/container/PageContainer";
+import { useEffect, useCallback, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchTracerStudy, updateStatus, deleteTracerStudy } from "../../../redux/slice/tracerStudySlice";
+import { Link, useNavigate } from "react-router-dom";
+import { Modal, Tooltip, OverlayTrigger, Form, InputGroup, Dropdown, Table, Pagination, Button, Alert, Spinner, ToastContainer, Toast, CloseButton } from "react-bootstrap";
 import { BsEye, BsPencilSquare, BsTrash } from "react-icons/bs";
 import "./TracerStudy.css"
-import { FaExclamationCircle, FaQuestion } from 'react-icons/fa';
-import { CircularProgress } from '@mui/material';
-import { FiAlertTriangle } from 'react-icons/fi';
-import axios from 'axios';
+import { FaExclamationCircle, FaQuestion } from "react-icons/fa";
+import { CircularProgress } from "@mui/material";
+import { FiAlertTriangle } from "react-icons/fi";
+import ExcelJS from "exceljs";
+import { saveAs } from "file-saver";
+import axios from "axios";
 
 export default function AdminTracerStudy() {
   const dispatch = useDispatch();
@@ -28,7 +30,7 @@ export default function AdminTracerStudy() {
 
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [showToast, setShowToast] = useState(false);
-  const [toastMessage, setToastMessage] = useState({ type: '', message: '' });
+  const [toastMessage, setToastMessage] = useState({ type: "", message: "" });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [deletingId, setDeletingId] = useState(null);
 
@@ -49,7 +51,7 @@ export default function AdminTracerStudy() {
       setShowToast(true);
       setShowModal(false);
     } catch (error) {
-      console.error('Ada kesalahan saat mengubah status tracer study di Redux!', error);
+      console.error("Ada kesalahan saat mengubah status tracer study di Redux!", error);
       setToastMessage({ type: "danger", message: "Gagal mengubah status. Silakan coba lagi." });
       setShowToast(true);
       setShowModal(false);
@@ -58,7 +60,7 @@ export default function AdminTracerStudy() {
     try {
       await axios.patch(`http://localhost:5000/tracer-study/${selectedTracerStudyId}/status`, { status: newStatus });
     } catch (error) {
-      console.error('Ada kesalahan saat mengubah status tracer study di backend!', error);
+      console.error("Ada kesalahan saat mengubah status tracer study di backend!", error);
     }
   };
 
@@ -71,7 +73,7 @@ export default function AdminTracerStudy() {
       setIsSubmitting(true);
       try {
         if (!deletingId) {
-          throw new Error('ID lowongan kerja tidak ditemukan');
+          throw new Error("ID lowongan kerja tidak ditemukan");
         }
         await dispatch(deleteTracerStudy(deletingId)).unwrap();
         setToastMessage({ type: "success", message: "Tracer Study ini berhasil dihapus!" });
@@ -104,6 +106,84 @@ export default function AdminTracerStudy() {
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
+
+  const exportToExcel = async () => {
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet("TracerStudy");
+  
+    worksheet.columns = [
+      { header: "No", key: "no", width: 10 },
+      { header: "Nama Lengkap", key: "nama_lengkap", width: 20 },
+      { header: "Jenis Kelamin", key: "jenis_kelamin", width: 15 },
+      { header: "Tanggal Lahir", key: "tanggal_lahir", width: 15 },
+      { header: "Kota Kelahiran", key: "kota_kelahiran", width: 15 },
+      { header: "Agama", key: "agama", width: 15 },
+      { header: "Alamat", key: "alamat", width: 30 },
+      { header: "NISN", key: "nisn", width: 15 },
+      { header: "NIS", key: "nis", width: 15 },
+      { header: "Tahun Lulus", key: "tahun_lulus", width: 15 },
+      { header: "Email", key: "email", width: 20 },
+      { header: "Handphone", key: "handphone", width: 15 },
+      { header: "Jurusan", key: "jurusan", width: 15 },
+      { header: "Status Anda", key: "status_anda", width: 15 },
+      { header: "Nama Perusahaan", key: "nama_perusahaan", width: 20 },
+      { header: "Posisi Jabatan", key: "posisi_jabatan", width: 15 },
+      { header: "Nama Kampus", key: "nama_kampus", width: 20 },
+      { header: "Program Studi", key: "program_studi", width: 15 },
+      { header: "Kepuasan Materi", key: "kepuasan_materi", width: 15 },
+      { header: "Kepuasan Fasilitas", key: "kepuasan_fasilitas", width: 15 },
+      { header: "Kepuasan Guru", key: "kepuasan_guru", width: 15 },
+      { header: "Saran SMK", key: "saran_smk", width: 30 },
+      { header: "Foto Alumni", key: "foto_alumni", width: 30 },
+      { header: "Status", key: "status", width: 15 },
+    ];
+  
+    const bulanIndonesia = [
+      "", "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+      "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+    ];
+    const formatTanggal = (tanggalString) => {
+      if (!tanggalString) return "";
+      const tanggal = new Date(tanggalString);
+      const hari = tanggal.getDate();
+      const bulan = bulanIndonesia[tanggal.getMonth() + 1];
+      const tahun = tanggal.getFullYear();
+      return `${hari} ${bulan} ${tahun}`;
+    };
+    for (const [index, user] of filteredData.entries()) {
+      worksheet.addRow({
+        no: index + 1,
+        nama_lengkap: user.nama_lengkap || "",
+        jenis_kelamin: user.jenis_kelamin || "",
+        tanggal_lahir: formatTanggal(user.tanggal_lahir),
+        kota_kelahiran: user.kota_kelahiran || "",
+        agama: user.agama || "",
+        alamat: user.alamat || "",
+        nisn: user.nisn || "",
+        nis: user.nis || "",
+        tahun_lulus: user.tahun_lulus || "",
+        email: user.email || "",
+        handphone: user.handphone || "",
+        jurusan: user.jurusan || "",
+        status_anda: user.status_anda || "",
+        nama_perusahaan: user.nama_perusahaan || "",
+        posisi_jabatan: user.posisi_jabatan || "",
+        nama_kampus: user.nama_kampus || "",
+        program_studi: user.program_studi || "",
+        kepuasan_materi: user.kepuasan_materi || "",
+        kepuasan_fasilitas: user.kepuasan_fasilitas || "",
+        kepuasan_guru: user.kepuasan_guru || "",
+        saran_smk: user.saran_smk || "",
+        foto_alumni: user.foto_alumni ? `http://localhost:5000/uploads/${user.foto_alumni}` : "",
+        status: user.status || "",
+      });
+    }
+  
+    const buffer = await workbook.xlsx.writeBuffer();
+    const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+    saveAs(blob, "TracerStudy_Data.xlsx");
+  };
+  
 
   if (loading) {
       return (
@@ -144,8 +224,11 @@ export default function AdminTracerStudy() {
               <Toast.Body className="text-white">{toastMessage.message}</Toast.Body>
           </Toast>
       </ToastContainer>
+      <Button variant="success" onClick={exportToExcel}>
+        Export to Excel
+      </Button>
       <div className="d-flex justify-content-end align-items-center mb-3 gap-3">
-        <InputGroup style={{width:'350px'}}>
+        <InputGroup style={{width:"350px"}}>
           <Form.Control
             type="text"
             placeholder="Cari nama alumni, NIS, atau NISN..."
@@ -166,8 +249,8 @@ export default function AdminTracerStudy() {
                 fontSize: "1.5rem",
                 transition: "color 0.3s, transform 0.3s"
               }}
-              onMouseEnter={(e) => e.target.style.color = '#989898'}
-              onMouseLeave={(e) => e.target.style.color = 'black'}
+              onMouseEnter={(e) => e.target.style.color = "#989898"}
+              onMouseLeave={(e) => e.target.style.color = "black"}
             />
           </Dropdown.Toggle>
 
@@ -187,7 +270,7 @@ export default function AdminTracerStudy() {
                   onChange={(e) => setFilter((prev) => ({ ...prev, jenis_kelamin: e.target.value }))}
                 >
                   <option value="">Pilih</option>
-                  <option value="Laki-Laki">Laki-Laki</option>
+                  <option value="Laki-laki">Laki-laki</option>
                   <option value="Perempuan">Perempuan</option>
                 </Form.Select>
               </Form.Group>
@@ -242,7 +325,7 @@ export default function AdminTracerStudy() {
                 <td>{index + 1}</td>
                 <td>{user.nisn}</td>
                 <td>{user.nis}</td>
-                <td className="text-truncate" style={{ maxWidth: '150px' }}>
+                <td className="text-truncate" style={{ maxWidth: "150px" }}>
                   {user.nama_lengkap}
                 </td>
                 <td>{user.jenis_kelamin}</td>
@@ -253,15 +336,15 @@ export default function AdminTracerStudy() {
                     overlay={<Tooltip id="tooltip-status">Pilih untuk mengubah status alumni.</Tooltip>}
                   >
                     <Button
-                      className={`status-button ${user.status === 'Pending' ? 'pending' : user.status === 'Setuju' ? 'approved' : 'rejected'}`}
+                      className={`status-button ${user.status === "Pending" ? "pending" : user.status === "Setuju" ? "approved" : "rejected"}`}
                       onClick={() => handleStatusChange(user._id)}
                     >
                       {
-                        user.status === 'Pending' ? (
+                        user.status === "Pending" ? (
                           <i className="bi bi-hourglass-split pending-icon"></i>
-                        ) : user.status === 'Setuju' ? (
+                        ) : user.status === "Setuju" ? (
                           <i className="bi bi-check-circle-fill approved-icon"></i>
-                        ) : user.status === 'Tolak' ? (
+                        ) : user.status === "Tolak" ? (
                           <i className="bi bi-x-circle-fill x-icon"></i>
                         ):null
                       }
@@ -328,9 +411,9 @@ export default function AdminTracerStudy() {
                   <FaQuestion
                       className="mb-3 rounded p-2"
                       style={{
-                          fontSize: 'clamp(3rem, 6vw, 3rem)',
-                          color: '#07a0ff',
-                          backgroundColor: '#d6e5fa',
+                          fontSize: "clamp(3rem, 6vw, 3rem)",
+                          color: "#07a0ff",
+                          backgroundColor: "#d6e5fa",
                       }}
                   />
                   <CloseButton
@@ -338,24 +421,24 @@ export default function AdminTracerStudy() {
                       onClick={() => setShowModal(false)}
                       aria-label="Tutup modal"
                   />
-                  <h5 className="fw-bold" style={{ fontSize: 'clamp(1.25rem, 4vw, 1.5rem)' }}>
+                  <h5 className="fw-bold" style={{ fontSize: "clamp(1.25rem, 4vw, 1.5rem)" }}>
                       Apakah Anda yakin?
                   </h5>
-                <p className="text-muted" style={{ fontSize: 'clamp(0.875rem, 3vw, 1rem)' }}>
+                <p className="text-muted" style={{ fontSize: "clamp(0.875rem, 3vw, 1rem)" }}>
                   Apakah Anda yakin ingin mengubah status Tracer Study ini menjadi {" "}
-                  <span className="fw-semibold">{selectedStatus === 'Setuju' ? 'Tolak' : 'Setuju'}</span>? 
+                  <span className="fw-semibold">{selectedStatus === "Setuju" ? "Tolak" : "Setuju"}</span>? 
                 </p>
               </Modal.Body>
               <Modal.Footer className="border-0 d-flex justify-content-center w-100 pt-0">
                       <div className="row w-100 g-2">
                           <div className="col-12 col-md-6">
                               <Button
-                                  onClick={() => handleConfirmStatusChange('Setuju')}
+                                  onClick={() => handleConfirmStatusChange("Setuju")}
                                   className="fw-bold py-2 rounded-pill shadow-sm w-100 border-0"
                                   style={{
-                                      color: '#ffffff',
-                                      backgroundColor: '#2e7636',
-                                      transition: 'all 0.2s ease-in-out',
+                                      color: "#ffffff",
+                                      backgroundColor: "#2e7636",
+                                      transition: "all 0.2s ease-in-out",
                                   }}
                                   onMouseEnter={(e) => {
                                       e.target.style.backgroundColor = "#2e7636";
@@ -373,12 +456,12 @@ export default function AdminTracerStudy() {
 
                           <div className="col-12 col-md-6">
                               <Button
-                                  onClick={() => handleConfirmStatusChange('Tolak')}
+                                  onClick={() => handleConfirmStatusChange("Tolak")}
                                   className="fw-bold py-2 rounded-pill shadow-sm w-100 border-0"
                                   style={{
-                                    color: '#ffffff',
-                                    backgroundColor: '#fe0202',
-                                    transition: 'all 0.2s ease-in-out',
+                                    color: "#ffffff",
+                                    backgroundColor: "#fe0202",
+                                    transition: "all 0.2s ease-in-out",
                                   }}
                                   onMouseEnter={(e) => {
                                       e.target.style.backgroundColor = "#fe0202";
@@ -436,9 +519,9 @@ export default function AdminTracerStudy() {
                   <FiAlertTriangle
                       className="mb-3 rounded p-2"
                       style={{
-                          fontSize: 'clamp(3rem, 6vw, 3rem)',
-                          color: '#ff0707',
-                          backgroundColor: '#fad6d6',
+                          fontSize: "clamp(3rem, 6vw, 3rem)",
+                          color: "#ff0707",
+                          backgroundColor: "#fad6d6",
                       }}
                   />
                   <CloseButton
@@ -446,10 +529,10 @@ export default function AdminTracerStudy() {
                       onClick={() => setShowConfirmModal(false)}
                       aria-label="Tutup modal"
                   />
-                  <h5 className="fw-bold" style={{ fontSize: 'clamp(1.25rem, 4vw, 1.5rem)' }}>
+                  <h5 className="fw-bold" style={{ fontSize: "clamp(1.25rem, 4vw, 1.5rem)" }}>
                       Apakah Anda yakin?
                   </h5>
-                  <p className="text-muted" style={{ fontSize: 'clamp(0.875rem, 3vw, 1rem)' }}>
+                  <p className="text-muted" style={{ fontSize: "clamp(0.875rem, 3vw, 1rem)" }}>
                       Apakah Anda yakin ingin menghapus tracer study ini?
                   </p>
               </Modal.Body>
@@ -488,9 +571,9 @@ export default function AdminTracerStudy() {
                                     className="fw-bold py-2 rounded-pill shadow-sm w-100 border-0"
                                     disabled={isSubmitting}
                                     style={{
-                                        color: '#ffffff',
-                                        backgroundColor: '#fe0202',
-                                        transition: 'all 0.2s ease-in-out',
+                                        color: "#ffffff",
+                                        backgroundColor: "#fe0202",
+                                        transition: "all 0.2s ease-in-out",
                                     }}
                                     onMouseEnter={(e) => {
                                         e.target.style.backgroundColor = "#fe0202";
