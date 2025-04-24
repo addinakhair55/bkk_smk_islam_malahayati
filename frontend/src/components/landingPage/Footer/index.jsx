@@ -7,7 +7,7 @@ import YouTube from "../../../assets/images/icon/youtube_icon.png"
 export default function Footer() {
     return (
         <footer>
-            <div className="container py-5 style-font">
+            <div className="container py-5">
                 <div className="row g-4 justify-content-center">
                     {/* SMK ISLAM MALAHAYATI Section */}
                     <div className="col-lg-3 col-md-6 col-12 d-flex flex-column align-items-start">

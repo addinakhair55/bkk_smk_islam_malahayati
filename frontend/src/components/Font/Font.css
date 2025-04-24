@@ -1,0 +1,23 @@
+/* frontend/src/components/Font/Font.css */
+@font-face {
+    font-family: 'Poppins';
+    src: url('../Font/Poppins-Regular.ttf') format('truetype');  /* Perbaiki path */
+    font-weight: 400;
+    font-style: normal;
+  }
+  
+  @font-face {
+    font-family: 'Poppins';
+    src: url('../Font/Poppins-SemiBold.ttf') format('truetype');  /* Perbaiki path */
+    font-weight: 700;
+    font-style: normal;
+  }
+  
+  body {
+    font-family: 'Poppins', sans-serif;
+  }
+  
+  *, *::before, *::after {
+    font-family: 'Poppins', sans-serif;
+  }
+  

@@ -24,10 +24,15 @@ const tracerStudySchema = new mongoose.Schema({
     },
     jurusan: { type: String, required: true },
     status_anda: { type: String, required: true },
+
     nama_perusahaan: { type: String },
     posisi_jabatan: { type: String },
+
     nama_kampus: { type: String },
+    jenjang_pendidikan: { type: String },
     program_studi: { type: String },
+    
+    instansi_abdi_negara: { type: String },
     // feedback smk
     kepuasan_materi: { type: String, required: true },
     kepuasan_fasilitas: { type: String, required: true },

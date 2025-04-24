@@ -342,7 +342,12 @@ export default function EditInfoLoker() {
         <PageContainer title="Edit Info Loker">
             <ToastContainer position="top-end" className="p-3 mt-5">
                 <Toast onClose={() => setShowToast(false)} show={showToast} delay={5000} autohide bg={toastMessage.type}>
-                    <Toast.Body className="text-white">{toastMessage.message}</Toast.Body>
+                    <Toast.Body className="d-flex align-items-center gap-2 text-white">
+                    {toastMessage.type === "success" && <i className="bi bi-check-circle-fill text-white fs-6"></i>}
+                    {toastMessage.type === "danger" && <i className="bi bi-x-circle-fill text-white fs-6"></i>}
+                    {toastMessage.type === "warning" && <i className="bi bi-exclamation-triangle-fill text-white fs-6"></i>}
+                    <strong>{toastMessage.message}</strong>
+                    </Toast.Body>
                 </Toast>
             </ToastContainer>
             {alertMessage && (
@@ -367,8 +372,16 @@ export default function EditInfoLoker() {
                     <li className="breadcrumb-item">
                         <Link
                             to="/info-lowongan-kerja"
-                            className="text-primary d-flex align-items-center text-decoration-none"
-                            style={{ transition: "color 0.3s ease" }}
+                            className="d-flex align-items-center text-decoration-none"
+                            style={{ 
+                                color: "#4065B6", 
+                                textDecoration: "none",
+                                transition: "color 0.3s ease"
+                            }}
+                            onMouseEnter={(e) => e.target.style.color = "#3050A5"}
+                            onMouseLeave={(e) => e.target.style.color = "#4065B6"}
+                            onMouseDown={(e) => e.target.style.color = "red"}
+                            onMouseUp={(e) => e.target.style.color = "#3050A5"}
                         >
                             <span className="fw-medium">Info Lowongan Kerja</span>
                         </Link>
@@ -378,39 +391,68 @@ export default function EditInfoLoker() {
                     </li>
                 </ol>
             </nav>
-            <div className="d-flex flex-column flex-md-row justify-content-between align-items-center align-items-md-start mb-3">
-                <h4 className="fw-bold mb-3 mb-md-0">Edit Info Lowongan Kerja</h4>
-                <div className="d-flex justify-content-end gap-2 mb-3">
-                    <Button
-                        type="submit"
-                        className="fw-bold d-flex align-items-center gap-2"
-                        style={{ backgroundColor: "#4A90E2", border: "none" }}
-                        disabled={isSubmitting}
-                        onClick={handleSubmit}
-                        onMouseEnter={(e) => e.target.style.backgroundColor = "#357ABD"}
-                        onMouseLeave={(e) => e.target.style.backgroundColor = "#4A90E2"}
-                    >
-                        {isSubmitting ? <CircularProgress size={20} color="inherit" /> : <><FaSave size={16} />Simpan</>}
-                    </Button>
-                    <Button
-                        variant="outline-secondary"
-                        className="fw-bold d-flex align-items-center gap-2"
-                        style={{ color: "#6c757d", backgroundColor: "white", border: "2px solid #6c757d" }}
-                        onMouseEnter={(e) => {
-                            e.target.style.backgroundColor = "#6c757d";
-                            e.target.style.color = "white";
-                            e.target.style.border = "2px solid #5a6268";
-                        }}
-                        onMouseLeave={(e) => {
-                            e.target.style.backgroundColor = "white";
-                            e.target.style.color = "#6c757d";
-                            e.target.style.border = "2px solid #6c757d";
-                        }}
-                        type="button"
-                        onClick={() => navigate("/info-lowongan-kerja")}
-                    >
-                        <FaTimes size={16} /> Batal
-                    </Button>
+            <div className="row mb-4 align-items-center">
+                <div className="col-12 col-md-6">
+                    <h4 className="fw-bold mb-0">Edit Lowongan</h4>
+                </div>
+                <div className="col-12 col-md-6 mt-3 mt-md-0">
+                    <div className="d-flex flex-column flex-md-row justify-content-end gap-2">
+                        <Button
+                            type="submit"
+                            className="fw-bold d-flex align-items-center justify-content-center gap-2"
+                            style={{
+                                backgroundColor: "#4065B6",
+                                border: "none",
+                                transition: "background-color 0.2s ease-in-out",
+                            }}
+                            onClick={handleSubmit}
+                            disabled={isSubmitting}
+                            onMouseEnter={(e) => {
+                                e.target.style.backgroundColor = "#3050A5";
+                                e.currentTarget.style.transform = "scale(1.05)";
+                            }}
+                            onMouseLeave={(e) => {
+                                e.target.style.backgroundColor = "#4065B6";
+                                e.currentTarget.style.transform = "scale(1)";
+                            }}
+                        >
+                            {isSubmitting ? (
+                                <CircularProgress size={20} color="inherit" />
+                            ) : (
+                                <>
+                                    <FaSave size="clamp(14px, 2vw, 16px)" /> Simpan Perubahan
+                                </>
+                            )}
+                        </Button>
+
+                        <Button
+                            variant="outline-secondary"
+                            className="fw-bold d-flex align-items-center justify-content-center gap-2"
+                            style={{
+                                color: "#939393",
+                                backgroundColor: "#ffffff",
+                                border: "2px solid #939393",
+                                transition: "all 0.2s ease-in-out",
+                            }}
+                            onMouseEnter={(e) => {
+                                e.target.style.backgroundColor = "#6c757d";
+                                e.target.style.color = "white";
+                                e.target.style.border = "2px solid #6c757d";
+                                e.currentTarget.style.transform = "scale(1.05)"
+
+                            }}
+                            onMouseLeave={(e) => {
+                                e.target.style.backgroundColor = "white";
+                                e.target.style.color = "#939393";
+                                e.target.style.border = "2px solid #939393";
+                                e.currentTarget.style.transform = "scale(1)";
+                            }}
+                            type="button"
+                            onClick={() => navigate("/info-lowongan-kerja")}
+                        >
+                            <FaTimes size="clamp(14px, 2vw, 16px)" /> Batal
+                        </Button>
+                    </div>
                 </div>
             </div>
 
@@ -419,7 +461,7 @@ export default function EditInfoLoker() {
                     <Form>
                         <Row>
                             {[
-                                { id: "judul", label: "Judul Pekerjaan", type: "text" },
+                                { id: "judul", label: "Judul/Posisi Pekerjaan", type: "text" },
                                 { id: "perusahaan", label: "Nama Perusahaan", type: "text" },
                                 { id: "lokasi", label: "Lokasi Pekerjaan", type: "text" },
                                 {
@@ -465,7 +507,7 @@ export default function EditInfoLoker() {
                                 { id: "deskripsi", label: "Deskripsi Pekerjaan", type: "quill" },
                                 { id: "persyaratan", label: "Persyaratan Pekerjaan", type: "quill" },
                                 { id: "keterampilan", label: "Keterampilan Pekerjaan", type: "quill" },
-                                { id: "link", label: "Link Lamaran", type: "text" },
+                                { id: "link", label: "Link Lamaran (Optional)", type: "text" },
                                 { id: "gaji_min", label: "Nominal Gaji Minimum", type: "text" },
                                 { id: "gaji_max", label: "Nominal Gaji Maksimal", type: "text" },
                             ].map(({ id, label, type, options }) => (

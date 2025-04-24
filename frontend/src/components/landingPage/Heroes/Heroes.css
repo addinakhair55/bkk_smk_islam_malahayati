@@ -4,7 +4,7 @@
     text-align: justify;
 }
   
-.font-title {
+.font-judul {
     font-size: 1.9rem;
 }
 
@@ -34,7 +34,7 @@
         font-size: 0.8rem;
     }
   
-    .font-title {
+    .font-judul {
         font-size: 1.5rem;
     }
     .img-hero {
@@ -51,8 +51,8 @@
         font-size: 1.25rem;
     }
   
-    .font-title {
-        font-size: 2.5rem;
+    .font-judul {
+        font-size: 2.4rem;
     }
     .img-hero {
         width: 23rem;
@@ -66,7 +66,7 @@
         font-size: 1.25rem;
     }
   
-    .font-title {
+    .font-judul {
         font-size: 3rem;
     }
     .img-hero {

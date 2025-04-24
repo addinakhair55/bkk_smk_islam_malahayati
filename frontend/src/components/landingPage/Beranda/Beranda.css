@@ -30,17 +30,6 @@
     font-size: 0.5rem;
 }
 
-@font-face {
-    font-family: 'Nunito Sans';
-    src: url('../../../components/Font/NunitoSans_7pt-Regular.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-}
-
-.style-font {
-    font-family: 'Nunito Sans', sans-serif;
-}
-
 @media (min-width: 768px) {
     .carousel-caption {
         max-width: 100%;

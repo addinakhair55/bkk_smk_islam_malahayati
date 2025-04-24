@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux"; // Import useSelector dari Redux
+import { useDispatch, useSelector } from "react-redux";
 import { Container } from "react-bootstrap";
 import { Outlet } from "react-router-dom";
 import Sidebar from "../full/sidebar/Sidebar.jsx";
 import Header from "../full/header/Header.jsx";
-import { getUser } from "../../components/redux/slice/authSlice"; // Import getUser dari Redux
+import { getUser } from "../../components/redux/slice/authSlice";
 
 const DashboardLayout = () => {
   const userRole = useSelector((state) => state.auth.role) || "guest";

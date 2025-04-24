@@ -24,8 +24,8 @@ export default function CreateTracerStudy() {
     const [formData, setFormData] = useState({
         nama_lengkap: "", jenis_kelamin: "", tanggal_lahir: "", kota_kelahiran: "", agama: "",
         alamat: "", nisn: "", nis: "", tahun_lulus: "", email: "", handphone: "", jurusan: "",
-        status_anda: "", nama_perusahaan: "", posisi_jabatan: "", nama_kampus: "", program_studi: "",
-        kepuasan_materi: "", kepuasan_fasilitas: "", kepuasan_guru: "", saran_smk: "", foto_alumni: null,
+        status_anda: "", nama_perusahaan: "", posisi_jabatan: "", nama_kampus: "", jenjang_pendidikan:"", program_studi: "",
+        instansi_abdi_negara:"", kepuasan_materi: "", kepuasan_fasilitas: "", kepuasan_guru: "", saran_smk: "", foto_alumni: null,
         status: "Pending",
     });
 
@@ -157,7 +157,7 @@ export default function CreateTracerStudy() {
         e.preventDefault();
         const newErrors = {};
         Object.keys(formData).forEach((key) => {
-            if (key !== "foto_alumni" && !formData[key] && key !== "nama_perusahaan" && key !== "posisi_jabatan" && key !== "nama_kampus" && key !== "program_studi") {
+            if (key !== "foto_alumni" && !formData[key] && key !== "nama_perusahaan" && key !== "posisi_jabatan" && key !== "nama_kampus" && key !== "jenjang_pendidikan" && key !== "program_studi" && key !== "instansi_abdi_negara") {
                 newErrors[key] = "Wajib diisi!";
             }
         });
@@ -172,6 +172,9 @@ export default function CreateTracerStudy() {
         } else if (formData.status_anda === "Melanjutkan Pendidikan") {
             if (!formData.nama_kampus) newErrors.nama_kampus = "Wajib diisi!";
             if (!formData.program_studi) newErrors.program_studi = "Wajib diisi!";
+            if (!formData.jenjang_pendidikan) newErrors.jenjang_pendidikan = "Wajib diisi!";
+        } else if (formData.status_anda === "Abdi Negara") {
+            if (!formData.instansi_abdi_negara) newErrors.instansi_abdi_negara = "Wajib diisi!";
         }
     
         setErrors(newErrors);
@@ -264,7 +267,12 @@ export default function CreateTracerStudy() {
         <PageContainer title="Tracer Study Baru">
             <ToastContainer position="top-end" className="p-3 mt-5">
                 <Toast onClose={() => setShowToast(false)} show={showToast} delay={5000} autohide bg={toastMessage.type}>
-                    <Toast.Body className="text-white">{toastMessage.message}</Toast.Body>
+                    <Toast.Body className="d-flex align-items-center gap-2 text-white">
+                    {toastMessage.type === "success" && <i className="bi bi-check-circle-fill text-white fs-6"></i>}
+                    {toastMessage.type === "danger" && <i className="bi bi-x-circle-fill text-white fs-6"></i>}
+                    {toastMessage.type === "warning" && <i className="bi bi-exclamation-triangle-fill text-white fs-6"></i>}
+                    <strong>{toastMessage.message}</strong>
+                    </Toast.Body>
                 </Toast>
             </ToastContainer>
 
@@ -291,16 +299,16 @@ export default function CreateTracerStudy() {
                 <li className="breadcrumb-item">
                     <Link 
                         to="/tracerStudy" 
-                        className="text-primary d-flex align-items-center text-decoration-none"
+                        className="d-flex align-items-center text-decoration-none"
                         style={{ 
-                            color: "blue", 
+                            color: "#4065B6", 
                             textDecoration: "none",
                             transition: "color 0.3s ease"
                         }}
-                        onMouseEnter={(e) => e.target.style.color = "darkblue"}
-                        onMouseLeave={(e) => e.target.style.color = "blue"}
+                        onMouseEnter={(e) => e.target.style.color = "#3050A5"}
+                        onMouseLeave={(e) => e.target.style.color = "#4065B6"}
                         onMouseDown={(e) => e.target.style.color = "red"}
-                        onMouseUp={(e) => e.target.style.color = "darkblue"}
+                        onMouseUp={(e) => e.target.style.color = "#3050A5"}
                     >
                         <span className="fw-medium">Tracer Study</span>
                     </Link>
@@ -316,23 +324,23 @@ export default function CreateTracerStudy() {
                     <h4 className="fw-bold mb-0">Tambah Tracer Study</h4>
                 </div>
                 <div className="col-12 col-md-6 mt-3 mt-md-0">
-                    <div className="d-flex flex-column flex-md-row justify-content-end gap-2 gap-md-3">
+                    <div className="d-flex flex-column flex-md-row justify-content-end gap-2">
                         <Button
                             type="submit"
                             className="fw-bold d-flex align-items-center justify-content-center gap-2"
                             style={{
-                                backgroundColor: "#4A90E2",
+                                backgroundColor: "#4065B6",
                                 border: "none",
                                 transition: "background-color 0.2s ease-in-out",
                             }}
                             onClick={handleSubmit}
                             disabled={isSubmitting}
                             onMouseEnter={(e) => {
-                                e.target.style.backgroundColor = "#357ABD";
+                                e.target.style.backgroundColor = "#3050A5";
                                 e.currentTarget.style.transform = "scale(1.05)";
                             }}
                             onMouseLeave={(e) => {
-                                e.target.style.backgroundColor = "#4A90E2";
+                                e.target.style.backgroundColor = "#4065B6";
                                 e.currentTarget.style.transform = "scale(1)";
                             }}
                         >
@@ -561,7 +569,7 @@ export default function CreateTracerStudy() {
                                         required
                                     >
                                         <option value="">Pilih</option>
-                                        {["Bekerja", "Melanjutkan Pendidikan", "Tidak bekerja dan tidak melanjutkan pendidikan", "Wirausaha"].map(option => (
+                                        {["Bekerja", "Melanjutkan Pendidikan", "Abdi Negara", "Tidak bekerja dan tidak melanjutkan pendidikan", "Wirausaha"].map(option => (
                                             <option key={option} value={option}>
                                                 {option}
                                             </option>
@@ -621,6 +629,32 @@ export default function CreateTracerStudy() {
                             {formData.status_anda === "Melanjutkan Pendidikan" && (
                                 <Row className="g-3 mb-3">
                                     <Col xs={12} md={6}>
+                                        <Form.Group controlId="jenjang_pendidikan">
+                                            <Form.Label className="text-uppercase text-secondary">Jenjang Pendidikan</Form.Label>
+                                            <Form.Control
+                                                as="select"
+                                                name="jenjang_pendidikan"
+                                                value={formData.jenjang_pendidikan}
+                                                onChange={handleChange}
+                                                style={{
+                                                    borderColor: errors.jenjang_pendidikan ? "red" : formData.jenjang_pendidikan ? "green" : "gray",
+                                                }}
+                                                isInvalid={!!errors.jenjang_pendidikan}
+                                                isValid={formData.jenjang_pendidikan && !errors.jenjang_pendidikan}
+                                                required
+                                            >
+                                                <option value="">Pilih Jenjang Pendidikan</option>
+                                                <option value="D3/D4">D3/D4</option>
+                                                <option value="S1">S1</option>
+                                                <option value="S2">S2</option>
+                                                <option value="S3">S3</option>
+                                            </Form.Control>
+                                            <Form.Control.Feedback type="invalid">
+                                                {errors.jenjang_pendidikan}
+                                            </Form.Control.Feedback>
+                                        </Form.Group>
+                                    </Col>
+                                    <Col xs={12} md={6}>
                                         <Form.Group controlId="nama_kampus">
                                             <Form.Label className="text-uppercase text-secondary">Nama Kampus</Form.Label>
                                             <Form.Control
@@ -657,6 +691,36 @@ export default function CreateTracerStudy() {
                                             />
                                             <Form.Control.Feedback type="invalid">
                                                 {errors.program_studi}
+                                            </Form.Control.Feedback>
+                                        </Form.Group>
+                                    </Col>
+                                </Row>
+                            )}
+                            {formData.status_anda === "Abdi Negara" && (
+                                <Row className="g-3 mb-3">
+                                    <Col xs={12} md={12}>
+                                        <Form.Group controlId="instansi_abdi_negara">
+                                            <Form.Label className="text-uppercase text-secondary">Instansi Abdi Negara</Form.Label>
+                                            <Form.Control
+                                                as="select"
+                                                name="instansi_abdi_negara"
+                                                value={formData.instansi_abdi_negara}
+                                                onChange={handleChange}
+                                                style={{
+                                                    borderColor: errors.instansi_abdi_negara ? "red" : formData.instansi_abdi_negara ? "green" : "gray",
+                                                }}
+                                                isInvalid={!!errors.instansi_abdi_negara}
+                                                isValid={formData.instansi_abdi_negara && !errors.instansi_abdi_negara}
+                                                required
+                                            >
+                                                <option value="">Pilih Instansi</option>
+                                                <option value="PNS">Pegawai Negeri Sipil (PNS)</option>
+                                                <option value="TNI">Tentara Nasional Indonesia (TNI)</option>
+                                                <option value="Polri">Kepolisian Republik Indonesia (Polri)</option>
+                                                <option value="Lainnya">Lainnya</option>
+                                            </Form.Control>
+                                            <Form.Control.Feedback type="invalid">
+                                                {errors.instansi_abdi_negara}
                                             </Form.Control.Feedback>
                                         </Form.Group>
                                     </Col>

@@ -134,7 +134,12 @@ export default function DetailMouPerusahaan() {
         <PageContainer>
             <ToastContainer position="top-end" className="p-3 mt-5">
                 <Toast onClose={() => setShowToast(false)} show={showToast} delay={5000} autohide bg={toastMessage.type}>
-                    <Toast.Body className="text-white">{toastMessage.message}</Toast.Body>
+                    <Toast.Body className="d-flex align-items-center gap-2 text-white">
+                    {toastMessage.type === "success" && <i className="bi bi-check-circle-fill text-white fs-6"></i>}
+                    {toastMessage.type === "danger" && <i className="bi bi-x-circle-fill text-white fs-6"></i>}
+                    {toastMessage.type === "warning" && <i className="bi bi-exclamation-triangle-fill text-white fs-6"></i>}
+                    <strong>{toastMessage.message}</strong>
+                    </Toast.Body>
                 </Toast>
             </ToastContainer>
             <nav aria-label="breadcrumb" className="mb-4">
@@ -142,16 +147,16 @@ export default function DetailMouPerusahaan() {
                 <li className="breadcrumb-item">
                     <Link 
                         to="/mou-perusahaan" 
-                        className="text-primary d-flex align-items-center text-decoration-none"
+                        className="d-flex align-items-center text-decoration-none"
                         style={{ 
-                            color: "blue", 
+                            color: "#4065B6", 
                             textDecoration: "none",
                             transition: "color 0.3s ease"
                         }}
-                        onMouseEnter={(e) => e.target.style.color = "darkblue"}
-                        onMouseLeave={(e) => e.target.style.color = "blue"}
+                        onMouseEnter={(e) => e.target.style.color = "#3050A5"}
+                        onMouseLeave={(e) => e.target.style.color = "#4065B6"}
                         onMouseDown={(e) => e.target.style.color = "red"}
-                        onMouseUp={(e) => e.target.style.color = "darkblue"}
+                        onMouseUp={(e) => e.target.style.color = "#3050A5"}
                     >
                         <span className="fw-medium">MoU Perusahaan</span>
                     </Link>

@@ -90,7 +90,7 @@ const Dashboard = () => {
                                     variants={textVariants}
                                     initial="hidden"
                                     animate="visible"
-                                    style={{ fontSize: "clamp(1.5rem, 4vw, 2.4rem)", lineHeight: "1.3" }}
+                                    style={{ fontSize: "clamp(1.5rem, 4vw, 1.9rem)", lineHeight: "1.3" }}
                                 >
                                     { "Senang melihatmu kembali! Yuk, mulai hari dengan semangat!".split("").map((char, index) => (
                                         <motion.span key={index} variants={letterVariants}>
@@ -154,7 +154,7 @@ const Dashboard = () => {
                             </div>
                             <div className="flex-grow-1">
                                 <h3 className="fw-bold fs-2 mb-0">{companyData.length}</h3>
-                                <p className="fw-bold mb-0 text-muted">Total MoU Perusahaan</p>
+                                <p className="fw-bold mb-0 text-muted">Total MoU</p>
                             </div>
                         </Card.Body>
                     </Card>

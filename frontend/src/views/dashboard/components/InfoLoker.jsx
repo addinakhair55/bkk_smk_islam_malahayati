@@ -3,6 +3,7 @@ import PageContainer from 'src/components/container/PageContainer';
 import DashboardCard from '../../../components/shared/DashboardCard';
 import AdminInfoLoker from '../../../components/dashboard/admin/Loker';
 import { BsPlus } from 'react-icons/bs';
+import { Button } from 'react-bootstrap';
 
 
 const InfoLoker = () => {
@@ -12,24 +13,29 @@ const InfoLoker = () => {
         <h4 className="fw-bold">
             Info Lowongan Kerja
           </h4>
-          <Link 
+          <Button
+            as={Link}
             to="/createInfoLowonganKerja"
-            className="btn btn-outline-primary d-flex align-items-center fw-semibold px-3 py-2 shadow-sm"
+            className="d-flex align-items-center fw-semibold px-3 py-2 shadow-sm"
             style={{
-              borderRadius: "8px",
-              transition: "all 0.3s ease",
+                borderRadius: "8px",
+                backgroundColor: "transparent",
+                color: "#4065B6",
+                transition: "all 0.3s ease",
             }}
             onMouseEnter={(e) => {
-              e.target.style.backgroundColor = "#1b69bd";
-              e.target.style.color = "white";
+                e.target.style.backgroundColor = "#4065B6";  
+                e.target.style.color = "white";  
+                e.target.style.borderColor = "#4065B6"; 
             }}
             onMouseLeave={(e) => {
-              e.target.style.backgroundColor = "transparent";
-              e.target.style.color = "#1b69bd";
+                e.target.style.backgroundColor = "transparent"; 
+                e.target.style.color = "#4065B6"; 
+                e.target.style.borderColor = "#4065B6";
             }}
-          >
+        >
             <BsPlus size={24} className="me-1 fw-bold" /> Tambah
-          </Link>
+        </Button>
       </div>
       <DashboardCard>
         <AdminInfoLoker />

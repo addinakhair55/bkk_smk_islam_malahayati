@@ -6,7 +6,7 @@ import "./Beranda.css";
 
 function Beranda() {
   return (
-    <Carousel className="style-font">
+    <Carousel>
       <Carousel.Item>
         <div className="carousel-overlay"></div>
         <img

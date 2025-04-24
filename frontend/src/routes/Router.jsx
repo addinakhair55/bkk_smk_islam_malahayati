@@ -55,7 +55,6 @@ import KonfirmasiGabung from "../views/authentication/page/KonfirmasiGabung";
 
 
 /* ***Layouts**** */
-const FullLayout = Loadable(lazy(() => import("../layouts/full/FullLayout")));
 const BlankLayout = Loadable(lazy(() => import("../layouts/blank/BlankLayout")));
 
 /* ****Pages***** */
@@ -79,117 +78,25 @@ const Router = [
   { path: "/faq", element: <FaqView /> },
   { path: "/kontak", element: <KontakView /> },
   { path: "/layout", element: <DashboardLayout /> },
-  { path: "/fulllayout", element: <FullLayout /> },
 
   // Dashboard Admin Routes
   { 
     path: "/",
     element: <DashboardLayout />,
     children: [
-      {
-        path: "/dashboard",
-        element: (
-          <PrivateRoute requiredRole="admin">
-            <Dashboard />
-          </PrivateRoute>
-        ),
-      },
-      {
-        path: "/tracerStudy",
-        element: (
-          <PrivateRoute requiredRole="admin">
-            <TracerStudy />
-          </PrivateRoute>
-        ),
-      },
-      {
-        path: "/info-lowongan-kerja",
-        element: (
-          <PrivateRoute requiredRole="admin">
-            <InfoLoker />
-          </PrivateRoute>
-        ),
-      },
-      {
-        path: "/detailLowongan/:id",
-        element: (
-          <PrivateRoute requiredRole="admin">
-            <DetailInfoLoker />
-          </PrivateRoute>
-        ),
-      },
-      {
-        path: "/editLowongan/:id",
-        element: (
-          <PrivateRoute requiredRole="admin">
-            <UpdateInfoLoker />
-          </PrivateRoute>
-        ),
-      },
-      {
-        path: "/createInfoLowonganKerja",
-        element: (
-          <PrivateRoute requiredRole="admin">
-            <CreateInfoLoker />
-          </PrivateRoute>
-        ),
-      },
-      {
-        path: "/createTracerStudy",
-        element: (
-          <PrivateRoute requiredRole="admin">
-            <CreateTracerStudy />
-          </PrivateRoute>
-        ),
-      },
-      {
-        path: "/editTracerStudy/:id",
-        element: (
-          <PrivateRoute requiredRole="admin">
-            <UpdateTracerStudy />
-          </PrivateRoute>
-        ),
-      },
-      {
-        path: "/detailTracerStudy/:id",
-        element: (
-          <PrivateRoute requiredRole="admin">
-            <DetailTracerStudy />
-          </PrivateRoute>
-        ),
-      },
-      {
-        path: "/mou-perusahaan",
-        element: (
-          <PrivateRoute requiredRole="admin">
-            <MouPerusahaan />
-          </PrivateRoute>
-        ),
-      },
-      {
-        path: "/createMouPerusahaan",
-        element: (
-          <PrivateRoute requiredRole="admin">
-            <CreateMouPerusahaan />
-          </PrivateRoute>
-        ),
-      },
-      {
-        path: "/editMouPerusahaan/:id",
-        element: (
-          <PrivateRoute requiredRole="admin">
-            <UpdateMouPerusahaan />
-          </PrivateRoute>
-        ),
-      },
-      {
-        path: "/detailMouPerusahaan/:id",
-        element: (
-          <PrivateRoute requiredRole="admin">
-            <DetailMouPerusahaan />
-          </PrivateRoute>
-        ),
-      },      
+      {path: "/dashboard",element: (<PrivateRoute requiredRole="admin"><Dashboard /></PrivateRoute>),},
+      {path: "/tracerStudy",element: (<PrivateRoute requiredRole="admin"><TracerStudy /></PrivateRoute>),},
+      {path: "/info-lowongan-kerja",element: (<PrivateRoute requiredRole="admin"><InfoLoker /></PrivateRoute>),},
+      {path: "/detailLowongan/:id",element: (<PrivateRoute requiredRole="admin"><DetailInfoLoker /></PrivateRoute>),},
+      {path: "/editLowongan/:id",element: (<PrivateRoute requiredRole="admin"><UpdateInfoLoker /></PrivateRoute>),},
+      {path: "/createInfoLowonganKerja",element: (<PrivateRoute requiredRole="admin"><CreateInfoLoker /></PrivateRoute>),},
+      {path: "/createTracerStudy",element: (<PrivateRoute requiredRole="admin"><CreateTracerStudy /></PrivateRoute>),},
+      {path: "/editTracerStudy/:id",element: (<PrivateRoute requiredRole="admin"><UpdateTracerStudy /></PrivateRoute>),},
+      {path: "/detailTracerStudy/:id",element: (<PrivateRoute requiredRole="admin"><DetailTracerStudy /></PrivateRoute>),},
+      {path: "/mou-perusahaan",element: (<PrivateRoute requiredRole="admin"><MouPerusahaan /></PrivateRoute>),},
+      {path: "/createMouPerusahaan",element: (<PrivateRoute requiredRole="admin"><CreateMouPerusahaan /></PrivateRoute>),},
+      {path: "/editMouPerusahaan/:id",element: (<PrivateRoute requiredRole="admin"><UpdateMouPerusahaan /></PrivateRoute>),},
+      {path: "/detailMouPerusahaan/:id",element: (<PrivateRoute requiredRole="admin"><DetailMouPerusahaan /></PrivateRoute>),},      
       ],
     },
   // Dashboard Alumni Routes
@@ -197,38 +104,10 @@ const Router = [
       path: "/",
       element: <DashboardLayout />,
       children: [
-      {
-        path: "/alumni",
-        element: (
-          <PrivateRoute requiredRole="alumni">
-            <DashboardAlumni />
-          </PrivateRoute>
-        ),
-      },
-      {
-        path: "/add-form-tracer-study",
-        element: (
-          <PrivateRoute requiredRole="alumni">
-            <TracerStudyFormAdd />
-          </PrivateRoute>
-        ),
-      },
-      {
-        path: "/my-tracer-study",
-        element: (
-          <PrivateRoute requiredRole="alumni">
-            <TracerStudyAlumni />
-          </PrivateRoute>
-        ),
-      },
-      {
-        path: "/edit-form-tracer-study/:id",
-        element: (
-          <PrivateRoute requiredRole="alumni">
-            <TracerStudyEditAlumni />
-          </PrivateRoute>
-        ),
-      },
+      {path: "/alumni",element: (<PrivateRoute requiredRole="alumni"><DashboardAlumni /></PrivateRoute>),},
+      {path: "/add-form-tracer-study",element: (<PrivateRoute requiredRole="alumni"><TracerStudyFormAdd /></PrivateRoute>),},
+      {path: "/my-tracer-study",element: (<PrivateRoute requiredRole="alumni"><TracerStudyAlumni /></PrivateRoute>),},
+      {path: "/edit-form-tracer-study/:id",element: (<PrivateRoute requiredRole="alumni"><TracerStudyEditAlumni /></PrivateRoute>),},
       { path: "/auth/profile", element: <Profile /> },
     ],
   },
@@ -238,49 +117,14 @@ const Router = [
   path: "/",
   element: <DashboardLayout />,
   children: [
-      {
-          path: "/perusahaan",
-          element: (
-              <PrivateRoute requiredRole="perusahaan">
-                  <DashboardPerusahaan />
-              </PrivateRoute>
-          ),
-      },
-      {
-          path: "/add-info-loker",
-          element: (
-              <PrivateRoute requiredRole="perusahaan">
-                  <CreateInfoLokerPerusahaan />
-              </PrivateRoute>
-          ),
-      },
-      {
-          path: "/info_loker",
-          element: (
-              <PrivateRoute requiredRole="perusahaan">
-                  <InfoLokerPerusahaan />
-              </PrivateRoute>
-          ),
-      },
-      {
-          path: "/detail_info_loker/:id",
-          element: (
-              <PrivateRoute requiredRole="perusahaan">
-                  <DetailInfoLokerPerusahaan />
-              </PrivateRoute>
-          ),
-      },
-      {
-          path: "/edit_info_loker/:id",
-          element: (
-              <PrivateRoute requiredRole="perusahaan">
-                  <UpdateInfoLokerPerusahaan />
-              </PrivateRoute>
-          ),
-      },
-      { path: "/auth/profile", element: <Profile /> },
-  ],
-},
+      {path: "/perusahaan",  element: (<PrivateRoute requiredRole="perusahaan"><DashboardPerusahaan /></PrivateRoute>),},
+      {path: "/add-info-loker",element: (<PrivateRoute requiredRole="perusahaan"><CreateInfoLokerPerusahaan /></PrivateRoute>),},
+      {path: "/info_loker",element: (<PrivateRoute requiredRole="perusahaan"><InfoLokerPerusahaan /></PrivateRoute>),},
+      {path: "/detail_info_loker/:id",element: (<PrivateRoute requiredRole="perusahaan"><DetailInfoLokerPerusahaan /></PrivateRoute>),},
+      {path: "/edit_info_loker/:id",element: (<PrivateRoute requiredRole="perusahaan"><UpdateInfoLokerPerusahaan /></PrivateRoute>),},
+      {path: "/auth/profile", element: <Profile />},
+    ],
+  },
 
 
   // Authentication Routes

@@ -1,49 +1,37 @@
-@font-face {
-    font-family: 'Poppins';
-    src: url('../../../components/Font/Poppins-Regular.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-}
 
-.style-font {
-    font-family: 'Poppins', sans-serif;
-}
 .bg-footer{
     background: #4065B6;
 }
 
 .icon-footer1 {
-    font-size: 1.5rem; /* Adjust the size as needed */
-    width: 30px; /* Optional: Set a width if needed */
-    height: 30px; /* Optional: Set a height if needed */
+    font-size: 1.5rem;
+    width: 30px; 
+    height: 30px; 
 }
 .icon-footer2 {
-    font-size: 1.5em; /* Adjust the size as needed */
-    width: 15px; /* Optional: Set a width if needed */
-    height: 30px; /* Optional: Set a height if needed */
+    font-size: 1.5em;
+    width: 15px; 
+    height: 30px; 
 }
 .icon-footer3 {
-    font-size: 1.5em; /* Adjust the size as needed */
-    width: 15px; /* Optional: Set a width if needed */
-    height: 30px; /* Optional: Set a height if needed */
+    font-size: 1.5em;
+    width: 15px; 
+    height: 30px; 
 }
 
-/* Base link styles */
 .link-footer {
-    color: #4065B6; /* Default muted color */
-    text-decoration: none; /* Remove underline */
-    transition: color 0.3s ease; /* Smooth transition for color change */
+    color: #4065B6; 
+    text-decoration: none;
+    transition: color 0.3s ease; 
 }
 
-/* Hover effect */
 .link-footer:hover {
-    color: #6c757d; /* Change to a primary color on hover */
-    text-decoration: underline; /* Add underline on hover */
+    color: #6c757d; 
+    text-decoration: underline; 
 }
 
-/* Active link style */
 .link-footer:active {
-    color: #4065B6; /* Darker shade for active link */
+    color: #4065B6;
 }
 
 .text-color{

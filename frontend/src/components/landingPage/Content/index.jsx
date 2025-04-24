@@ -4,7 +4,7 @@ export default function Content({ title, content }) {
     return (
         <div className="p-3 p-sm-4 p-md-5" style={{ backgroundColor: "#ECF0F8" }}>
             <div className="container text-center pb-4 pb-md-5">
-                <h1 className="position-relative pb-3 pb-md-4">
+                <h1 className="position-relative pb-3 pb-md-4 fw-bold">
                     {title}
                     <div
                         className="position-absolute bottom-0 start-50 translate-middle-x"

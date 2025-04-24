@@ -31,7 +31,7 @@ export default function FaqView() {
             <Navbar />
             <PageContainer title="Frequently Asked Questions (FAQ)">
                 <div className="page-fade">
-                    <HeroTitle title="Frequently Asked Questions (FAQ)"/>
+                    <HeroTitle title="Frequently Asked Questions"/>
                     <div style={{ backgroundColor: "#ECF0F8"}} className="py-5">
                         <div className="container my-5">
                             <div className="accordion" id="faqAccordion">

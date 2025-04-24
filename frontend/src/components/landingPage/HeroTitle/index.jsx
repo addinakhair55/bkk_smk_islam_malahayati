@@ -11,7 +11,7 @@ export default function HeroTitle({ title, subtitle}) {
             </div>
             <div className="w-100 d-flex justify-content-center mt-3">
                 <nav aria-label="breadcrumb" className="mb-4">
-                    <ol className="breadcrumb">
+                    <ol className="breadcrumb justify-content-center">
                         <li className="breadcrumb-item">
                             <Link 
                                 to="/" 

@@ -128,7 +128,7 @@
 
   @media (max-width: 768px) {
     .table {
-      min-width: 100%;
+      min-width: 140%;
       font-size: 12px;
     }
 
@@ -151,7 +151,9 @@
   }
 
   @media (min-width: 992px) {
-      
+    .table {
+      min-width: 130%;
+    }
     .table-responsive {
         max-height: 400px;
     }

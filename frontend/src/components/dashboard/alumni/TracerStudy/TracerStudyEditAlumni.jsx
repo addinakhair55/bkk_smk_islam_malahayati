@@ -38,8 +38,8 @@ export default function TracerStudyEditAlumni() {
     const [formData, setFormData] = useState({
         nama_lengkap: "", jenis_kelamin: "", tanggal_lahir: "", kota_kelahiran: "", agama: "",
         alamat: "", nisn: "", nis: "", tahun_lulus: "", email: "", handphone: "", jurusan: "",
-        status_anda: "", nama_perusahaan: "", posisi_jabatan: "", nama_kampus: "", program_studi: "",
-        kepuasan_materi: "", kepuasan_fasilitas: "", kepuasan_guru: "", saran_smk: "", foto_alumni: null,
+        status_anda: "", nama_perusahaan: "", posisi_jabatan: "", nama_kampus: "", jenjang_pendidikan:"", program_studi: "",
+        instansi_abdi_negara:"", kepuasan_materi: "", kepuasan_fasilitas: "", kepuasan_guru: "", saran_smk: "", foto_alumni: null,
     });
 
     const formFields = [
@@ -80,8 +80,10 @@ export default function TracerStudyEditAlumni() {
                     : "",
                 nama_perusahaan: myTracerStudy.nama_perusahaan || "",
                 posisi_jabatan: myTracerStudy.posisi_jabatan || "",
+                jenjang_pendidikan: myTracerStudy.jenjang_pendidikan || "",
                 nama_kampus: myTracerStudy.nama_kampus || "",
                 program_studi: myTracerStudy.program_studi || "",
+                instansi_abdi_negara: myTracerStudy.instansi_abdi_negara || "",
                 kepuasan_materi: myTracerStudy.kepuasan_materi || "",
                 kepuasan_fasilitas: myTracerStudy.kepuasan_fasilitas || "",
                 kepuasan_guru: myTracerStudy.kepuasan_guru || "",
@@ -240,6 +242,9 @@ export default function TracerStudyEditAlumni() {
         } else if (formData.status_anda === "Melanjutkan Pendidikan") {
             if (!formData.nama_kampus) newErrors.nama_kampus = "Wajib diisi!";
             if (!formData.program_studi) newErrors.program_studi = "Wajib diisi!";
+            if (!formData.jenjang_pendidikan) newErrors.jenjang_pendidikan = "Wajib diisi!";
+        } else if (formData.status_anda === "Abdi Negara") {
+            if (!formData.instansi_abdi_negara) newErrors.instansi_abdi_negara = "Wajib diisi!";
         }
 
         if (!formData.foto_alumni && !myTracerStudy?.foto_alumni) {
@@ -339,7 +344,12 @@ export default function TracerStudyEditAlumni() {
 
             <ToastContainer position="top-end" className="p-3 mt-5">
                 <Toast onClose={() => setShowToast(false)} show={showToast} delay={5000} autohide bg={toastMessage.type}>
-                    <Toast.Body className="text-white">{toastMessage.message}</Toast.Body>
+                    <Toast.Body className="d-flex align-items-center gap-2 text-white">
+                    {toastMessage.type === "success" && <i className="bi bi-check-circle-fill text-white fs-6"></i>}
+                    {toastMessage.type === "danger" && <i className="bi bi-x-circle-fill text-white fs-6"></i>}
+                    {toastMessage.type === "warning" && <i className="bi bi-exclamation-triangle-fill text-white fs-6"></i>}
+                    <strong>{toastMessage.message}</strong>
+                    </Toast.Body>
                 </Toast>
             </ToastContainer>
             
@@ -604,7 +614,7 @@ export default function TracerStudyEditAlumni() {
                                     required
                                 >
                                     <option value="">Pilih</option>
-                                    {["Bekerja", "Melanjutkan Pendidikan", "Tidak bekerja dan tidak melanjutkan pendidikan", "Wirausaha"].map(option => (
+                                    {["Bekerja", "Melanjutkan Pendidikan", "Abdi Negara", "Tidak bekerja dan tidak melanjutkan pendidikan", "Wirausaha"].map(option => (
                                         <option key={option} value={option}>
                                             {option}
                                         </option>
@@ -664,6 +674,32 @@ export default function TracerStudyEditAlumni() {
                         {formData.status_anda === "Melanjutkan Pendidikan" && (
                             <Row className="g-3 mb-3">
                                 <Col xs={12} md={6}>
+                                    <Form.Group controlId="jenjang_pendidikan">
+                                        <Form.Label className="text-uppercase text-secondary">Jenjang Pendidikan</Form.Label>
+                                        <Form.Control
+                                            as="select"
+                                            name="jenjang_pendidikan"
+                                            value={formData.jenjang_pendidikan}
+                                            onChange={handleChange}
+                                            style={{
+                                                borderColor: errors.jenjang_pendidikan ? "red" : formData.jenjang_pendidikan ? "green" : "gray",
+                                            }}
+                                            isInvalid={!!errors.jenjang_pendidikan}
+                                            isValid={formData.jenjang_pendidikan && !errors.jenjang_pendidikan}
+                                            required
+                                        >
+                                            <option value="">Pilih Jenjang Pendidikan</option>
+                                            <option value="D3/D4">D3/D4</option>
+                                            <option value="S1">S1</option>
+                                            <option value="S2">S2</option>
+                                            <option value="S3">S3</option>
+                                        </Form.Control>
+                                        <Form.Control.Feedback type="invalid">
+                                            {errors.jenjang_pendidikan}
+                                        </Form.Control.Feedback>
+                                    </Form.Group>
+                                </Col>
+                                <Col xs={12} md={6}>
                                     <Form.Group controlId="nama_kampus">
                                         <Form.Label className="text-uppercase text-secondary">Nama Kampus</Form.Label>
                                         <Form.Control
@@ -700,6 +736,36 @@ export default function TracerStudyEditAlumni() {
                                         />
                                         <Form.Control.Feedback type="invalid">
                                             {errors.program_studi}
+                                        </Form.Control.Feedback>
+                                    </Form.Group>
+                                </Col>
+                            </Row>
+                        )}
+                        {formData.status_anda === "Abdi Negara" && (
+                            <Row className="g-3 mb-3">
+                                <Col xs={12} md={12}>
+                                    <Form.Group controlId="instansi_abdi_negara">
+                                        <Form.Label className="text-uppercase text-secondary">Instansi Abdi Negara</Form.Label>
+                                        <Form.Control
+                                            as="select"
+                                            name="instansi_abdi_negara"
+                                            value={formData.instansi_abdi_negara}
+                                            onChange={handleChange}
+                                            style={{
+                                                borderColor: errors.instansi_abdi_negara ? "red" : formData.instansi_abdi_negara ? "green" : "gray",
+                                            }}
+                                            isInvalid={!!errors.instansi_abdi_negara}
+                                            isValid={formData.instansi_abdi_negara && !errors.instansi_abdi_negara}
+                                            required
+                                        >
+                                            <option value="">Pilih Instansi</option>
+                                            <option value="PNS">Pegawai Negeri Sipil (PNS)</option>
+                                            <option value="TNI">Tentara Nasional Indonesia (TNI)</option>
+                                            <option value="Polri">Kepolisian Republik Indonesia (Polri)</option>
+                                            <option value="Lainnya">Lainnya</option>
+                                        </Form.Control>
+                                        <Form.Control.Feedback type="invalid">
+                                            {errors.instansi_abdi_negara}
                                         </Form.Control.Feedback>
                                     </Form.Group>
                                 </Col>

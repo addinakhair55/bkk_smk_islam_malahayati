@@ -45,7 +45,7 @@ export default function Heroes({ sections }) {
                       <Button
                         className="rounded-3 w-100"
                         style={{
-                          padding: "14px 24px",
+                          padding: "14px 17px",
                           backgroundColor: "#4065B6",
                           transition: "all 0.2s ease-in-out",
                         }}

@@ -117,10 +117,15 @@ export default function DetailInfoLoker() {
     }
 
     return (
-        <PageContainer title="Job Info Detail">
+        <PageContainer title="Detail Info Lowongan Kerja">
             <ToastContainer position="top-end" className="p-3 mt-5">
                 <Toast onClose={() => setShowToast(false)} show={showToast} delay={5000} autohide bg={toastMessage.type}>
-                    <Toast.Body className="text-white">{toastMessage.message}</Toast.Body>
+                    <Toast.Body className="d-flex align-items-center gap-2 text-white">
+                    {toastMessage.type === "success" && <i className="bi bi-check-circle-fill text-white fs-6"></i>}
+                    {toastMessage.type === "danger" && <i className="bi bi-x-circle-fill text-white fs-6"></i>}
+                    {toastMessage.type === "warning" && <i className="bi bi-exclamation-triangle-fill text-white fs-6"></i>}
+                    <strong>{toastMessage.message}</strong>
+                    </Toast.Body>
                 </Toast>
             </ToastContainer>
             <nav aria-label="breadcrumb" className="mb-4">
@@ -128,10 +133,16 @@ export default function DetailInfoLoker() {
                     <li className="breadcrumb-item">
                         <Link 
                             to="/info-lowongan-kerja" 
-                            className="text-primary d-flex align-items-center text-decoration-none"
+                            className="d-flex align-items-center text-decoration-none"
                             style={{ 
+                                color: "#4065B6", 
+                                textDecoration: "none",
                                 transition: "color 0.3s ease"
                             }}
+                            onMouseEnter={(e) => e.target.style.color = "#3050A5"}
+                            onMouseLeave={(e) => e.target.style.color = "#4065B6"}
+                            onMouseDown={(e) => e.target.style.color = "red"}
+                            onMouseUp={(e) => e.target.style.color = "#3050A5"}
                         >
                             <span className="fw-medium">Info Lowongan Kerja</span>
                         </Link>
@@ -206,10 +217,10 @@ export default function DetailInfoLoker() {
                                     />
                                     {/* Detail Pekerjaan */}
                                     <div className="flex-grow-1">
-                                        <h3 className="mb-2 fw-bold text-primary fs-4 fs-md-3">{infoLoker.judul}</h3>
+                                        <h3 className="mb-2 fw-bold fs-4 fs-md-3" style={{color:"#4065B6"}}>{infoLoker.judul}</h3>
                                         <div className="d-flex flex-column gap-2 text-secondary">
                                             <div className="d-flex align-items-center flex-nowrap">
-                                                <FaBuilding className="me-2 text-primary flex-shrink-0"/>
+                                                <FaBuilding className="me-2 flex-shrink-0" style={{color:"#4065B6"}}/>
                                                 <span style={{ fontSize: 'clamp(14px, 1.4vw, 14px)' }} className="text-truncate text-tag-detail">{infoLoker.perusahaan}</span>
                                             </div>
                                             <div className="d-flex align-items-center flex-nowrap">
@@ -246,31 +257,36 @@ export default function DetailInfoLoker() {
                                                 </div>
                                             </div>
                                             <div className="mt-3 d-flex flex-column flex-sm-row gap-3">
-                                                {/* Tombol Lamar */}
-                                                {infoLoker.link && (
-                                                    <Button
-                                                        href={infoLoker.link.startsWith("http") ? infoLoker.link : `https://${infoLoker.link}`}
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                        className="fw-bold d-flex align-items-center justify-content-center flex-grow-1 w-100 w-sm-auto"
-                                                        style={{ 
-                                                            backgroundColor: "#4A90E2",
-                                                            border: "none",
-                                                            padding: "0.8rem 1.5rem", // Padding yang lebih responsif
-                                                            transition: "all 0.2s ease-in-out",
-                                                        }}
-                                                        onMouseEnter={(e) => {
-                                                            e.currentTarget.style.backgroundColor = "#357ABD";
-                                                            e.currentTarget.style.transform = "scale(1.05)";
-                                                        }}
-                                                        onMouseLeave={(e) => {
-                                                            e.currentTarget.style.backgroundColor = "#4A90E2";
-                                                            e.currentTarget.style.transform = "scale(1)";
-                                                        }}
-                                                    >
-                                                        LAMAR PEKERJAAN
-                                                    </Button>
-                                                )}
+                                                <Button
+                                                    href={infoLoker.link ? (infoLoker.link.startsWith("http") ? infoLoker.link : `https://${infoLoker.link}`) : undefined}
+                                                    target={infoLoker.link ? "_blank" : undefined}
+                                                    rel={infoLoker.link ? "noopener noreferrer" : undefined}
+                                                    className="fw-bold d-flex align-items-center justify-content-center flex-grow-1 w-100 w-sm-auto"
+                                                    style={{ 
+                                                        backgroundColor: "#4065B6",
+                                                        border: "none",
+                                                        padding: "0.8rem 1.5rem",
+                                                        transition: "all 0.2s ease-in-out",
+                                                        cursor: infoLoker.link ? "pointer" : "not-allowed",
+                                                        opacity: infoLoker.link ? 1 : 0.6
+                                                    }}
+                                                    onClick={(e) => {
+                                                        if (!infoLoker.link) {
+                                                            e.preventDefault();
+                                                            alert("Link belum tersedia.");
+                                                        }
+                                                    }}
+                                                    onMouseEnter={(e) => {
+                                                        e.currentTarget.style.backgroundColor = "#3050A5";
+                                                        e.currentTarget.style.transform = "scale(1.05)";
+                                                    }}
+                                                    onMouseLeave={(e) => {
+                                                        e.currentTarget.style.backgroundColor = "#4065B6";
+                                                        e.currentTarget.style.transform = "scale(1)";
+                                                    }}
+                                                >
+                                                    LAMAR PEKERJAAN
+                                                </Button>
 
                                                 {/* Tombol Bagikan */}
                                                 <Button

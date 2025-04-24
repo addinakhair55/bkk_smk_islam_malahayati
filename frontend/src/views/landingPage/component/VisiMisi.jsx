@@ -31,7 +31,7 @@ export default function VisiMisi() {
         <Navbar/>
         <div className="m-auto page-fade">
           <HeroTitle 
-              title="Visi & Misi BKK" 
+              title="Visi & Misi" 
               subtitle="BKK SMK ISLAM MALAHAYATI" 
           />
           <Content 

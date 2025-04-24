@@ -67,7 +67,7 @@
     max-height: 200px;
   }
   .table {
-    max-width: 120%;
+    min-width: 150%;
   }
   .text-truncate-loker {
     max-width: 140px;
@@ -76,7 +76,7 @@
 
 @media (min-width: 992px) {
   .table {
-    min-width: 120%;
+    min-width: 130%;
   }
   .table-responsive {
     max-height: 400px;
@@ -85,7 +85,7 @@
 
 @media (min-width: 1200px) {
   .table {
-    min-width: 100%;
+    min-width: 115%;
     width: auto;
   }
 }

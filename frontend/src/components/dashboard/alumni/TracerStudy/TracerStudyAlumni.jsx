@@ -324,6 +324,15 @@ const TracerStudyAlumni = () => {
                             {tracerStudy.status_anda === 'Melanjutkan Pendidikan' && (
                                 <>
                                     <Col md={6} className="mb-3">
+                                        <label className="form-label text-muted text-uppercase">Jenjang Pendidikan</label>
+                                        <input
+                                            type="text"
+                                            className="form-control bg-light"
+                                            value={tracerStudy.jenjang_pendidikan || "-"}
+                                            disabled
+                                        />
+                                    </Col>
+                                    <Col md={6} className="mb-3">
                                         <label className="form-label text-muted text-uppercase">Nama Kampus</label>
                                         <input
                                             type="text"
@@ -338,6 +347,19 @@ const TracerStudyAlumni = () => {
                                             type="text"
                                             className="form-control bg-light"
                                             value={tracerStudy.program_studi || '-'}
+                                            disabled
+                                        />
+                                    </Col>
+                                </>
+                            )}
+                            {tracerStudy.status_anda === "Abdi Negara" && (
+                                <>
+                                    <Col md={12} className="mb-3">
+                                        <label className="form-label text-muted text-uppercase">Instansi Abdi Negara</label>
+                                        <input
+                                            type="text"
+                                            className="form-control bg-light"
+                                            value={tracerStudy.instansi_abdi_negara || "-"}
                                             disabled
                                         />
                                     </Col>

@@ -220,7 +220,12 @@ export default function CreateMouPerusahaan() {
         <PageContainer title="Tambah Baru MoU Perusahaan">
             <ToastContainer position="top-end" className="p-3 mt-5">
                 <Toast onClose={() => setShowToast(false)} show={showToast} delay={5000} autohide bg={toastMessage.type}>
-                    <Toast.Body className="text-white">{toastMessage.message}</Toast.Body>
+                    <Toast.Body className="d-flex align-items-center gap-2 text-white">
+                    {toastMessage.type === "success" && <i className="bi bi-check-circle-fill text-white fs-6"></i>}
+                    {toastMessage.type === "danger" && <i className="bi bi-x-circle-fill text-white fs-6"></i>}
+                    {toastMessage.type === "warning" && <i className="bi bi-exclamation-triangle-fill text-white fs-6"></i>}
+                    <strong>{toastMessage.message}</strong>
+                    </Toast.Body>
                 </Toast>
             </ToastContainer>
             {alertMessage && (
@@ -245,16 +250,16 @@ export default function CreateMouPerusahaan() {
                 <li className="breadcrumb-item">
                     <Link 
                         to="/mou-perusahaan" 
-                        className="text-primary d-flex align-items-center text-decoration-none"
+                        className="d-flex align-items-center text-decoration-none"
                         style={{ 
-                            color: "blue", 
+                            color: "#4065B6", 
                             textDecoration: "none",
                             transition: "color 0.3s ease"
                         }}
-                        onMouseEnter={(e) => e.target.style.color = "darkblue"}
-                        onMouseLeave={(e) => e.target.style.color = "blue"}
+                        onMouseEnter={(e) => e.target.style.color = "#3050A5"}
+                        onMouseLeave={(e) => e.target.style.color = "#4065B6"}
                         onMouseDown={(e) => e.target.style.color = "red"}
-                        onMouseUp={(e) => e.target.style.color = "darkblue"}
+                        onMouseUp={(e) => e.target.style.color = "#3050A5"}
                     >
                         <span className="fw-medium">MoU Perusahaan</span>
                     </Link>
@@ -266,26 +271,26 @@ export default function CreateMouPerusahaan() {
             </nav>
             <div className="row mb-4 align-items-center">
                 <div className="col-12 col-md-6">
-                    <h4 className="fw-bold mb-0">Tambah Data MoU Perusahaan</h4>
+                    <h4 className="fw-bold mb-0">Tambah Data MoU</h4>
                 </div>
                 <div className="col-12 col-md-6 mt-3 mt-md-0">
-                    <div className="d-flex flex-column flex-md-row justify-content-end gap-2 gap-md-3">
+                    <div className="d-flex flex-column flex-md-row justify-content-end gap-2">
                         <Button
                             type="submit"
                             className="fw-bold d-flex align-items-center justify-content-center gap-2"
                             style={{
-                                backgroundColor: "#4A90E2",
+                                backgroundColor: "#4065B6",
                                 border: "none",
                                 transition: "background-color 0.2s ease-in-out",
                             }}
                             onClick={handleSubmit}
                             disabled={isSubmitting}
                             onMouseEnter={(e) => {
-                                e.target.style.backgroundColor = "#357ABD";
+                                e.target.style.backgroundColor = "#3050A5";
                                 e.currentTarget.style.transform = "scale(1.05)";
                             }}
                             onMouseLeave={(e) => {
-                                e.target.style.backgroundColor = "#4A90E2";
+                                e.target.style.backgroundColor = "#4065B6";
                                 e.currentTarget.style.transform = "scale(1)";
                             }}
                         >

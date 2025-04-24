@@ -167,31 +167,38 @@ export default function DetailInfoLokerView() {
                                                 </div>
                                                 <div className="mt-3 d-flex flex-column flex-sm-row gap-3">
                                                     {/* Tombol Lamar */}
-                                                    {jobInfo.link && (
-                                                        <Button
-                                                        onClick={() => window.open(jobInfo.link, "_blank")}
-                                                            className="fw-bold d-flex align-items-center justify-content-center flex-grow-1"
-                                                            style={{ 
-                                                                backgroundColor: "#4065B6",
-                                                                maxWidth: "250px",
-                                                                width: "100%",
-                                                                flexBasis: 0,
-                                                                border: "none",
-                                                                padding: "0.5rem",
-                                                                transition: "all 0.2s ease-in-out",
-                                                            }}
-                                                            onMouseEnter={(e) => {
-                                                                e.currentTarget.style.backgroundColor = "#3050A5";
-                                                                e.currentTarget.style.transform = "scale(1.05)";
-                                                            }}
-                                                            onMouseLeave={(e) => {
-                                                                e.currentTarget.style.backgroundColor = "#4065B6";
-                                                                e.currentTarget.style.transform = "scale(1)";
-                                                            }}
-                                                        >
-                                                            LAMAR SEKARANG
-                                                        </Button>
-                                                    )}
+                                                    <Button
+                                                        onClick={() => {
+                                                            if (jobInfo.link) {
+                                                                window.open(jobInfo.link.startsWith("http") ? jobInfo.link : `https://${jobInfo.link}`, "_blank");
+                                                            } else {
+                                                                alert("Link belum tersedia.");
+                                                            }
+                                                        }}
+                                                        className="fw-bold d-flex align-items-center justify-content-center flex-grow-1"
+                                                        style={{ 
+                                                            backgroundColor: "#4065B6",
+                                                            maxWidth: "250px",
+                                                            width: "100%",
+                                                            flexBasis: 0,
+                                                            border: "none",
+                                                            padding: "0.5rem",
+                                                            transition: "all 0.2s ease-in-out",
+                                                            cursor: jobInfo.link ? "pointer" : "not-allowed",
+                                                            opacity: jobInfo.link ? 1 : 0.6
+                                                        }}
+                                                        onMouseEnter={(e) => {
+                                                            e.currentTarget.style.backgroundColor = "#3050A5";
+                                                            e.currentTarget.style.transform = "scale(1.05)";
+                                                        }}
+                                                        onMouseLeave={(e) => {
+                                                            e.currentTarget.style.backgroundColor = "#4065B6";
+                                                            e.currentTarget.style.transform = "scale(1)";
+                                                        }}
+                                                    >
+                                                        LAMAR SEKARANG
+                                                    </Button>
+
 
                                                     {/* Tombol Bagikan */}
                                                     <Button
