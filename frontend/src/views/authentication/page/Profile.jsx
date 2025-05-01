@@ -189,7 +189,12 @@ if (error) {
     <PageContainer title="Pengaturan Akun">
       <ToastContainer position="top-end" className="p-3 mt-5">
           <Toast onClose={() => setShowToast(false)} show={showToast} delay={5000} autohide bg={toastMessage.type}>
-              <Toast.Body className="text-white">{toastMessage.message}</Toast.Body>
+              <Toast.Body className="d-flex align-items-center gap-2 text-white">
+              {toastMessage.type === "success" && <i className="bi bi-check-circle-fill text-white fs-6"></i>}
+              {toastMessage.type === "danger" && <i className="bi bi-x-circle-fill text-white fs-6"></i>}
+              {toastMessage.type === "warning" && <i className="bi bi-exclamation-triangle-fill text-white fs-6"></i>}
+              <strong>{toastMessage.message}</strong>
+              </Toast.Body>
           </Toast>
       </ToastContainer>
       <div className="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4">
