@@ -3,7 +3,7 @@ import Footer from "../../../components/landingPage/Footer";
 import Navbar from "../../../components/landingPage/Navbar";
 import PageContainer from "src/components/container/PageContainer";
 import { useEffect } from "react";
-import Struktur from "../../../assets/images/backgrounds/struktur_organisasi_bkk.jpg"
+import Struktur from "../../../assets/images/backgrounds/struktur-organisasi.png"
 
 export default function StrukturOrganisasi() {
   useEffect(() => {

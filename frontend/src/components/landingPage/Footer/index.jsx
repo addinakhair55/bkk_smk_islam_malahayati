@@ -22,12 +22,12 @@ export default function Footer() {
                             </div>
                             <div className="d-flex align-items-center mb-2">
                                 <FaPhone className="me-2 text-success icon-footer2" />
-                                <p className="mb-0" style={{fontSize:"12px"}}>(021) 8701744</p>
+                                <p className="mb-0" style={{fontSize:"12px"}}>0852-8302-2455</p>
                             </div>
                             <div className="d-flex align-items-center mb-2">
                                 <FaEnvelope className="me-2 text-danger icon-footer3" />
-                                <Link href="mailto:info@malahayatiislamicschool.sch.id" className=" text-decoration-none link-footer" style={{fontSize:"12px"}}>
-                                    info@malahayatiislamicschool.sch.id
+                                <Link href="mailto:bkksmkislammalahayati20@gmail.com" className=" text-decoration-none link-footer" style={{fontSize:"12px"}}>
+                                    bkksmkislammalahayati20@gmail.com
                                 </Link>
                             </div>
                         </div>
@@ -38,7 +38,7 @@ export default function Footer() {
                         <h5 className="mb-3 text-color fw-bold">Pelayanan Kami</h5>
                         <ul className="list-unstyled">
                             <li className="mb-2">
-                                <Link to="/lowongan-kerja" className=" text-decoration-none link-footer" style={{fontSize:"12px"}}>
+                                <Link to="/info-loker" className=" text-decoration-none link-footer" style={{fontSize:"12px"}}>
                                     Lowongan Kerja
                                 </Link>
                             </li>

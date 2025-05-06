@@ -10,12 +10,12 @@ const kontakList = [
   {
     icon: <FaPhone className="icon-kontak" />,
     title: "Telepon",
-    desc: "(021) 8701744",
+    desc: "0852-8302-2455",
   },
   {
     icon: <FaEnvelope className="icon-kontak" />,
     title: "Email",
-    desc: "info@malahayatiislamicschool.sch.id",
+    desc: "bkksmkislammalahayati20@gmail.com",
   },
   {
     icon: <FaInstagram className="icon-kontak" />,
