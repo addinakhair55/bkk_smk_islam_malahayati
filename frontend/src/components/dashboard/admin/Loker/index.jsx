@@ -3,10 +3,10 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchInfoLoker, deleteInfoLoker } from "../../../redux/slice/infoLokerSlice";
 import { Link, useNavigate } from "react-router-dom";
-import { Pagination, Form, InputGroup, Dropdown, Table, Button, OverlayTrigger, Tooltip, Spinner, Alert, ToastContainer, Toast, Modal, CloseButton } from "react-bootstrap";
+import { Form, InputGroup, Dropdown, Table, Button, OverlayTrigger, Tooltip, Spinner, Alert, ToastContainer, Toast, Modal, CloseButton } from "react-bootstrap";
 import "./Loker.css";
 import { BsEye, BsPencilSquare, BsTrash } from "react-icons/bs";
-import { FaExclamationCircle } from "react-icons/fa";
+import { FaChevronLeft, FaChevronRight, FaExclamationCircle } from "react-icons/fa";
 import { FiAlertTriangle } from "react-icons/fi";
 import { CircularProgress } from "@mui/material";
 
@@ -20,7 +20,7 @@ export default function AdminInfoLoker() {
   const [searchTerm, setSearchTerm] = useState("");
   const [filter, setFilter] = useState({ jenis: "" });
   const [showFilter, setShowFilter] = useState(false);
-  const itemsPerPage = 5;
+  const [itemsPerPage, setItemsPerPage] = useState(5);
 
   const filteredData = Array.isArray(infoLoker) ? infoLoker.filter((data) => {
     const nama = data.perusahaan.toLowerCase().includes(searchTerm.toLowerCase()) || searchTerm === "";
@@ -40,8 +40,16 @@ export default function AdminInfoLoker() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [deletingId, setDeletingId] = useState(null);
   
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [itemsPerPage]);
+
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
+  };
+
+  const handleItemsPerPageChange = (e) => {
+    setItemsPerPage(Number(e.target.value));
   };
 
   useEffect(() => {
@@ -249,15 +257,80 @@ export default function AdminInfoLoker() {
               </Table>
             </div>
 
-            <Pagination className="justify-content-end mt-3">
-                <Pagination.Prev disabled={currentPage === 1} onClick={() => handlePageChange(currentPage - 1)} />
-                {[...Array(totalPages).keys()].map((number) => (
-                  <Pagination.Item key={number + 1} active={number + 1 === currentPage} onClick={() => handlePageChange(number + 1)}>
-                    {number + 1}
-                  </Pagination.Item>
-                ))}
-                <Pagination.Next disabled={currentPage === totalPages} onClick={() => handlePageChange(currentPage + 1)} />
-            </Pagination>
+            <div className="d-flex flex-column flex-sm-row justify-content-between align-items-center my-3 gap-2 flex-wrap">
+              <Button
+                size="sm"
+                disabled={currentPage === 1}
+                onClick={() => handlePageChange(currentPage - 1)}
+                className="p-2 d-flex align-items-center"
+                style={{
+                  backgroundColor: "transparent",
+                  color: currentPage === 1 ? "#6c757d" : "#4065B6",
+                  border: `1px solid ${currentPage === 1 ? "#6c757d" : "#4065B6"}`,
+                  transition: "all 0.3s ease",
+                }}
+                onMouseEnter={(e) => {
+                  if (currentPage !== 1) {
+                    e.target.style.backgroundColor = "#4065B6";
+                    e.target.style.color = "white";
+                    e.target.style.borderColor = "#4065B6";
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.backgroundColor = "transparent";
+                  e.target.style.color = currentPage === 1 ? "#6c757d" : "#4065B6";
+                  e.target.style.borderColor = currentPage === 1 ? "#6c757d" : "#4065B6";
+                }}
+              >
+                <FaChevronLeft />
+              </Button>
+
+              <div className="d-flex justify-content-center">
+                <InputGroup size="sm" className="w-auto">
+                  <InputGroup.Text className="bg-light fw-semibold">Per halaman</InputGroup.Text>
+                  <Form.Select
+                    value={itemsPerPage}
+                    onChange={handleItemsPerPageChange}
+                    size="sm"
+                    className="shadow-sm"
+                  >
+                    <option value={5}>5</option>
+                    <option value={10}>10</option>
+                    <option value={20}>20</option>
+                    <option value={50}>50</option>
+                    <option value={filteredData.length}>Semua</option>
+                  </Form.Select>
+                </InputGroup>
+              </div>
+
+              <Button
+                size="sm"
+                disabled={currentPage === totalPages}
+                onClick={() => handlePageChange(currentPage + 1)}
+                className="p-2 d-flex align-items-center"
+                style={{
+                  backgroundColor: "transparent",
+                  color: currentPage === totalPages ? "#6c757d" : "#4065B6",
+                  border: `1px solid ${currentPage === totalPages ? "#6c757d" : "#4065B6"}`,
+                  transition: "all 0.3s ease",
+                }}
+                onMouseEnter={(e) => {
+                  if (currentPage !== totalPages) {
+                    e.target.style.backgroundColor = "#4065B6";
+                    e.target.style.color = "white";
+                    e.target.style.borderColor = "#4065B6";
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.backgroundColor = "transparent";
+                  e.target.style.color = currentPage === totalPages ? "#6c757d" : "#4065B6";
+                  e.target.style.borderColor = currentPage === totalPages ? "#6c757d" : "#4065B6";
+                }}
+              >
+                <FaChevronRight />
+              </Button>
+            </div>
+
             <Modal
                 show={showConfirmModal}
                 onHide={() => setShowConfirmModal(false)}

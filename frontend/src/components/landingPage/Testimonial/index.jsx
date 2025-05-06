@@ -1,6 +1,8 @@
 import { Carousel } from "react-bootstrap";
 import "./Testimonial.css";
-import Testimoni from "../../../assets/images/profile/user-1.jpg"
+import Testimoni from "../../../assets/images/profile/Lestari_Mutiara_Firda.jpg"
+import Testimoni2 from "../../../assets/images/profile/tegar-rakasiwi.png"
+import Testimoni3 from "../../../assets/images/profile/Addina_Khairinisa.jpg"
 
 export default function Testimonial() {
   return (
@@ -19,22 +21,22 @@ export default function Testimonial() {
         <Carousel indicators={false}>
           {[
             {
-              name: "Joko Santoso",
-              job: "Web Developer",
+              name: "Lestari Mutiara Firda",
+              job: "Akuntansi",
               image: Testimoni,
-              text: "Layanan ini sangat membantu saya dalam menemukan pekerjaan yang tepat. Prosesnya mudah dan sangat user-friendly.",
+              text: "Layanan ini sangat membantu dalam menemukan lowongan kerja. Prosesnya mudah dan sangat user-friendly.",
             },
             {
-              name: "Maria Kusuma",
-              job: "UI/UX Designer",
-              image: Testimoni,
-              text: "Platform ini sangat berguna untuk mempercepat proses pencarian pekerjaan. Terima kasih!",
+              name: "Addina Khairinisa",
+              job: "Mahasiswa",
+              image: Testimoni3,
+              text: "Fitur tracer study memudahkan saya dalam mengisi data setelah lulus, semuanya praktis dan jelas.",
             },
             {
-              name: "Andi Pratama",
-              job: "Mobile Developer",
-              image: Testimoni,
-              text: "Pengalaman yang luar biasa! Layanan ini membantu saya mendapatkan pekerjaan impian.",
+              name: "Tegar Rakasiwi",
+              job: "Mahasiswa",
+              image: Testimoni2,
+              text: "BKK online ini membuat saya merasa lebih diperhatikan sebagai alumni.",
             },
           ].map((testimonial, index) => (
             <Carousel.Item key={index}>

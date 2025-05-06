@@ -57,7 +57,7 @@ export default function Navbar() {
                   </Link>
                 </li>
                 <li>
-                  <Link className="dropdown-item p-1" to="#" onClick={() => window.scrollTo(0, 0)}>
+                  <Link className="dropdown-item p-1" to="/struktur-organisasi" onClick={() => window.scrollTo(0, 0)}>
                     Struktur Organisasi BKK
                   </Link>
                 </li>

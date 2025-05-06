@@ -52,6 +52,7 @@ import DashboardAlumni from "../views/dashboard/DashboardAlumni";
 import DashboardPerusahaan from "../views/dashboard/DashboardPerusahaan";
 import Profile from "../views/authentication/page/Profile";
 import KonfirmasiGabung from "../views/authentication/page/KonfirmasiGabung";
+import StrukturOrganisasi from "../views/landingPage/component/StrukturOrganisasi";
 
 
 /* ***Layouts**** */
@@ -71,6 +72,7 @@ const Router = [
   { path: "/", element: <Home /> },
   { path: "/visi-misi", element: <VisiMisi /> },
   { path: "/program-kerja", element: <ProgramKerja /> },
+  { path: "/struktur-organisasi", element: <StrukturOrganisasi /> },
   { path: "/tracer-study", element: <TracerStudyView /> },
   { path: "/info-loker", element: <InfoLokerView /> },
   { path: "/info-loker/:id", element: <DetailInfoLokerView /> },

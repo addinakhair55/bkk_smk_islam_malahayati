@@ -4,10 +4,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchPerusahaan, updatePerusahaanStatus, deleteMouPerusahaan } from "../../../../redux/slice/mouPerusahaanSlice";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
-import { Modal, Tooltip, OverlayTrigger, Pagination, Form, InputGroup, Dropdown, Table, Button, Spinner, Alert, ToastContainer, Toast, CloseButton } from "react-bootstrap";
+import { Modal, Tooltip, OverlayTrigger, Form, InputGroup, Dropdown, Table, Button, Spinner, Alert, ToastContainer, Toast, CloseButton } from "react-bootstrap";
 import { BsEye, BsPencilSquare, BsTrash } from "react-icons/bs"
 import "./Mou.css"
-import { FaExclamationCircle, FaQuestion } from "react-icons/fa";
+import { FaChevronLeft, FaChevronRight, FaExclamationCircle, FaQuestion } from "react-icons/fa";
 import { CircularProgress } from "@mui/material";
 import { FiAlertTriangle } from "react-icons/fi";
 
@@ -20,10 +20,10 @@ export default function AdminMouPerusahaan() {
   const [selectedStatus, setSelectedStatus] = useState("");
   const [selectedMouPerusahaanId, setSelectedMouPerusahaanId] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(5);
   const [searchTerm, setSearchTerm] = useState("");
   const [filter, setFilter] = useState({ nama_perusahaan: "", tanggal_mulai: "", tanggal_berakhir: "", status: "" });
   const [showFilter, setShowFilter] = useState(false);
-  const itemsPerPage = 5;
 
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [showToast, setShowToast] = useState(false);
@@ -103,8 +103,16 @@ export default function AdminMouPerusahaan() {
   const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
   
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [itemsPerPage]);
+
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
+  };
+
+  const handleItemsPerPageChange = (e) => {
+    setItemsPerPage(Number(e.target.value));
   };
 
   if (loading) {
@@ -315,15 +323,79 @@ export default function AdminMouPerusahaan() {
       </div>
 
       {/* Pagination */}
-      <Pagination className="justify-content-end mt-3">
-        <Pagination.Prev disabled={currentPage === 1} onClick={() => handlePageChange(currentPage - 1)} />
-        {[...Array(totalPages).keys()].map((number) => (
-          <Pagination.Item key={number + 1} active={number + 1 === currentPage} onClick={() => handlePageChange(number + 1)}>
-            {number + 1}
-          </Pagination.Item>
-        ))}
-        <Pagination.Next disabled={currentPage === totalPages} onClick={() => handlePageChange(currentPage + 1)} />
-      </Pagination>
+      <div className="d-flex flex-column flex-sm-row justify-content-between align-items-center my-3 gap-2 flex-wrap">
+        <Button
+          size="sm"
+          disabled={currentPage === 1}
+          onClick={() => handlePageChange(currentPage - 1)}
+          className="p-2 d-flex align-items-center"
+          style={{
+            backgroundColor: "transparent",
+            color: currentPage === 1 ? "#6c757d" : "#4065B6",
+            border: `1px solid ${currentPage === 1 ? "#6c757d" : "#4065B6"}`,
+            transition: "all 0.3s ease",
+          }}
+          onMouseEnter={(e) => {
+            if (currentPage !== 1) {
+              e.target.style.backgroundColor = "#4065B6";
+              e.target.style.color = "white";
+              e.target.style.borderColor = "#4065B6";
+            }
+          }}
+          onMouseLeave={(e) => {
+            e.target.style.backgroundColor = "transparent";
+            e.target.style.color = currentPage === 1 ? "#6c757d" : "#4065B6";
+            e.target.style.borderColor = currentPage === 1 ? "#6c757d" : "#4065B6";
+          }}
+        >
+          <FaChevronLeft />
+        </Button>
+
+        <div className="d-flex justify-content-center">
+          <InputGroup size="sm" className="w-auto">
+            <InputGroup.Text className="bg-light fw-semibold">Per halaman</InputGroup.Text>
+            <Form.Select
+              value={itemsPerPage}
+              onChange={handleItemsPerPageChange}
+              size="sm"
+              className="shadow-sm"
+            >
+              <option value={5}>5</option>
+              <option value={10}>10</option>
+              <option value={20}>20</option>
+              <option value={50}>50</option>
+              <option value={filteredData.length}>Semua</option>
+            </Form.Select>
+          </InputGroup>
+        </div>
+
+        <Button
+          size="sm"
+          disabled={currentPage === totalPages}
+          onClick={() => handlePageChange(currentPage + 1)}
+          className="p-2 d-flex align-items-center"
+          style={{
+            backgroundColor: "transparent",
+            color: currentPage === totalPages ? "#6c757d" : "#4065B6",
+            border: `1px solid ${currentPage === totalPages ? "#6c757d" : "#4065B6"}`,
+            transition: "all 0.3s ease",
+          }}
+          onMouseEnter={(e) => {
+            if (currentPage !== totalPages) {
+              e.target.style.backgroundColor = "#4065B6";
+              e.target.style.color = "white";
+              e.target.style.borderColor = "#4065B6";
+            }
+          }}
+          onMouseLeave={(e) => {
+            e.target.style.backgroundColor = "transparent";
+            e.target.style.color = currentPage === totalPages ? "#6c757d" : "#4065B6";
+            e.target.style.borderColor = currentPage === totalPages ? "#6c757d" : "#4065B6";
+          }}
+        >
+          <FaChevronRight />
+        </Button>
+      </div>
 
         <Modal
             show={showModal} onHide={() => setShowModal(false)} centered
