@@ -1,14 +1,24 @@
 import { useEffect, useRef, useState } from "react";
 import { Nav, Button } from "react-bootstrap";
-import getMenuItems from '../../full/sidebar/MenuItems';
+import { useLocation } from "react-router-dom";
+import getMenuItems from "../../full/sidebar/MenuItems";
 import "./Sidebar.css";
-import Logo from '../../../assets/images/logos/logo-bkk.png';
+import Logo from "../../../assets/images/logos/logo-bkk.png";
 
 // eslint-disable-next-line react/prop-types
 const Sidebar = ({ isOpen, toggleSidebar, userRole }) => {
     const [activeKey, setActiveKey] = useState("");
     const sidebarRef = useRef(null);
     const Menuitems = getMenuItems(userRole);
+    const location = useLocation();
+
+    useEffect(() => {
+        // Set active key based on current URL
+        const currentItem = Menuitems.find(item => !item.navlabel && item.href === location.pathname);
+        if (currentItem) {
+            setActiveKey(currentItem.id);
+        }
+    }, [location, Menuitems]);
 
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -30,6 +40,9 @@ const Sidebar = ({ isOpen, toggleSidebar, userRole }) => {
 
     const handleItemClick = (id) => {
         setActiveKey(id);
+        if (window.innerWidth < 992) {
+            toggleSidebar(false);
+        }
     };
 
     return (
@@ -56,7 +69,7 @@ const Sidebar = ({ isOpen, toggleSidebar, userRole }) => {
                                     href={item.href}
                                     className={`sidebar-button border-0 d-flex align-items-center mb-2 py-2 
                                         ${activeKey === item.id ? "active" : "inactive"}`}
-                                    onClick={() => handleItemClick(item.id)}
+                                    onClick={() => handleItemClick(item.id, item.href)}
                                 >
                                     <item.icon className="me-2" />
                                     {item.title}

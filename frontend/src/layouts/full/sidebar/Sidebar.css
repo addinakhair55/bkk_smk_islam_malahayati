@@ -1,145 +1,143 @@
-  .sidebar {
-    width: 80vw;
-    max-height:100%;
-    height: 100vh;
-    position: fixed;
-    padding:0;
-    transition: transform 0.3s ease-in-out;
-    z-index: 1050;
-    border-right: 1px solid rgb(212, 212, 212);
-    background: #FFFFFF;
-    display: flex;
-    flex-direction: column;
-  }
+.sidebar {
+  width: 80vw;
+  max-height: 100%;
+  height: 100vh;
+  position: fixed;
+  padding: 0;
+  transition: transform 0.3s ease-in-out;
+  z-index: 1050;
+  border-right: 1px solid rgb(212, 212, 212);
+  background: #FFFFFF;
+  display: flex;
+  flex-direction: column;
+}
 
-  .text-subheader{
-    font-size: 0.8rem;
-    color:rgb(114, 114, 114);
-  }
+.text-subheader {
+  font-size: 0.8rem;
+  color: rgb(114, 114, 114);
+}
 
-  .sidebar-button {
-    background-color: #dbe5ff;
-    color: #1e3a8a;
-    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
-    border-radius: 8px;
-    font-weight: 600;
-  }
+.sidebar-button {
+  background-color: #dbe5ff;
+  color: #1e3a8a;
+  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+  border-radius: 8px;
+  font-weight: 600;
+}
 
-  .sidebar-button.active {
-    background-color: #4065B6;
-    color: #0a1f5a;
-    font-weight: bold;
-  }
+.sidebar-button.active {
+  background-color: #4065B6;
+  color: white;
+  font-weight: bold;
+}
 
-  .sidebar-button.inactive {
-    background-color: #FFFFFF;
-    color: #1e3a8a;
-  }
+.sidebar-button.inactive {
+  background-color: #FFFFFF;
+  color: #1e3a8a;
+}
 
-  .sidebar-button:hover {
-    background-color: #5a94d2;
-    color: white;
-  }
+.sidebar-button:hover {
+  background-color: #5a94d2;
+  color: white;
+}
 
-  .sidebar.closed {
-    transform: translateX(-100%);
-  }
+.sidebar.closed {
+  transform: translateX(-100%);
+}
 
-  .sidebar.open {
-    transform: translateX(0);
-  }
+.sidebar.open {
+  transform: translateX(0);
+}
 
-  .sidebar-content {
-    flex-grow: 1;
-    overflow-y: auto;
-    padding: 0 1.5rem;
-  }
+.sidebar-content {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding: 0 1.5rem;
+}
 
-  .sidebar-overlay {
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 1049;
-    display: block;
-  }
+.sidebar-overlay {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1049;
+  display: block;
+}
 
-  .sidebar-toggle-btn {
-    position: fixed;
-    top: 1.4rem;
-    left: 0.4rem;
-    background: none;
-    border: none;
-    color: black;
-    font-size: 1.5rem;
-    cursor: pointer;
-    z-index: 1200;
-    display: none;
-  }
+.sidebar-toggle-btn {
+  position: fixed;
+  top: 1.4rem;
+  left: 0.4rem;
+  background: none;
+  border: none;
+  color: black;
+  font-size: 1.5rem;
+  cursor: pointer;
+  z-index: 1200;
+  display: none;
+}
 
-  .logo-container {
-    display: flex;
-    align-items: center;
-    padding: 1rem;
-  }
+.logo-container {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+}
 
+.logo-container img {
+  width: 3rem;
+  height: 3rem;
+}
+
+.text-title {
+  font-size: 0.8rem;
+  font-weight: bold;
+  color: #4065B6;
+}
+
+@media (min-width: 768px) {
   .logo-container img {
-    width: 3rem;
-    height: 3rem;
+      width: 3rem;
+      height: 3rem;
   }
 
   .text-title {
-    font-size: 0.8rem;
-    font-weight: bold;
-    color: #4065B6;
-  }
-
-  @media (min-width: 768px) {
-    .logo-container img {
-      width: 3rem;
-      height: 3rem;
-    }
-
-    .text-title {
       font-size: 0.9rem;
-    }
+  }
 
-    .sidebar {
+  .sidebar {
       width: 35vw;
-      max-height:100%;
+      max-height: 100%;
       height: 100vh;
-    }
   }
+}
 
-  @media (max-width: 992px) {
-    .sidebar-toggle-btn {
+@media (max-width: 992px) {
+  .sidebar-toggle-btn {
       display: block;
-    }
-
-    
   }
+}
 
-  @media (min-width: 992px) {
-    .sidebar {
+@media (min-width: 992px) {
+  .sidebar {
       transform: translateX(0);
       width: 270px;
-    }
+  }
 
-    .logo-container img {
+  .logo-container img {
       width: 50px;
       height: 50px;
-    }
+  }
 
-    .content {
+  .content {
       margin-left: 270px;
-    }
+  }
 
-    .text-title {
+  .text-title {
       font-size: 13px;
       margin: 0rem 1rem 0.5rem;
-    }
-
-    .sidebar-toggle-btn {
-      display: none;
-    }
   }
+
+  .sidebar-toggle-btn {
+      display: none;
+  }
+}

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import PageContainer from "src/components/container/PageContainer";
+import { Link } from 'react-router-dom';
 import { Card, Row, Col } from "react-bootstrap";
 import { FaUserGraduate, FaBriefcase, FaBuilding } from "react-icons/fa";
 import adminImage from "../../assets/images/backgrounds/bg-8.png";
@@ -119,45 +120,95 @@ const Dashboard = () => {
                 </Col>
             </Row>
 
+            <style>
+                {`
+                .card {
+                    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+                }
+                .card:hover {
+                    transform: scale(1.05);
+                    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+                }
+                `}
+            </style>
             <Row className="g-4 mb-4">
                 <Col xl={4} lg={4} md={6} sm={6} xs={12}>
-                    <Card className="shadow p-2 rounded-4 border-0 h-100">
-                        <Card.Body className="d-flex align-items-center">
-                            <div className="icon-circle me-3 flex-shrink-0" style={{ background: "linear-gradient(135deg, #c7d7f9, #c7d7f9)", width: "70px", height: "70px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                                <FaUserGraduate size={30} className="text-primary" />
-                            </div>
-                            <div className="flex-grow-1">
-                                <h3 className="fw-bold fs-2 mb-0">{tracerData.length}</h3>
-                                <p className="fw-bold mb-0 text-muted">Total Kelulusan</p>
-                            </div>
-                        </Card.Body>
+                <Link to="/tracerStudy" style={{ textDecoration: 'none' }}>
+                    <Card className="shadow p-2 rounded-4 border-0 h-100" style={{ cursor: 'pointer' }}>
+                    <Card.Body className="d-flex align-items-center">
+                        <div
+                        className="icon-circle me-3 flex-shrink-0"
+                        style={{
+                            background: 'linear-gradient(135deg, #c7d7f9, #c7d7f9)',
+                            width: '70px',
+                            height: '70px',
+                            borderRadius: '50%',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                        }}
+                        >
+                        <FaUserGraduate size={30} className="text-primary" />
+                        </div>
+                        <div className="flex-grow-1">
+                        <h3 className="fw-bold fs-2 mb-0">{tracerData.length}</h3>
+                        <p className="fw-bold mb-0 text-muted">Total Kelulusan</p>
+                        </div>
+                    </Card.Body>
                     </Card>
+                </Link>
                 </Col>
                 <Col xl={4} lg={4} md={6} sm={6} xs={12}>
-                    <Card className="shadow p-2 rounded-4 border-0 h-100">
-                        <Card.Body className="d-flex align-items-center">
-                            <div className="icon-circle me-3 flex-shrink-0" style={{ background: "linear-gradient(135deg, #c0fbd4, #c0fbd4)", width: "70px", height: "70px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                                <FaBriefcase size={30} className="text-success" />
-                            </div>
-                            <div className="flex-grow-1">
-                                <h3 className="fw-bold fs-2 mb-0">{jobData.length}</h3>
-                                <p className="fw-bold mb-0 text-muted">Total Lowongan</p>
-                            </div>
-                        </Card.Body>
+                <Link to="/info-lowongan-kerja" style={{ textDecoration: 'none' }}>
+                    <Card className="shadow p-2 rounded-4 border-0 h-100" style={{ cursor: 'pointer' }}>
+                    <Card.Body className="d-flex align-items-center">
+                        <div
+                        className="icon-circle me-3 flex-shrink-0"
+                        style={{
+                            background: 'linear-gradient(135deg, #c0fbd4, #c0fbd4)',
+                            width: '70px',
+                            height: '70px',
+                            borderRadius: '50%',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                        }}
+                        >
+                        <FaBriefcase size={30} className="text-success" />
+                        </div>
+                        <div className="flex-grow-1">
+                        <h3 className="fw-bold fs-2 mb-0">{jobData.length}</h3>
+                        <p className="fw-bold mb-0 text-muted">Total Lowongan</p>
+                        </div>
+                    </Card.Body>
                     </Card>
+                </Link>
                 </Col>
                 <Col xl={4} lg={4} md={6} sm={6} xs={12}>
-                    <Card className="shadow p-2 rounded-4 border-0 h-100">
-                        <Card.Body className="d-flex align-items-center">
-                            <div className="icon-circle me-3 flex-shrink-0" style={{ background: "linear-gradient(135deg, #faf8c0, #faf8c0)", width: "70px", height: "70px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                                <FaBuilding size={30} className="text-warning" />
-                            </div>
-                            <div className="flex-grow-1">
-                                <h3 className="fw-bold fs-2 mb-0">{companyData.length}</h3>
-                                <p className="fw-bold mb-0 text-muted">Total MoU</p>
-                            </div>
-                        </Card.Body>
+                <Link to="/mou-perusahaan" style={{ textDecoration: 'none' }}>
+                    <Card className="shadow p-2 rounded-4 border-0 h-100" style={{ cursor: 'pointer' }}>
+                    <Card.Body className="d-flex align-items-center">
+                        <div
+                        className="icon-circle me-3 flex-shrink-0"
+                        style={{
+                            background: 'linear-gradient(135deg, #faf8c0, #faf8c0)',
+                            width: '70px',
+                            height: '70px',
+                            borderRadius: '50%',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                        }}
+                        >
+                        <FaBuilding size={30} className="text-warning" />
+                        </div>
+                        <div className="flex-grow-1">
+                        <h3 className="fw-bold fs-2 mb-0">{companyData.length}</h3>
+                        <p className="fw-bold mb-0 text-muted">Total MoU</p>
+                        </div>
+                    </Card.Body>
                     </Card>
+                </Link>
                 </Col>
             </Row>
         </PageContainer>

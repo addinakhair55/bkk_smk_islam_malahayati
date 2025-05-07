@@ -93,7 +93,14 @@ export default function FaqView() {
                                     </h2>
                                     <div id="faq3" className="accordion-collapse collapse" data-bs-parent="#faqAccordion">
                                         <div className="accordion-body">
-                                            Anda bisa mengakses halaman <Link to="/info-loker" className="fw-bold text-decoration-none text-primary">Lowongan Kerja</Link> di website ini atau mengikuti media sosial kami untuk informasi terbaru.
+                                            Anda bisa mengakses halaman 
+                                            <Link to="/info-loker" 
+                                                className="fw-bold text-decoration-none mx-2" 
+                                                style={{color: '#4065B6'}}
+                                                onMouseOver={(e) => (e.target.style.color = '#bbc8e3')}
+                                                onMouseOut={(e) => (e.target.style.color = '#4065B6')}>Lowongan Kerja
+                                            </Link>
+                                            di website ini atau mengikuti media sosial kami untuk informasi terbaru.
                                         </div>
                                     </div>
                                 </div>
@@ -109,20 +116,21 @@ export default function FaqView() {
                                             aria-expanded="false"
                                             aria-controls="faq4"
                                         >
-                                            Bagaimana cara mendaftar Tracer Study?
+                                            Bagaimana cara mengisi Tracer Study?
                                         </button>
                                     </h2>
                                     <div id="faq4" className="accordion-collapse collapse" data-bs-parent="#faqAccordion">
                                         <div className="accordion-body">
                                             <p>
-                                                Tracer Study hanya diperuntukkan bagi alumni <span className="fw-bold text-primary">SMK ISLAM MALAHAYATI</span>.
+                                            Tracer Study hanya diperuntukkan bagi alumni <span className="fw-bold" style={{color: '#4065B6'}}>SMK ISLAM MALAHAYATI</span>.
                                             </p>
                                             <p>
-                                                Anda dapat mendaftar dengan mengakses link berikut: 
-                                                <Link to="#" className="fw-bold text-decoration-none text-primary"> Pendaftaran Tracer Study</Link>.
+                                            Alumni yang <span className="fw-bold">belum memiliki akun</span> diwajibkan untuk mendaftar terlebih dahulu. 
+                                            <span className="fw-bold"> Jika sudah memiliki akun, silakan login</span>.
                                             </p>
                                             <p>
-                                                Lalu mengisi formulir dengan data yang diminta. Pastikan Anda mengisi informasi dengan benar agar data alumni dapat tercatat dengan baik.
+                                            Setelah berhasil login, alumni dapat mengisi formulir Tracer Study. 
+                                            Pastikan seluruh data yang diisi benar dan lengkap agar informasi alumni dapat tercatat dengan baik.
                                             </p>
                                         </div>
                                     </div>
@@ -146,15 +154,21 @@ export default function FaqView() {
                                         <div className="accordion-body">
                                             <p>
                                                 <strong>Tracer Study</strong> hanya diperuntukkan bagi alumni 
-                                                <span className="fw-bold text-primary"> SMK Islam Malahayati</span>.
+                                                <span className="fw-bold" style={{color: '#4065B6'}}> SMK Islam Malahayati</span>.
                                             </p>
                                             <p>
                                                 Anda dapat menghubungi admin BKK SMK Islam Malahayati melalui link berikut: 
-                                                <Link to="#" className="fw-bold text-decoration-none text-primary"> Kontak Admin BKK</Link>.
-                                            </p>
-                                            <p>
-                                                Setelah itu, silakan mengisi formulir dengan data yang diminta. 
-                                                <span className="fw-bold"> Pastikan Anda mengisi informasi dengan benar</span> agar data alumni dapat tercatat dengan baik.
+                                                <Link 
+                                                    to="https://wa.me/6285283022455" 
+                                                    className="fw-bold text-decoration-none mx-2"
+                                                    style={{
+                                                        color: '#4065B6'
+                                                    }}
+                                                    onMouseOver={(e) => (e.target.style.color = '#bbc8e3')}
+                                                    onMouseOut={(e) => (e.target.style.color = '#4065B6')}
+                                                >
+                                                    Kontak Admin BKK
+                                                </Link>.
                                             </p>
                                         </div>
                                     </div>

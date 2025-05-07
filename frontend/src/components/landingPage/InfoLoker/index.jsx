@@ -124,11 +124,9 @@ export default function InfoLoker() {
                     <Button
                       size="sm"
                       className="py-2 border-0 fw-bold"
-                      href={job.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                      onClick={() => window.open(job.link, "_blank", "noopener,noreferrer")}
                       style={{
-                        padding:"9px",
+                        padding: "9px",
                         color: "#ffffff",
                         backgroundColor: "#4065B6",
                         transition: "all 0.2s ease-in-out",

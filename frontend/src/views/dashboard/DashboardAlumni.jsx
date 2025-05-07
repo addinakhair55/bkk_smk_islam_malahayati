@@ -74,7 +74,7 @@ const DashboardAlumni = () => {
                                     ))}
                                 </motion.h2>
                             </Col>
-                            <Col xs={12} md={5} className="p-0 d-flex align-items-center justify-content-end position-relative">
+                            <Col xs={12} md={5} className="p-0 d-flex align-items-center justify-content-center position-relative">
                                 <img
                                     src={adminImage}
                                     alt="Admin"
