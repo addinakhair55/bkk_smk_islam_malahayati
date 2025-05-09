@@ -357,17 +357,17 @@ export default function TracerStudyEditAlumni() {
                 <ol className="breadcrumb">
                     <li className="breadcrumb-item">
                         <Link 
-                            to="/tracerStudy" 
-                            className="text-primary d-flex align-items-center text-decoration-none"
+                            to="/alumni" 
+                            className="d-flex align-items-center text-decoration-none"
                             style={{ 
-                                color: "blue", 
+                                color: "#4065B6", 
                                 textDecoration: "none",
                                 transition: "color 0.3s ease"
                             }}
-                            onMouseEnter={(e) => e.target.style.color = "darkblue"}
-                            onMouseLeave={(e) => e.target.style.color = "blue"}
+                            onMouseEnter={(e) => e.target.style.color = "#3050A5"}
+                            onMouseLeave={(e) => e.target.style.color = "#4065B6"}
                             onMouseDown={(e) => e.target.style.color = "red"}
-                            onMouseUp={(e) => e.target.style.color = "darkblue"}
+                            onMouseUp={(e) => e.target.style.color = "#3050A5"}
                         >
                             <span className="fw-medium">Tracer Study</span>
                         </Link>
