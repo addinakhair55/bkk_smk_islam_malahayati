@@ -248,7 +248,7 @@ export default function CreateInfoLoker() {
     }
 
     return (
-        <PageContainer title="Submit Info Loker">
+        <PageContainer title="Tambah Info Loker">
             <ToastContainer position="top-end" className="p-3 mt-5">
                 <Toast onClose={() => setShowToast(false)} show={showToast} delay={5000} autohide bg={toastMessage.type}>
                     <Toast.Body className="d-flex align-items-center gap-2 text-white">
