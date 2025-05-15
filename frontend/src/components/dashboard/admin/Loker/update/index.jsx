@@ -483,13 +483,14 @@ export default function EditInfoLoker() {
                                         "Pariwisata dan Perhotelan",
                                         "Energi dan Lingkungan",
                                         "Desain dan Seni",
+                                        "Lainnya"
                                     ],
                                 },
                                 {
                                     id: "jenis",
                                     label: "Jenis Pekerjaan",
                                     type: "select",
-                                    options: ["Full-Time", "Kontrak", "Part-Time", "Freelance", "Magang", "Volunter"],
+                                    options: ["Full-Time", "Kontrak", "Part-Time", "Freelance", "Magang", "Volunter", "Lainnya"],
                                 },
                                 { id: "jenis_kelamin", label: "Jenis Kelamin", type: "select", options: ["Laki-Laki", "Perempuan", "Laki-Laki / Perempuan"] },
                                 {
