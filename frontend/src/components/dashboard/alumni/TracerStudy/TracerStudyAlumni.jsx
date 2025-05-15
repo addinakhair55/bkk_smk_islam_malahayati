@@ -8,11 +8,15 @@ import { Link, useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { ArrowLeft } from 'lucide-react';
 import { BsPencilSquare } from 'react-icons/bs';
-import { FaCheckCircle, FaClock, FaExclamationCircle } from 'react-icons/fa';
+import { FaCheckCircle, FaClock, FaExclamationCircle, FaWhatsapp } from 'react-icons/fa';
 
 const TracerStudyAlumni = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const whatsappNumber = "6285283022455";
+  const whatsappMessage = encodeURIComponent(
+    "Halo, saya ingin bertanya tentang penolakan data Tracer Study saya. Berikut data saya:\n\nNama Lengkap:\nNIS:\nNISN:\n\nMohon bantuannya, terima kasih."
+  );
 
   const { tracerStudy = {}, loading, error } = useSelector(
     (state) => state.tracerStudyAlumni
@@ -191,6 +195,44 @@ const TracerStudyAlumni = () => {
               >
                   <FaExclamationCircle style={{ color: "#FF463F", fontSize: "1.2rem" }} className="mx-2"/>
                     Data Anda ditolak. Silakan hubungi admin BKK untuk informasi lebih lanjut.
+                  <div className="d-flex justify-content-center mt-3">
+                    <Button
+                      href={`https://wa.me/${whatsappNumber}?text=${whatsappMessage}`}
+                      target="_blank"
+                      className="fw-bold d-flex align-items-center justify-content-center gap-2"
+                      style={{
+                        background: "linear-gradient(50deg, #25D366, #128C7E)",
+                        border: "none",
+                        borderRadius: "25px",
+                        padding: "clamp(0.5rem, 2vw, 0.75rem) clamp(1rem, 3vw, 1.5rem)",
+                        color: "#fff",
+                        fontSize: "clamp(0.8rem, 2.5vw, 0.95rem)",
+                        transition: "all 0.3s ease-in-out",
+                        width: "fit-content",
+                        maxWidth: "100%",
+                        boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+                      }}
+                      onMouseEnter={(e) => {
+                        if (window.matchMedia("(hover: hover)").matches) {
+                          e.target.style.transform = "scale(1.05)";
+                          e.target.style.boxShadow = "0 6px 12px rgba(0, 0, 0, 0.2)";
+                        }
+                      }}
+                      onMouseLeave={(e) => {
+                        e.target.style.transform = "scale(1)";
+                        e.target.style.boxShadow = "0 4px 8px rgba(0, 0, 0, 0.1)";
+                      }}
+                      onTouchStart={(e) => {
+                        e.target.style.transform = "scale(0.95)";
+                      }}
+                      onTouchEnd={(e) => {
+                        e.target.style.transform = "scale(1)";
+                      }}
+                    >
+                      <FaWhatsapp size="clamp(1rem, 2.5vw, 1.3rem)" />
+                      Hubungi Admin via WhatsApp
+                    </Button>
+                  </div>
               </Alert>
         </PageContainer>
       );
